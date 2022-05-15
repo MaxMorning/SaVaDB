@@ -1,0 +1,10 @@
+
+.DS_Store
+
+.vscode
+
+DataMan/SequenceSpider/.idea
+DataMan/SequenceSpider/SummaryCleaner
+
+*.fasta
+DataMan/SequenceSpider/*.csv
