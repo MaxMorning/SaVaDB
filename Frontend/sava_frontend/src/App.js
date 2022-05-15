@@ -1,25 +1,56 @@
-import logo from './logo.svg';
 import './App.css';
+import { Layout, Breadcrumb } from 'antd';
+import MySider from './component/MySider';
+import "antd/dist/antd.min.css";
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    let username = "Morning";
+
+    return (
+        <Layout
+            style={{
+                minHeight: '100vh',
+            }}>
+            <MySider user={username}/>
+
+            <Layout className="site-layout">
+                <Header
+                    className="site-layout-background"
+                    style={{
+                        padding: 0,
+                    }}
+                />
+                <Content
+                    style={{
+                        margin: '0 16px',
+                    }}>
+                    <Breadcrumb
+                        style={{
+                        margin: '16px 0',
+                        }}>
+                        <Breadcrumb.Item>User</Breadcrumb.Item>
+                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div
+                        className="site-layout-background"
+                        style={{
+                            padding: 24,
+                            minHeight: 360,
+                        }}>
+                        Bill is a cat.
+                    </div>
+                </Content>
+                <Footer
+                    style={{
+                        textAlign: 'center',
+                    }}>
+                    Ant Design ©2018 Created by Ant UED
+                </Footer>
+            </Layout>
+        </Layout>
+    );
 }
 
 export default App;
