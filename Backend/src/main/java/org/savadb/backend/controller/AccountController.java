@@ -4,6 +4,7 @@ import org.savadb.backend.entity.UserEntity;
 import org.savadb.backend.service.JPA.JpaUserService;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
+import org.savadb.backend.utils.PasswordUtils;
 import org.savadb.backend.utils.Result;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,24 +16,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api")
 public class AccountController {
     @Resource
     private JpaUserService jpaUserService;
 
+    private int idCnt = 0;
+
     /**
      * 用户注册
      */
-    @PostMapping("register")
-    public Result<String> register(@RequestBody UserEntity user) {
-        if (user.getUsrName().length() == 0 || user.getPasswd().length < 32) {
+    @PostMapping("reg")
+    public Result<String> register(@RequestBody Map<String, Object> reg_info) {
+        String username = (String) reg_info.get("username");
+        byte[] password = (byte[]) reg_info.get("password");
+        Boolean keep_login = (Boolean) reg_info.get("keep_login");
+        if (username == null || username.length() == 0 || password == null || password.length < 32 || keep_login == null) {
             return Result.resultFactory(EResult.DATA_NULL, "Invalid data.");
         }
 
         // check name used
-        if (!jpaUserService.findAllByUsrName(user.getUsrName()).isEmpty()) {
+        if (!jpaUserService.findAllByUsrName(username).isEmpty()) {
             return Result.resultFactory(EResult.DATA_DUPLICATE, "Invalid user name.");
         }
+
+        UserEntity user = new UserEntity();
+        user.setUsrId(idCnt);
+        ++idCnt;
+        user.setEmail((String) reg_info.get("email"));
+        user.setUsrName(username);
+        user.setRole("USER");
+
+        byte[] salt = PasswordUtils.genRandom512bit();
+        byte[] saltedPassword = PasswordUtils.passwordHash(password, salt);
+        user.setSalt(salt);
+        user.setPasswd(saltedPassword);
 
         jpaUserService.insertUser(user);
 
@@ -56,7 +74,8 @@ public class AccountController {
             tokenMap.put("role", roleStr.toString());
         }
 
-        String token = jwtUtils.getToken(tokenMap, 7);
+        int expiredDay = keep_login ? 1 : 15;
+        String token = jwtUtils.getToken(tokenMap, expiredDay);
 
         return Result.resultFactory(EResult.SUCCESS, token);
     }
