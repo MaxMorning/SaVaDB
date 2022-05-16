@@ -21,7 +21,11 @@ function App() {
                     style={{
                         padding: 0,
                     }}
-                />
+                >
+                    <h1>
+                        主页
+                    </h1>
+                </Header>
                 <Content
                     style={{
                         margin: '0 16px',

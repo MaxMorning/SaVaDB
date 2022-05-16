@@ -1,0 +1,19 @@
+# SpringBoot
+spring:
+  datasource:
+    # Database thread pool
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/SaVa?useUnicode=true&characterEncoding=UTF-8}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USER:savaer}
+    password: ${MYSQL_PASS:Sava@1951581}
+    hikari:
+      idle-timeout: 30000
+      connection-timeout: 10000
+      maximum-pool-size: 15
+      minimum-idle: 5
+      auto-commit: true
+
+  # Hot reload tools
+  devtools:
+    restart:
+      enabled: true
