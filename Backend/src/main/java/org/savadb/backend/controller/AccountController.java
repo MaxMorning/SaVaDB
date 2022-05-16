@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class AccountController {
     @PostMapping("reg")
     public Result<String> register(@RequestBody Map<String, Object> reg_info) {
         String username = (String) reg_info.get("username");
-        byte[] password = (byte[]) reg_info.get("password");
+        byte[] password = Base64.getDecoder().decode((String) reg_info.get("password"));
         Boolean keep_login = (Boolean) reg_info.get("keep_login");
         if (username == null || username.length() == 0 || password == null || password.length < 32 || keep_login == null) {
             return Result.resultFactory(EResult.DATA_NULL, "Invalid data.");

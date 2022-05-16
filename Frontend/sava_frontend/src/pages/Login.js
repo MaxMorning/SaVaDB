@@ -3,10 +3,10 @@ import "antd/dist/antd.min.css";
 import { Tabs, Form, Input, Button, Checkbox, Typography } from 'antd';
 import { LoginOutlined, PlusCircleOutlined, UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import "./Login.css"
-import { b64_sha512 } from '../utils/sha512'
 import '../utils/Requester'
 import Requester from '../utils/Requester';
 
+const CryptoJS = require('crypto-js'); 
 const { TabPane } = Tabs;
 
 export default class LoginPage extends Component {
@@ -22,25 +22,20 @@ export default class LoginPage extends Component {
     loginForm = React.createRef();
     regForm = React.createRef();
 
-    login() {
-        var login_json_content = this.loginForm.current.getFieldValue();
-        var login_json_obj = JSON.parse(login_json_content);
-        var password = login_json_obj.password;
+    login = () => {
+        var login_form_obj = this.loginForm.current.getFieldValue();
+        var password = login_form_obj.password;
 
-        var shad_password = b64_sha512(password);
-        // 尾部补齐等号，使其满足MIME
-        var tail_equal = (4 - (shad_password.length % 4)) % 4;
-        for (var i = 0; i < tail_equal; ++i) {
-            shad_password += '='
-        }
+        var shad_password = CryptoJS.SHA512(password);
+        shad_password = CryptoJS.enc.Base64.stringify(shad_password.words);
         
         Requester.requestJSON({
             method: 'post',
             url: '/api/login',
             data: {
-                username: login_json_obj.username,
+                username: login_form_obj.username,
                 password: shad_password,
-                keep_login: login_json_obj.remember
+                keep_login: login_form_obj.remember
             }
         },
         false,
@@ -57,39 +52,36 @@ export default class LoginPage extends Component {
         },
         (error) => {}
         );
-    }
+    };
 
-    register() {
-        var reg_json_content = this.regForm.current.getFieldValue();
-        var reg_json_obj = JSON.parse(reg_json_content);
+    register = () => {
+        var reg_form_obj = this.regForm.current.getFieldValue();
 
-        var password = reg_json_obj.password;
+        var password = reg_form_obj.password;
 
-        var shad_password = b64_sha512(password);
-        // 尾部补齐等号，使其满足MIME
-        var tail_equal = (4 - (shad_password.length % 4)) % 4;
-        for (var i = 0; i < tail_equal; ++i) {
-            shad_password += '='
-        }
+        var sha512_result = CryptoJS.SHA512(password);
+        var shad_password = sha512_result.toString(CryptoJS.enc.Base64);
+        console.log(shad_password);
 
 
         Requester.requestJSON({
             method: 'post',
             url: '/api/reg',
             data: {
-                email: reg_json_obj.email,
-                username: reg_json_obj.username,
+                email: reg_form_obj.email,
+                username: reg_form_obj.username,
                 password: shad_password,
-                keep_login: reg_json_obj.remember
+                keep_login: reg_form_obj.remember
             }
         },
         false,
         (response) => {
-            if (200 == response.status) {
+            if (200 == response.status && 200 == response.data.code) {
                 // 注册成功
                 // 将token写入local storage
-                Requester.storeAuthToken(response.headers['Authorization']);
-                window.location.href='./';
+                console.log(response);
+                Requester.storeAuthToken(response.data.data);
+                // window.location.href='./';
             }
             else {
                 alert("Register failed.\nstatus: " + response.status);
@@ -97,11 +89,11 @@ export default class LoginPage extends Component {
         },
         (error) => {}
         );
-    }
+    };
 
     render() {
         return (
-            <div style={{background: "#CCCCFF"}}>
+            <div>
                 <h1 style={{margin: 25, textAlign: "center", fontSize: 45}}>SaVaDB</h1>
                 <h1 style={{margin: 25, textAlign: "center", fontSize: 35}}>Login {"&"} Register</h1>
                 <div style={{
@@ -109,7 +101,7 @@ export default class LoginPage extends Component {
                     justifyContent:'center',
                     alignItems:'center',
                 }}>
-                    <div ref={(parentDiv) => {this.tabsParentDiv = parentDiv}} style={{
+                    <div style={{
                         minWidth: 400,
                         maxWidth: 400,
                         background: "#EEEEEE",
@@ -166,8 +158,7 @@ export default class LoginPage extends Component {
 
                                     <Form.Item>
                                         <Button type="primary" htmlType="submit" className="login-form-button" block
-                                        ref={(item) => (this.loginSubmitButtom = item)}
-                                        onClick="login()">
+                                        onClick={this.login}>
                                         Log in
                                         </Button>
                                     </Form.Item>
@@ -264,7 +255,7 @@ export default class LoginPage extends Component {
                                     </Form.Item>
 
                                     <Form.Item>
-                                        <Button type="primary" htmlType="submit" className="login-form-button" block>
+                                        <Button type="primary" htmlType="submit" className="login-form-button" block onClick={this.register}>
                                         Register
                                         </Button>
                                     </Form.Item>

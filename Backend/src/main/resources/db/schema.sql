@@ -8,16 +8,7 @@ DROP TABLE IF EXISTS Statistic;
 DROP TABLE IF EXISTS Region;
 DROP TABLE IF EXISTS PangoNomenclature;
 DROP TABLE IF EXISTS Variant;
-DROP TABLE IF EXISTS Administrator;
 
-
-CREATE TABLE Administrator
-(
-    admin_id   INT NOT NULL PRIMARY KEY,
-    admin_name VARCHAR(16)  NOT NULL,
-    passwd     BLOB         NOT NULL,
-    salt       BLOB         NOT NULL
-);
 
 CREATE TABLE Variant
 (
@@ -31,7 +22,7 @@ CREATE TABLE Variant
     v_status       ENUM ('Normal', 'Withdraw') NOT NULL,
     update_time    DATETIME                    NOT NULL,
 
-    FOREIGN KEY (add_admin) REFERENCES Administrator (admin_id)
+    FOREIGN KEY (add_admin) REFERENCES User (usr_id)
 );
 
 CREATE TABLE PangoNomenclature
