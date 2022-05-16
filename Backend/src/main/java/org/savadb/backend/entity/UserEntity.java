@@ -32,6 +32,17 @@ public class UserEntity {
     @OneToMany(mappedBy = "userByUsrId")
     private Collection<UserWatchingEntity> userWatchingsByUsrId;
 
+    @Basic
+    @Column(name = "role", nullable = false, length = 32)
+    private String role;
+
+    @OneToMany(mappedBy = "userByAddAdmin")
+    private Collection<VariantEntity> variantsByUsrId;
+
+    @Basic
+    @Column(name = "token", nullable = true)
+    private byte[] token;
+
     public int getUsrId() {
         return usrId;
     }
@@ -108,5 +119,29 @@ public class UserEntity {
 
     public void setUserWatchingsByUsrId(Collection<UserWatchingEntity> userWatchingsByUsrId) {
         this.userWatchingsByUsrId = userWatchingsByUsrId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Collection<VariantEntity> getVariantsByUsrId() {
+        return variantsByUsrId;
+    }
+
+    public void setVariantsByUsrId(Collection<VariantEntity> variantsByUsrId) {
+        this.variantsByUsrId = variantsByUsrId;
+    }
+
+    public byte[] getToken() {
+        return token;
+    }
+
+    public void setToken(byte[] token) {
+        this.token = token;
     }
 }

@@ -64,12 +64,12 @@ public class VariantEntity {
     @OneToMany(mappedBy = "variantByWatchingVId")
     private Collection<UserWatchingEntity> userWatchingsByVId;
 
-    @ManyToOne
-    @JoinColumn(name = "add_admin", referencedColumnName = "admin_id", nullable = false)
-    private AdministratorEntity administratorByAddAdmin;
-
     @OneToOne(mappedBy = "variantByVId")
     private WhoLabelEntity whoLabelByVId;
+
+    @ManyToOne
+    @JoinColumn(name = "add_admin", referencedColumnName = "usr_id", nullable = false)
+    private UserEntity userByAddAdmin;
 
     public int getvId() {
         return vId;
@@ -245,19 +245,19 @@ public class VariantEntity {
         this.userWatchingsByVId = userWatchingsByVId;
     }
 
-    public AdministratorEntity getAdministratorByAddAdmin() {
-        return administratorByAddAdmin;
-    }
-
-    public void setAdministratorByAddAdmin(AdministratorEntity administratorByAddAdmin) {
-        this.administratorByAddAdmin = administratorByAddAdmin;
-    }
-
     public WhoLabelEntity getWhoLabelByVId() {
         return whoLabelByVId;
     }
 
     public void setWhoLabelByVId(WhoLabelEntity whoLabelByVId) {
         this.whoLabelByVId = whoLabelByVId;
+    }
+
+    public UserEntity getUserByAddAdmin() {
+        return userByAddAdmin;
+    }
+
+    public void setUserByAddAdmin(UserEntity userByAddAdmin) {
+        this.userByAddAdmin = userByAddAdmin;
     }
 }

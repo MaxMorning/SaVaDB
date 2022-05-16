@@ -10,7 +10,7 @@ public class WhoLabelEntity {
     @Id
     @Column(name = "v_id", nullable = false)
     private int vId;
-    
+
     @Basic
     @Column(name = "label", nullable = false, length = 16)
     private String label;
