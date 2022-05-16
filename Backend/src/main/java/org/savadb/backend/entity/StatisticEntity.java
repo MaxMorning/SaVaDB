@@ -8,41 +8,35 @@ import java.util.Objects;
 @Table(name = "Statistic", schema = "SaVa")
 @IdClass(StatisticEntityPK.class)
 public class StatisticEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "region_id", nullable = false)
-    private int regionId;
+    private Integer regionId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "stat_date", nullable = false)
     private Date statDate;
 
     @Basic
     @Column(name = "existing_confirmed_cnt", nullable = false)
-    private int existingConfirmedCnt;
+    private Integer existingConfirmedCnt;
 
     @Basic
     @Column(name = "death_cnt", nullable = false)
-    private int deathCnt;
+    private Integer deathCnt;
 
     @Basic
     @Column(name = "cured_cnt", nullable = false)
-    private int curedCnt;
+    private Integer curedCnt;
 
     @ManyToOne
-    @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false)
+    @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false, insertable = false, updatable = false)
     private RegionEntity regionByRegionId;
 
-    public int getRegionId() {
+    public Integer getRegionId() {
         return regionId;
     }
 
     public void setRegionId(Integer regionId) {
-        this.regionId = regionId;
-    }
-
-    public void setRegionId(int regionId) {
         this.regionId = regionId;
     }
 
@@ -54,7 +48,7 @@ public class StatisticEntity {
         this.statDate = statDate;
     }
 
-    public int getExistingConfirmedCnt() {
+    public Integer getExistingConfirmedCnt() {
         return existingConfirmedCnt;
     }
 
@@ -62,11 +56,7 @@ public class StatisticEntity {
         this.existingConfirmedCnt = existingConfirmedCnt;
     }
 
-    public void setExistingConfirmedCnt(int existingConfirmedCnt) {
-        this.existingConfirmedCnt = existingConfirmedCnt;
-    }
-
-    public int getDeathCnt() {
+    public Integer getDeathCnt() {
         return deathCnt;
     }
 
@@ -74,19 +64,11 @@ public class StatisticEntity {
         this.deathCnt = deathCnt;
     }
 
-    public void setDeathCnt(int deathCnt) {
-        this.deathCnt = deathCnt;
-    }
-
-    public int getCuredCnt() {
+    public Integer getCuredCnt() {
         return curedCnt;
     }
 
     public void setCuredCnt(Integer curedCnt) {
-        this.curedCnt = curedCnt;
-    }
-
-    public void setCuredCnt(int curedCnt) {
         this.curedCnt = curedCnt;
     }
 
@@ -97,22 +79,23 @@ public class StatisticEntity {
 
         StatisticEntity that = (StatisticEntity) o;
 
-        if (regionId != that.regionId) return false;
-        if (existingConfirmedCnt != that.existingConfirmedCnt) return false;
-        if (deathCnt != that.deathCnt) return false;
-        if (curedCnt != that.curedCnt) return false;
+        if (!Objects.equals(regionId, that.regionId)) return false;
         if (!Objects.equals(statDate, that.statDate)) return false;
+        if (!Objects.equals(existingConfirmedCnt, that.existingConfirmedCnt))
+            return false;
+        if (!Objects.equals(deathCnt, that.deathCnt)) return false;
+        if (!Objects.equals(curedCnt, that.curedCnt)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = regionId;
+        int result = regionId != null ? regionId.hashCode() : 0;
         result = 31 * result + (statDate != null ? statDate.hashCode() : 0);
-        result = 31 * result + existingConfirmedCnt;
-        result = 31 * result + deathCnt;
-        result = 31 * result + curedCnt;
+        result = 31 * result + (existingConfirmedCnt != null ? existingConfirmedCnt.hashCode() : 0);
+        result = 31 * result + (deathCnt != null ? deathCnt.hashCode() : 0);
+        result = 31 * result + (curedCnt != null ? curedCnt.hashCode() : 0);
         return result;
     }
 

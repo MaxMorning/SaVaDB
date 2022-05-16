@@ -7,10 +7,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "Region", schema = "SaVa")
 public class RegionEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "region_id", nullable = false)
-    private int regionId;
+    private Integer regionId;
 
     @Basic
     @Column(name = "region_name", nullable = false, length = 16)
@@ -19,15 +18,11 @@ public class RegionEntity {
     @OneToMany(mappedBy = "regionByRegionId")
     private Collection<StatisticEntity> statisticsByRegionId;
 
-    public int getRegionId() {
+    public Integer getRegionId() {
         return regionId;
     }
 
     public void setRegionId(Integer regionId) {
-        this.regionId = regionId;
-    }
-
-    public void setRegionId(int regionId) {
         this.regionId = regionId;
     }
 
@@ -46,7 +41,7 @@ public class RegionEntity {
 
         RegionEntity that = (RegionEntity) o;
 
-        if (regionId != that.regionId) return false;
+        if (!Objects.equals(regionId, that.regionId)) return false;
         if (!Objects.equals(regionName, that.regionName)) return false;
 
         return true;
@@ -54,7 +49,7 @@ public class RegionEntity {
 
     @Override
     public int hashCode() {
-        int result = regionId;
+        int result = regionId != null ? regionId.hashCode() : 0;
         result = 31 * result + (regionName != null ? regionName.hashCode() : 0);
         return result;
     }

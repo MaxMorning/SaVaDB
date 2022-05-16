@@ -5,31 +5,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class UserWatchingEntityPK implements Serializable {
     @Column(name = "usr_id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int usrId;
+    private Integer usrId;
 
     @Column(name = "watching_v_id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int watchingVId;
+    private Integer watchingVId;
 
-    public int getUsrId() {
+    public Integer getUsrId() {
         return usrId;
     }
 
-    public void setUsrId(int usrId) {
+    public void setUsrId(Integer usrId) {
         this.usrId = usrId;
     }
 
-    public int getWatchingVId() {
+    public Integer getWatchingVId() {
         return watchingVId;
     }
 
-    public void setWatchingVId(int watchingVId) {
+    public void setWatchingVId(Integer watchingVId) {
         this.watchingVId = watchingVId;
     }
 
@@ -40,16 +39,16 @@ public class UserWatchingEntityPK implements Serializable {
 
         UserWatchingEntityPK that = (UserWatchingEntityPK) o;
 
-        if (usrId != that.usrId) return false;
-        if (watchingVId != that.watchingVId) return false;
+        if (!Objects.equals(usrId, that.usrId)) return false;
+        if (!Objects.equals(watchingVId, that.watchingVId)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = usrId;
-        result = 31 * result + watchingVId;
+        int result = usrId != null ? usrId.hashCode() : 0;
+        result = 31 * result + (watchingVId != null ? watchingVId.hashCode() : 0);
         return result;
     }
 }

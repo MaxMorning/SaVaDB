@@ -11,19 +11,17 @@ import java.util.Objects;
 public class StatisticEntityPK implements Serializable {
     @Column(name = "region_id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int regionId;
+    private Integer regionId;
 
     @Column(name = "stat_date", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Date statDate;
 
-    public int getRegionId() {
+    public Integer getRegionId() {
         return regionId;
     }
 
-    public void setRegionId(int regionId) {
+    public void setRegionId(Integer regionId) {
         this.regionId = regionId;
     }
 
@@ -42,7 +40,7 @@ public class StatisticEntityPK implements Serializable {
 
         StatisticEntityPK that = (StatisticEntityPK) o;
 
-        if (regionId != that.regionId) return false;
+        if (!Objects.equals(regionId, that.regionId)) return false;
         if (!Objects.equals(statDate, that.statDate)) return false;
 
         return true;
@@ -50,7 +48,7 @@ public class StatisticEntityPK implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = regionId;
+        int result = regionId != null ? regionId.hashCode() : 0;
         result = 31 * result + (statDate != null ? statDate.hashCode() : 0);
         return result;
     }

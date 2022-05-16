@@ -6,32 +6,27 @@ import java.util.Objects;
 @Entity
 @Table(name = "Lineage", schema = "SaVa")
 public class LineageEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "child_variant_id", nullable = false)
-    private int childVariantId;
+    private Integer childVariantId;
 
     @Basic
     @Column(name = "parent_variant_id", nullable = true)
     private Integer parentVariantId;
 
     @OneToOne
-    @JoinColumn(name = "child_variant_id", referencedColumnName = "v_id", nullable = false)
+    @JoinColumn(name = "child_variant_id", referencedColumnName = "v_id", nullable = false, insertable = false, updatable = false)
     private VariantEntity variantByChildVariantId;
 
     @ManyToOne
-    @JoinColumn(name = "parent_variant_id", referencedColumnName = "v_id")
+    @JoinColumn(name = "parent_variant_id", referencedColumnName = "v_id", insertable = false, updatable = false)
     private VariantEntity variantByParentVariantId;
 
-    public int getChildVariantId() {
+    public Integer getChildVariantId() {
         return childVariantId;
     }
 
     public void setChildVariantId(Integer childVariantId) {
-        this.childVariantId = childVariantId;
-    }
-
-    public void setChildVariantId(int childVariantId) {
         this.childVariantId = childVariantId;
     }
 
@@ -50,7 +45,8 @@ public class LineageEntity {
 
         LineageEntity that = (LineageEntity) o;
 
-        if (childVariantId != that.childVariantId) return false;
+        if (!Objects.equals(childVariantId, that.childVariantId))
+            return false;
         if (!Objects.equals(parentVariantId, that.parentVariantId))
             return false;
 
@@ -59,7 +55,7 @@ public class LineageEntity {
 
     @Override
     public int hashCode() {
-        int result = childVariantId;
+        int result = childVariantId != null ? childVariantId.hashCode() : 0;
         result = 31 * result + (parentVariantId != null ? parentVariantId.hashCode() : 0);
         return result;
     }

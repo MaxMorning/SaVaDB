@@ -7,29 +7,23 @@ import java.util.Objects;
 @Table(name = "AAChanges", schema = "SaVa")
 @IdClass(AAChangesEntityPK.class)
 public class AAChangesEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "v_id", nullable = false)
-    private int vId;
+    private Integer vId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "AA_changes", nullable = false, length = 16)
     private String aaChanges;
 
     @ManyToOne
-    @JoinColumn(name = "v_id", referencedColumnName = "v_id", nullable = false)
+    @JoinColumn(name = "v_id", referencedColumnName = "v_id", nullable = false, insertable = false, updatable = false)
     private VariantEntity variantByVId;
 
-    public int getvId() {
+    public Integer getvId() {
         return vId;
     }
 
     public void setvId(Integer vId) {
-        this.vId = vId;
-    }
-
-    public void setvId(int vId) {
         this.vId = vId;
     }
 
@@ -48,7 +42,7 @@ public class AAChangesEntity {
 
         AAChangesEntity that = (AAChangesEntity) o;
 
-        if (vId != that.vId) return false;
+        if (!Objects.equals(vId, that.vId)) return false;
         if (!Objects.equals(aaChanges, that.aaChanges)) return false;
 
         return true;
@@ -56,7 +50,7 @@ public class AAChangesEntity {
 
     @Override
     public int hashCode() {
-        int result = vId;
+        int result = vId != null ? vId.hashCode() : 0;
         result = 31 * result + (aaChanges != null ? aaChanges.hashCode() : 0);
         return result;
     }

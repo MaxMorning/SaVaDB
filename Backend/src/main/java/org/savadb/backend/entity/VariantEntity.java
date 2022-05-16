@@ -9,10 +9,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "Variant", schema = "SaVa")
 public class VariantEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "v_id", nullable = false)
-    private int vId;
+    private Integer vId;
 
     @Basic
     @Column(name = "earliest_date", nullable = false)
@@ -20,15 +19,15 @@ public class VariantEntity {
 
     @Basic
     @Column(name = "monitor_level", nullable = false)
-    private Object monitorLevel;
+    private String monitorLevel;
 
     @Basic
     @Column(name = "R0", nullable = false, precision = 0)
-    private double r0;
+    private Double r0;
 
     @Basic
     @Column(name = "avg_incubation", nullable = false, precision = 0)
-    private double avgIncubation;
+    private Double avgIncubation;
 
     @Basic
     @Column(name = "descript", nullable = true, length = 256)
@@ -36,11 +35,11 @@ public class VariantEntity {
 
     @Basic
     @Column(name = "add_admin", nullable = false)
-    private int addAdmin;
+    private Integer addAdmin;
 
     @Basic
     @Column(name = "v_status", nullable = false)
-    private Object vStatus;
+    private String vStatus;
 
     @Basic
     @Column(name = "update_time", nullable = false)
@@ -64,22 +63,18 @@ public class VariantEntity {
     @OneToMany(mappedBy = "variantByWatchingVId")
     private Collection<UserWatchingEntity> userWatchingsByVId;
 
+    @ManyToOne
+    @JoinColumn(name = "add_admin", referencedColumnName = "usr_id", nullable = false, insertable = false, updatable = false)
+    private UserEntity userByAddAdmin;
+
     @OneToOne(mappedBy = "variantByVId")
     private WhoLabelEntity whoLabelByVId;
 
-    @ManyToOne
-    @JoinColumn(name = "add_admin", referencedColumnName = "usr_id", nullable = false)
-    private UserEntity userByAddAdmin;
-
-    public int getvId() {
+    public Integer getvId() {
         return vId;
     }
 
     public void setvId(Integer vId) {
-        this.vId = vId;
-    }
-
-    public void setvId(int vId) {
         this.vId = vId;
     }
 
@@ -91,15 +86,15 @@ public class VariantEntity {
         this.earliestDate = earliestDate;
     }
 
-    public Object getMonitorLevel() {
+    public String getMonitorLevel() {
         return monitorLevel;
     }
 
-    public void setMonitorLevel(Object monitorLevel) {
+    public void setMonitorLevel(String monitorLevel) {
         this.monitorLevel = monitorLevel;
     }
 
-    public double getR0() {
+    public Double getR0() {
         return r0;
     }
 
@@ -107,19 +102,11 @@ public class VariantEntity {
         this.r0 = r0;
     }
 
-    public void setR0(double r0) {
-        this.r0 = r0;
-    }
-
-    public double getAvgIncubation() {
+    public Double getAvgIncubation() {
         return avgIncubation;
     }
 
     public void setAvgIncubation(Double avgIncubation) {
-        this.avgIncubation = avgIncubation;
-    }
-
-    public void setAvgIncubation(double avgIncubation) {
         this.avgIncubation = avgIncubation;
     }
 
@@ -131,7 +118,7 @@ public class VariantEntity {
         this.descript = descript;
     }
 
-    public int getAddAdmin() {
+    public Integer getAddAdmin() {
         return addAdmin;
     }
 
@@ -139,15 +126,11 @@ public class VariantEntity {
         this.addAdmin = addAdmin;
     }
 
-    public void setAddAdmin(int addAdmin) {
-        this.addAdmin = addAdmin;
-    }
-
-    public Object getvStatus() {
+    public String getvStatus() {
         return vStatus;
     }
 
-    public void setvStatus(Object vStatus) {
+    public void setvStatus(String vStatus) {
         this.vStatus = vStatus;
     }
 
@@ -166,13 +149,14 @@ public class VariantEntity {
 
         VariantEntity that = (VariantEntity) o;
 
-        if (vId != that.vId) return false;
-        if (Double.compare(that.r0, r0) != 0) return false;
-        if (Double.compare(that.avgIncubation, avgIncubation) != 0) return false;
-        if (addAdmin != that.addAdmin) return false;
+        if (!Objects.equals(vId, that.vId)) return false;
         if (!Objects.equals(earliestDate, that.earliestDate)) return false;
         if (!Objects.equals(monitorLevel, that.monitorLevel)) return false;
+        if (!Objects.equals(r0, that.r0)) return false;
+        if (!Objects.equals(avgIncubation, that.avgIncubation))
+            return false;
         if (!Objects.equals(descript, that.descript)) return false;
+        if (!Objects.equals(addAdmin, that.addAdmin)) return false;
         if (!Objects.equals(vStatus, that.vStatus)) return false;
         if (!Objects.equals(updateTime, that.updateTime)) return false;
 
@@ -181,17 +165,13 @@ public class VariantEntity {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = vId;
+        int result = vId != null ? vId.hashCode() : 0;
         result = 31 * result + (earliestDate != null ? earliestDate.hashCode() : 0);
         result = 31 * result + (monitorLevel != null ? monitorLevel.hashCode() : 0);
-        temp = Double.doubleToLongBits(r0);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(avgIncubation);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (r0 != null ? r0.hashCode() : 0);
+        result = 31 * result + (avgIncubation != null ? avgIncubation.hashCode() : 0);
         result = 31 * result + (descript != null ? descript.hashCode() : 0);
-        result = 31 * result + addAdmin;
+        result = 31 * result + (addAdmin != null ? addAdmin.hashCode() : 0);
         result = 31 * result + (vStatus != null ? vStatus.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
@@ -245,19 +225,19 @@ public class VariantEntity {
         this.userWatchingsByVId = userWatchingsByVId;
     }
 
-    public WhoLabelEntity getWhoLabelByVId() {
-        return whoLabelByVId;
-    }
-
-    public void setWhoLabelByVId(WhoLabelEntity whoLabelByVId) {
-        this.whoLabelByVId = whoLabelByVId;
-    }
-
     public UserEntity getUserByAddAdmin() {
         return userByAddAdmin;
     }
 
     public void setUserByAddAdmin(UserEntity userByAddAdmin) {
         this.userByAddAdmin = userByAddAdmin;
+    }
+
+    public WhoLabelEntity getWhoLabelByVId() {
+        return whoLabelByVId;
+    }
+
+    public void setWhoLabelByVId(WhoLabelEntity whoLabelByVId) {
+        this.whoLabelByVId = whoLabelByVId;
     }
 }

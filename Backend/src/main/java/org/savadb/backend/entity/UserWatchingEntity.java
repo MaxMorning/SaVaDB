@@ -1,30 +1,29 @@
 package org.savadb.backend.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "UserWatching", schema = "SaVa")
 @IdClass(UserWatchingEntityPK.class)
 public class UserWatchingEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "usr_id", nullable = false)
-    private int usrId;
+    private Integer usrId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "watching_v_id", nullable = false)
-    private int watchingVId;
+    private Integer watchingVId;
 
     @ManyToOne
-    @JoinColumn(name = "usr_id", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "usr_id", referencedColumnName = "usr_id", nullable = false, insertable = false, updatable = false)
     private UserEntity userByUsrId;
 
     @ManyToOne
-    @JoinColumn(name = "watching_v_id", referencedColumnName = "v_id", nullable = false)
+    @JoinColumn(name = "watching_v_id", referencedColumnName = "v_id", nullable = false, insertable = false, updatable = false)
     private VariantEntity variantByWatchingVId;
 
-    public int getUsrId() {
+    public Integer getUsrId() {
         return usrId;
     }
 
@@ -32,19 +31,11 @@ public class UserWatchingEntity {
         this.usrId = usrId;
     }
 
-    public void setUsrId(int usrId) {
-        this.usrId = usrId;
-    }
-
-    public int getWatchingVId() {
+    public Integer getWatchingVId() {
         return watchingVId;
     }
 
     public void setWatchingVId(Integer watchingVId) {
-        this.watchingVId = watchingVId;
-    }
-
-    public void setWatchingVId(int watchingVId) {
         this.watchingVId = watchingVId;
     }
 
@@ -55,14 +46,16 @@ public class UserWatchingEntity {
 
         UserWatchingEntity that = (UserWatchingEntity) o;
 
-        if (usrId != that.usrId) return false;
-        return watchingVId == that.watchingVId;
+        if (!Objects.equals(usrId, that.usrId)) return false;
+        if (!Objects.equals(watchingVId, that.watchingVId)) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = usrId;
-        result = 31 * result + watchingVId;
+        int result = usrId != null ? usrId.hashCode() : 0;
+        result = 31 * result + (watchingVId != null ? watchingVId.hashCode() : 0);
         return result;
     }
 

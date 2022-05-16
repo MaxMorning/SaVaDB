@@ -6,28 +6,23 @@ import java.util.Objects;
 @Entity
 @Table(name = "WHOLabel", schema = "SaVa")
 public class WhoLabelEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "v_id", nullable = false)
-    private int vId;
+    private Integer vId;
 
     @Basic
     @Column(name = "label", nullable = false, length = 16)
     private String label;
 
     @OneToOne
-    @JoinColumn(name = "v_id", referencedColumnName = "v_id", nullable = false)
+    @JoinColumn(name = "v_id", referencedColumnName = "v_id", nullable = false, insertable = false, updatable = false)
     private VariantEntity variantByVId;
 
-    public int getvId() {
+    public Integer getvId() {
         return vId;
     }
 
     public void setvId(Integer vId) {
-        this.vId = vId;
-    }
-
-    public void setvId(int vId) {
         this.vId = vId;
     }
 
@@ -46,7 +41,7 @@ public class WhoLabelEntity {
 
         WhoLabelEntity that = (WhoLabelEntity) o;
 
-        if (vId != that.vId) return false;
+        if (!Objects.equals(vId, that.vId)) return false;
         if (!Objects.equals(label, that.label)) return false;
 
         return true;
@@ -54,7 +49,7 @@ public class WhoLabelEntity {
 
     @Override
     public int hashCode() {
-        int result = vId;
+        int result = vId != null ? vId.hashCode() : 0;
         result = 31 * result + (label != null ? label.hashCode() : 0);
         return result;
     }
