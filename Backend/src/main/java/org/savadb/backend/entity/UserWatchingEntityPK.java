@@ -7,11 +7,12 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 public class UserWatchingEntityPK implements Serializable {
-    @Column(name = "usr_id")
+    @Column(name = "usr_id", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int usrId;
-    @Column(name = "watching_v_id")
+
+    @Column(name = "watching_v_id", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int watchingVId;

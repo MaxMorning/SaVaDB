@@ -8,15 +8,23 @@ import java.util.Objects;
 public class GeneInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "v_id")
+    @Column(name = "v_id", nullable = false)
     private int vId;
 
     @Basic
-    @Column(name = "cDNA_sequence_path")
+    @Column(name = "cDNA_sequence_path", nullable = true, length = 128)
     private String cDnaSequencePath;
+
+    @OneToOne
+    @JoinColumn(name = "v_id", referencedColumnName = "v_id", nullable = false)
+    private VariantEntity variantByVId;
 
     public int getvId() {
         return vId;
+    }
+
+    public void setvId(Integer vId) {
+        this.vId = vId;
     }
 
     public void setvId(int vId) {
@@ -50,5 +58,13 @@ public class GeneInfoEntity {
         int result = vId;
         result = 31 * result + (cDnaSequencePath != null ? cDnaSequencePath.hashCode() : 0);
         return result;
+    }
+
+    public VariantEntity getVariantByVId() {
+        return variantByVId;
+    }
+
+    public void setVariantByVId(VariantEntity variantByVId) {
+        this.variantByVId = variantByVId;
     }
 }

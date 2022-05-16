@@ -8,15 +8,23 @@ import java.util.Objects;
 public class PangoNomenclatureEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "v_id")
+    @Column(name = "v_id", nullable = false)
     private int vId;
 
     @Basic
-    @Column(name = "variant")
+    @Column(name = "variant", nullable = false, length = 16)
     private String variant;
+
+    @OneToOne
+    @JoinColumn(name = "v_id", referencedColumnName = "v_id", nullable = false)
+    private VariantEntity variantByVId;
 
     public int getvId() {
         return vId;
+    }
+
+    public void setvId(Integer vId) {
+        this.vId = vId;
     }
 
     public void setvId(int vId) {
@@ -49,5 +57,13 @@ public class PangoNomenclatureEntity {
         int result = vId;
         result = 31 * result + (variant != null ? variant.hashCode() : 0);
         return result;
+    }
+
+    public VariantEntity getVariantByVId() {
+        return variantByVId;
+    }
+
+    public void setVariantByVId(VariantEntity variantByVId) {
+        this.variantByVId = variantByVId;
     }
 }

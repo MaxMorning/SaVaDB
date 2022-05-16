@@ -2,6 +2,7 @@ package org.savadb.backend.entity;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -9,27 +10,34 @@ import java.util.Objects;
 public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "usr_id")
+    @Column(name = "usr_id", nullable = false)
     private int usrId;
 
     @Basic
-    @Column(name = "usr_name")
+    @Column(name = "usr_name", nullable = false, length = 16)
     private String usrName;
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, length = 64)
     private String email;
 
     @Basic
-    @Column(name = "passwd")
+    @Column(name = "passwd", nullable = false)
     private byte[] passwd;
 
     @Basic
-    @Column(name = "salt")
+    @Column(name = "salt", nullable = false)
     private byte[] salt;
+
+    @OneToMany(mappedBy = "userByUsrId")
+    private Collection<UserWatchingEntity> userWatchingsByUsrId;
 
     public int getUsrId() {
         return usrId;
+    }
+
+    public void setUsrId(Integer usrId) {
+        this.usrId = usrId;
     }
 
     public void setUsrId(int usrId) {
@@ -92,5 +100,13 @@ public class UserEntity {
         result = 31 * result + Arrays.hashCode(passwd);
         result = 31 * result + Arrays.hashCode(salt);
         return result;
+    }
+
+    public Collection<UserWatchingEntity> getUserWatchingsByUsrId() {
+        return userWatchingsByUsrId;
+    }
+
+    public void setUserWatchingsByUsrId(Collection<UserWatchingEntity> userWatchingsByUsrId) {
+        this.userWatchingsByUsrId = userWatchingsByUsrId;
     }
 }

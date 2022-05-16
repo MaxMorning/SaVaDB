@@ -9,11 +9,12 @@ import java.sql.Date;
 import java.util.Objects;
 
 public class StatisticEntityPK implements Serializable {
-    @Column(name = "region_id")
+    @Column(name = "region_id", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int regionId;
-    @Column(name = "stat_date")
+
+    @Column(name = "stat_date", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Date statDate;

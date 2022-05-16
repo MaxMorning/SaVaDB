@@ -10,28 +10,36 @@ import java.util.Objects;
 public class StatisticEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "region_id")
+    @Column(name = "region_id", nullable = false)
     private int regionId;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "stat_date")
+    @Column(name = "stat_date", nullable = false)
     private Date statDate;
 
     @Basic
-    @Column(name = "existing_confirmed_cnt")
+    @Column(name = "existing_confirmed_cnt", nullable = false)
     private int existingConfirmedCnt;
 
     @Basic
-    @Column(name = "death_cnt")
+    @Column(name = "death_cnt", nullable = false)
     private int deathCnt;
 
     @Basic
-    @Column(name = "cured_cnt")
+    @Column(name = "cured_cnt", nullable = false)
     private int curedCnt;
+
+    @ManyToOne
+    @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false)
+    private RegionEntity regionByRegionId;
 
     public int getRegionId() {
         return regionId;
+    }
+
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
     }
 
     public void setRegionId(int regionId) {
@@ -50,6 +58,10 @@ public class StatisticEntity {
         return existingConfirmedCnt;
     }
 
+    public void setExistingConfirmedCnt(Integer existingConfirmedCnt) {
+        this.existingConfirmedCnt = existingConfirmedCnt;
+    }
+
     public void setExistingConfirmedCnt(int existingConfirmedCnt) {
         this.existingConfirmedCnt = existingConfirmedCnt;
     }
@@ -58,12 +70,20 @@ public class StatisticEntity {
         return deathCnt;
     }
 
+    public void setDeathCnt(Integer deathCnt) {
+        this.deathCnt = deathCnt;
+    }
+
     public void setDeathCnt(int deathCnt) {
         this.deathCnt = deathCnt;
     }
 
     public int getCuredCnt() {
         return curedCnt;
+    }
+
+    public void setCuredCnt(Integer curedCnt) {
+        this.curedCnt = curedCnt;
     }
 
     public void setCuredCnt(int curedCnt) {
@@ -94,5 +114,13 @@ public class StatisticEntity {
         result = 31 * result + deathCnt;
         result = 31 * result + curedCnt;
         return result;
+    }
+
+    public RegionEntity getRegionByRegionId() {
+        return regionByRegionId;
+    }
+
+    public void setRegionByRegionId(RegionEntity regionByRegionId) {
+        this.regionByRegionId = regionByRegionId;
     }
 }

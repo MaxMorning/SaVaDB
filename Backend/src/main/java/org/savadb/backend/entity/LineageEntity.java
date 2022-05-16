@@ -8,15 +8,27 @@ import java.util.Objects;
 public class LineageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "child_variant_id")
+    @Column(name = "child_variant_id", nullable = false)
     private int childVariantId;
 
     @Basic
-    @Column(name = "parent_variant_id")
+    @Column(name = "parent_variant_id", nullable = true)
     private Integer parentVariantId;
+
+    @OneToOne
+    @JoinColumn(name = "child_variant_id", referencedColumnName = "v_id", nullable = false)
+    private VariantEntity variantByChildVariantId;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_variant_id", referencedColumnName = "v_id")
+    private VariantEntity variantByParentVariantId;
 
     public int getChildVariantId() {
         return childVariantId;
+    }
+
+    public void setChildVariantId(Integer childVariantId) {
+        this.childVariantId = childVariantId;
     }
 
     public void setChildVariantId(int childVariantId) {
@@ -50,5 +62,21 @@ public class LineageEntity {
         int result = childVariantId;
         result = 31 * result + (parentVariantId != null ? parentVariantId.hashCode() : 0);
         return result;
+    }
+
+    public VariantEntity getVariantByChildVariantId() {
+        return variantByChildVariantId;
+    }
+
+    public void setVariantByChildVariantId(VariantEntity variantByChildVariantId) {
+        this.variantByChildVariantId = variantByChildVariantId;
+    }
+
+    public VariantEntity getVariantByParentVariantId() {
+        return variantByParentVariantId;
+    }
+
+    public void setVariantByParentVariantId(VariantEntity variantByParentVariantId) {
+        this.variantByParentVariantId = variantByParentVariantId;
     }
 }

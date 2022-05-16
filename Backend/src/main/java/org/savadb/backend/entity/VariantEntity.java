@@ -3,6 +3,7 @@ package org.savadb.backend.entity;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -10,43 +11,72 @@ import java.util.Objects;
 public class VariantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "v_id")
+    @Column(name = "v_id", nullable = false)
     private int vId;
 
     @Basic
-    @Column(name = "earliest_date")
+    @Column(name = "earliest_date", nullable = false)
     private Date earliestDate;
 
     @Basic
-    @Column(name = "monitor_level")
+    @Column(name = "monitor_level", nullable = false)
     private Object monitorLevel;
 
     @Basic
-    @Column(name = "R0")
+    @Column(name = "R0", nullable = false, precision = 0)
     private double r0;
 
     @Basic
-    @Column(name = "avg_incubation")
+    @Column(name = "avg_incubation", nullable = false, precision = 0)
     private double avgIncubation;
 
     @Basic
-    @Column(name = "descript")
+    @Column(name = "descript", nullable = true, length = 256)
     private String descript;
 
     @Basic
-    @Column(name = "add_admin")
+    @Column(name = "add_admin", nullable = false)
     private int addAdmin;
 
     @Basic
-    @Column(name = "v_status")
+    @Column(name = "v_status", nullable = false)
     private Object vStatus;
 
     @Basic
-    @Column(name = "update_time")
+    @Column(name = "update_time", nullable = false)
     private Timestamp updateTime;
+
+    @OneToMany(mappedBy = "variantByVId")
+    private Collection<AAChangesEntity> aaChangesByVId;
+
+    @OneToOne(mappedBy = "variantByVId")
+    private GeneInfoEntity geneInfoByVId;
+
+    @OneToOne(mappedBy = "variantByChildVariantId")
+    private LineageEntity lineageByVId;
+
+    @OneToMany(mappedBy = "variantByParentVariantId")
+    private Collection<LineageEntity> lineagesByVId;
+
+    @OneToOne(mappedBy = "variantByVId")
+    private PangoNomenclatureEntity pangoNomenclatureByVId;
+
+    @OneToMany(mappedBy = "variantByWatchingVId")
+    private Collection<UserWatchingEntity> userWatchingsByVId;
+
+    @ManyToOne
+    @JoinColumn(name = "add_admin", referencedColumnName = "admin_id", nullable = false)
+    private AdministratorEntity administratorByAddAdmin;
+
+    @OneToOne(mappedBy = "variantByVId")
+    private WhoLabelEntity whoLabelByVId;
 
     public int getvId() {
         return vId;
+    }
+
+    public void setvId(Integer vId) {
+        this.vId = vId;
     }
 
     public void setvId(int vId) {
@@ -73,12 +103,20 @@ public class VariantEntity {
         return r0;
     }
 
+    public void setR0(Double r0) {
+        this.r0 = r0;
+    }
+
     public void setR0(double r0) {
         this.r0 = r0;
     }
 
     public double getAvgIncubation() {
         return avgIncubation;
+    }
+
+    public void setAvgIncubation(Double avgIncubation) {
+        this.avgIncubation = avgIncubation;
     }
 
     public void setAvgIncubation(double avgIncubation) {
@@ -95,6 +133,10 @@ public class VariantEntity {
 
     public int getAddAdmin() {
         return addAdmin;
+    }
+
+    public void setAddAdmin(Integer addAdmin) {
+        this.addAdmin = addAdmin;
     }
 
     public void setAddAdmin(int addAdmin) {
@@ -153,5 +195,69 @@ public class VariantEntity {
         result = 31 * result + (vStatus != null ? vStatus.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
+    }
+
+    public Collection<AAChangesEntity> getAaChangesByVId() {
+        return aaChangesByVId;
+    }
+
+    public void setAaChangesByVId(Collection<AAChangesEntity> aaChangesByVId) {
+        this.aaChangesByVId = aaChangesByVId;
+    }
+
+    public GeneInfoEntity getGeneInfoByVId() {
+        return geneInfoByVId;
+    }
+
+    public void setGeneInfoByVId(GeneInfoEntity geneInfoByVId) {
+        this.geneInfoByVId = geneInfoByVId;
+    }
+
+    public LineageEntity getLineageByVId() {
+        return lineageByVId;
+    }
+
+    public void setLineageByVId(LineageEntity lineageByVId) {
+        this.lineageByVId = lineageByVId;
+    }
+
+    public Collection<LineageEntity> getLineagesByVId() {
+        return lineagesByVId;
+    }
+
+    public void setLineagesByVId(Collection<LineageEntity> lineagesByVId) {
+        this.lineagesByVId = lineagesByVId;
+    }
+
+    public PangoNomenclatureEntity getPangoNomenclatureByVId() {
+        return pangoNomenclatureByVId;
+    }
+
+    public void setPangoNomenclatureByVId(PangoNomenclatureEntity pangoNomenclatureByVId) {
+        this.pangoNomenclatureByVId = pangoNomenclatureByVId;
+    }
+
+    public Collection<UserWatchingEntity> getUserWatchingsByVId() {
+        return userWatchingsByVId;
+    }
+
+    public void setUserWatchingsByVId(Collection<UserWatchingEntity> userWatchingsByVId) {
+        this.userWatchingsByVId = userWatchingsByVId;
+    }
+
+    public AdministratorEntity getAdministratorByAddAdmin() {
+        return administratorByAddAdmin;
+    }
+
+    public void setAdministratorByAddAdmin(AdministratorEntity administratorByAddAdmin) {
+        this.administratorByAddAdmin = administratorByAddAdmin;
+    }
+
+    public WhoLabelEntity getWhoLabelByVId() {
+        return whoLabelByVId;
+    }
+
+    public void setWhoLabelByVId(WhoLabelEntity whoLabelByVId) {
+        this.whoLabelByVId = whoLabelByVId;
     }
 }

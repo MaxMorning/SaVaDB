@@ -2,6 +2,7 @@ package org.savadb.backend.entity;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -9,23 +10,30 @@ import java.util.Objects;
 public class AdministratorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "admin_id")
+    @Column(name = "admin_id", nullable = false)
     private int adminId;
 
     @Basic
-    @Column(name = "admin_name")
+    @Column(name = "admin_name", nullable = false, length = 16)
     private String adminName;
 
     @Basic
-    @Column(name = "passwd")
+    @Column(name = "passwd", nullable = false)
     private byte[] passwd;
 
     @Basic
-    @Column(name = "salt")
+    @Column(name = "salt", nullable = false)
     private byte[] salt;
+
+    @OneToMany(mappedBy = "administratorByAddAdmin")
+    private Collection<VariantEntity> variantsByAdminId;
 
     public int getAdminId() {
         return adminId;
+    }
+
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
     }
 
     public void setAdminId(int adminId) {
@@ -78,5 +86,13 @@ public class AdministratorEntity {
         result = 31 * result + Arrays.hashCode(passwd);
         result = 31 * result + Arrays.hashCode(salt);
         return result;
+    }
+
+    public Collection<VariantEntity> getVariantsByAdminId() {
+        return variantsByAdminId;
+    }
+
+    public void setVariantsByAdminId(Collection<VariantEntity> variantsByAdminId) {
+        this.variantsByAdminId = variantsByAdminId;
     }
 }
