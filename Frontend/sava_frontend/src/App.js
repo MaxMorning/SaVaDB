@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import './App.css';
-import { Layout, Breadcrumb } from 'antd';
+import { Layout, PageHeader } from 'antd';
 import MySider from './component/MySider';
 import "antd/dist/antd.min.css";
 import Requester from './utils/Requester';
 
 const { Header, Content, Footer } = Layout;
+
+// 设置懒加载
+const HomeApp = lazy(()=>import('./AppBuiltIn/HomeApp'))
+
 
 export default class App extends Component {
     constructor(props) {
@@ -36,7 +40,7 @@ export default class App extends Component {
         return (
         <Layout
             style={{
-                minHeight: '100vh',
+                minHeight: '100vh'
             }}>
             <MySider user={this.state.username} didLogin={this.state.didLogin}/>
 
@@ -45,37 +49,25 @@ export default class App extends Component {
                     className="site-layout-background"
                     style={{
                         padding: 0,
-                    }}
-                >
-                    <h1>
-                        主页
-                    </h1>
+                    }}>
+                    <PageHeader
+                        className="site-page-header"
+                        backIcon="false"
+                        title="Title"
+                        subTitle="This is a subtitle"/>
                 </Header>
                 <Content
                     style={{
-                        margin: '0 16px',
+                        margin: '32px 32px',
                     }}>
-                    <Breadcrumb
-                        style={{
-                        margin: '16px 0',
-                        }}>
-                        <Breadcrumb.Item>User</Breadcrumb.Item>
-                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div
-                        className="site-layout-background"
-                        style={{
-                            padding: 24,
-                            minHeight: 360,
-                        }}>
-                        Bill is a cat.
-                    </div>
+                    <HomeApp />
                 </Content>
                 <Footer
                     style={{
                         textAlign: 'center',
+                        color: '#999999'
                     }}>
-                    Ant Design ©2018 Created by Ant UED
+                    Sars-CoV-19 Variant DataBase Created by Morning Han
                 </Footer>
             </Layout>
         </Layout>
