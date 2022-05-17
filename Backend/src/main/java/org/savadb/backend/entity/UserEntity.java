@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "User", schema = "SaVa")
+@Table(name = "user", schema = "SaVa")
 public class UserEntity {
     @Id
     @Column(name = "usr_id", nullable = false)
@@ -31,10 +31,6 @@ public class UserEntity {
     @Basic
     @Column(name = "role", nullable = false, length = 32)
     private String role;
-
-    @Basic
-    @Column(name = "token", nullable = true)
-    private byte[] token;
 
     @OneToMany(mappedBy = "userByUsrId")
     private Collection<UserWatchingEntity> userWatchingsByUsrId;
@@ -90,14 +86,6 @@ public class UserEntity {
         this.role = role;
     }
 
-    public byte[] getToken() {
-        return token;
-    }
-
-    public void setToken(byte[] token) {
-        this.token = token;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,7 +99,6 @@ public class UserEntity {
         if (!Arrays.equals(passwd, that.passwd)) return false;
         if (!Arrays.equals(salt, that.salt)) return false;
         if (!Objects.equals(role, that.role)) return false;
-        if (!Arrays.equals(token, that.token)) return false;
 
         return true;
     }
@@ -124,7 +111,6 @@ public class UserEntity {
         result = 31 * result + Arrays.hashCode(passwd);
         result = 31 * result + Arrays.hashCode(salt);
         result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(token);
         return result;
     }
 

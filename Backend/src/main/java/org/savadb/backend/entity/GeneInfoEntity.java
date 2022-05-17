@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "GeneInfo", schema = "SaVa")
+@Table(name = "gene_info", schema = "SaVa")
 public class GeneInfoEntity {
     @Id
     @Column(name = "v_id", nullable = false)

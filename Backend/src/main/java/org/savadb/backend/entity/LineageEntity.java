@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Lineage", schema = "SaVa")
+@Table(name = "lineage", schema = "SaVa")
 public class LineageEntity {
     @Id
     @Column(name = "child_variant_id", nullable = false)

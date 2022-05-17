@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "WHOLabel", schema = "SaVa")
+@Table(name = "who_label", schema = "SaVa")
 public class WhoLabelEntity {
     @Id
     @Column(name = "v_id", nullable = false)

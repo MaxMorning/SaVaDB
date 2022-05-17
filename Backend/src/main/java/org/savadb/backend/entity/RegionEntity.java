@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Region", schema = "SaVa")
+@Table(name = "region", schema = "SaVa")
 public class RegionEntity {
     @Id
     @Column(name = "region_id", nullable = false)

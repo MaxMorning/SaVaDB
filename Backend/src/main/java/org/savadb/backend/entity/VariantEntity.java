@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Variant", schema = "SaVa")
+@Table(name = "variant", schema = "SaVa")
 public class VariantEntity {
     @Id
     @Column(name = "v_id", nullable = false)

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "PangoNomenclature", schema = "SaVa")
+@Table(name = "pango_nomenclature", schema = "SaVa")
 public class PangoNomenclatureEntity {
     @Id
     @Column(name = "v_id", nullable = false)
