@@ -40,10 +40,11 @@ export default class LoginPage extends Component {
         },
         false,
         (response) => {
-            if (200 == response.status) {
+            if (200 === response.data.code) {
                 // 登录成功
                 // 将token写入local storage
-                Requester.storeAuthToken(response.headers['Authorization']);
+                // 不论是否选择keep_login都保存，因为都需要保证在之后一小段时间内可以用token访问其它API
+                Requester.storeAuthToken(response.data.data);
                 window.location.href='./';
             }
             else {
@@ -76,15 +77,15 @@ export default class LoginPage extends Component {
         },
         false,
         (response) => {
-            if (200 == response.status && 200 == response.data.code) {
+            if (200 === response.data.code) {
                 // 注册成功
                 // 将token写入local storage
                 console.log(response);
                 Requester.storeAuthToken(response.data.data);
-                // window.location.href='./';
+                window.location.href='./';
             }
             else {
-                alert("Register failed.\nstatus: " + response.status);
+                alert("Register failed.\nstatus: " + response.data.msg);
             }
         },
         (error) => {}
@@ -203,8 +204,6 @@ export default class LoginPage extends Component {
                                             message: 'Please input your Username!',
                                         },
                                         ]}
-                                        hasFeedback
-                                        validateStatus="validating"
                                         ref={(item) => (this.regUsername = item)}>
                                         <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder="Username" />
                                     </Form.Item>

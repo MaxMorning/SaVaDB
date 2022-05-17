@@ -1,19 +1,44 @@
+import React, { Component } from 'react';
 import './App.css';
 import { Layout, Breadcrumb } from 'antd';
 import MySider from './component/MySider';
 import "antd/dist/antd.min.css";
+import Requester from './utils/Requester';
 
 const { Header, Content, Footer } = Layout;
 
-function App() {
-    let username = "Morning";
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {username: 'Anonymous', role: '', didLogin: false};
+    }
 
-    return (
+    componentDidMount() {
+        // 获取用户名
+        Requester.requestJSON({
+            method: 'get',
+            url: '/api/user/getUserInfo'
+        }, true,
+        (response) => {
+            if (response.data.code === 200) {
+                this.setState({
+                    username: response.data.data.username,
+                    role: response.data.data.role,
+                    didLogin: true
+                });
+            }
+        },
+        (error) => {}
+        )
+    }
+
+    render() { 
+        return (
         <Layout
             style={{
                 minHeight: '100vh',
             }}>
-            <MySider user={username}/>
+            <MySider user={this.state.username} didLogin={this.state.didLogin}/>
 
             <Layout className="site-layout">
                 <Header
@@ -54,7 +79,5 @@ function App() {
                 </Footer>
             </Layout>
         </Layout>
-    );
+    );}
 }
-
-export default App;
