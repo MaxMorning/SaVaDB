@@ -22,6 +22,10 @@ public class JpaUserService {
         return jpaUserRepo.findAllByUsrName(name);
     }
 
+    public UserEntity findByUsrName(String name) {
+        return jpaUserRepo.findFirstByUsrName(name);
+    }
+
     public void insertUser(UserEntity user) {
         jpaUserRepo.save(user);
     }

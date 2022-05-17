@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface JpaUserRepo extends JpaRepository<UserEntity, Integer> {
     List<UserEntity> findAllByUsrName(String name);
+
+    UserEntity findFirstByUsrName(String name);
 }

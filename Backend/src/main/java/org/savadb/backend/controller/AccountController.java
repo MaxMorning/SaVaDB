@@ -6,14 +6,14 @@ import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
 import org.savadb.backend.utils.PasswordUtils;
 import org.savadb.backend.utils.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -46,7 +46,7 @@ public class AccountController {
         ++idCnt;
         user.setEmail((String) reg_info.get("email"));
         user.setUsrName(username);
-        user.setRole("USER");
+        user.setRole("ROLE_USER");
 
         byte[] salt = PasswordUtils.genRandom512bit();
         byte[] saltedPassword = PasswordUtils.passwordHash(password, salt);
@@ -79,5 +79,34 @@ public class AccountController {
         String token = jwtUtils.getToken(tokenMap, expiredDay);
 
         return Result.resultFactory(EResult.SUCCESS, token);
+    }
+
+    @GetMapping("user/getUserInfo")
+    public Result<Map<String, String>> getUserInfo() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        }
+        else {
+            username = principal.toString();
+        }
+        List<UserEntity> userList = jpaUserService.findAllByUsrName(username);
+        if (userList.isEmpty()) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+
+        if (userList.size() > 1) {
+            return Result.resultFactory(EResult.DATA_DUPLICATE, null);
+        }
+
+        UserEntity user = userList.get(0);
+
+        Map<String, String> userInfo = new HashMap<>();
+
+        userInfo.put("username", user.getUsrName());
+        userInfo.put("role", user.getRole());
+
+        return Result.resultFactory(EResult.SUCCESS, userInfo);
     }
 }
