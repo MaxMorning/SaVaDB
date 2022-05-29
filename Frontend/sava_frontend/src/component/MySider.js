@@ -36,48 +36,49 @@ export default class MySider extends React.Component {
         super(props);
         this.state = {
             collapsed: false,
-            didLogin: props.didLogin};
+            didLogin: props.didLogin,
+            selectedKey: props.selectedKey};
     }
 
     didLoginItems = [
-        getItem('Home', 'home', <HomeOutlined />),
+        getItem('Home', 'HomeApp', <HomeOutlined />),
         getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-            getItem('Regions', 'regions', <MyIcon type="icon-earth" />),
-            getItem('Lineages', 'sub_lineages', <BranchesOutlined />),
+            getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
+            getItem('Lineages', 'SubLineages', <BranchesOutlined />),
         ]),
         getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-            getItem('Search', 'search', <SearchOutlined />),
-            getItem('Lineages', 'lineages', <BranchesOutlined />),
-            getItem('Compare', 'compare', <MyIcon type="icon-compare" />),
+            getItem('Search', 'Search', <SearchOutlined />),
+            getItem('Lineages', 'Lineage', <BranchesOutlined />),
+            getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
         ]),
         getItem('Data', 'data', <DatabaseOutlined />, [
-            getItem('Statistics', 'statistics', <LineChartOutlined />),
-            getItem('API', 'api', <ConsoleSqlOutlined />),
-            getItem('Data source', 'dataSource', <CloudServerOutlined />)
+            getItem('Statistics', 'Statistics', <LineChartOutlined />),
+            getItem('API', 'Api', <ConsoleSqlOutlined />),
+            getItem('Data source', 'DataSource', <CloudServerOutlined />)
         ]),
         getItem('User', 'user', <UserOutlined />, [
-            getItem('Info', 'info', <InfoCircleOutlined />),
-            getItem('Log out', 'logout', <LogoutOutlined />)
+            getItem('Info', 'Info', <InfoCircleOutlined />),
+            getItem('Log out', 'Logout', <LogoutOutlined />)
         ]),
     ];
 
     notLoginItems = [
-        getItem('Home', 'home', <HomeOutlined />),
+        getItem('Home', 'HomeApp', <HomeOutlined />),
         getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-            getItem('Regions', 'regions', <MyIcon type="icon-earth" />),
-            getItem('Lineages', 'sub_lineages', <BranchesOutlined />),
+            getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
+            getItem('Lineages', 'SubLineages', <BranchesOutlined />),
         ]),
         getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-            getItem('Search', 'search', <SearchOutlined />),
-            getItem('Lineages', 'lineages', <BranchesOutlined />),
-            getItem('Compare', 'compare', <MyIcon type="icon-compare" />),
+            getItem('Search', 'Search', <SearchOutlined />),
+            getItem('Lineages', 'Lineage', <BranchesOutlined />),
+            getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
         ]),
         getItem('Data', 'data', <DatabaseOutlined />, [
-            getItem('Statistics', 'statistics', <LineChartOutlined />),
-            getItem('API', 'api', <ConsoleSqlOutlined />),
-            getItem('Data source', 'dataSource', <CloudServerOutlined />)
+            getItem('Statistics', 'Statistics', <LineChartOutlined />),
+            getItem('API', 'Api', <ConsoleSqlOutlined />),
+            getItem('Data source', 'DataSource', <CloudServerOutlined />)
         ]),
-        getItem('Log in', 'login', <LoginOutlined/>),
+        getItem('Log in', 'Login', <LoginOutlined/>),
     ];
 
     onCollapse = (inCollapsed) => {
@@ -99,6 +100,25 @@ export default class MySider extends React.Component {
         return null;
     }
 
+    menuSelectHandler = (item, key, keyPath, selectedKeys, domEvent) => {
+        console.log(item);
+
+        switch (item.key) {
+            case 'HomeApp':
+                this.props.parentJumpFunc('HomeApp');
+                window.history.pushState(null,null, './');
+                break;
+        
+            case 'SubRegions':
+                this.props.parentJumpFunc('SubRegions');
+                window.history.pushState(null,null, './SubRegions');
+                break;
+
+            default:
+                break;
+        }
+    }
+
     render() {
         const { collapsed } = this.state;
 
@@ -116,10 +136,10 @@ export default class MySider extends React.Component {
 
         var my_menu;
         if (this.state.didLogin) {
-            my_menu = <Menu theme="dark" defaultSelectedKeys={['home']} mode="inline" items={this.didLoginItems}/>;
+            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" items={this.didLoginItems} onSelect={this.menuSelectHandler}/>;
         }
         else {
-            my_menu = <Menu theme="dark" defaultSelectedKeys={['home']} mode="inline" items={this.notLoginItems}/>;
+            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" items={this.notLoginItems} onSelect={this.menuSelectHandler}/>;
         }
 
         var temp_items = {};

@@ -8,12 +8,17 @@ import Requester from './utils/Requester';
 const { Header, Content, Footer } = Layout;
 
 // 设置懒加载
-const HomeApp = lazy(()=>import('./AppBuiltIn/HomeApp'))
+const HomeApp = lazy(()=>import('./AppBuiltIn/HomeApp'));
+const SubRegionsApp = lazy(()=>import('./AppBuiltIn/SubscribedRegions'));
 
 export default class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {username: 'Anonymous', role: '', didLogin: false};
+        this.state = {
+            username: 'Anonymous', 
+            role: '', 
+            didLogin: false,
+            AppType: props.AppType};
     }
 
     componentDidMount() {
@@ -35,15 +40,25 @@ export default class App extends Component {
         )
     }
 
+    setLink = (dstApp) => {
+        this.setState({AppType : dstApp});
+    }
+
     render() {
         // 设置懒加载
         var BuiltInApp;
         var pageName, subTitle;
 
-        switch (this.props.AppType) {
+        switch (this.state.AppType) {
             case 'HomeApp':
                 BuiltInApp = HomeApp;
                 pageName = "Home";
+                subTitle = "";
+                break;
+
+            case 'SubRegions':
+                BuiltInApp = SubRegionsApp;
+                pageName = "Subscribed Regions";
                 subTitle = "";
                 break;
 
@@ -55,7 +70,11 @@ export default class App extends Component {
             style={{
                 minHeight: '100vh'
             }}>
-            <MySider user={this.state.username} didLogin={this.state.didLogin}/>
+            <MySider
+                user={this.state.username}
+                didLogin={this.state.didLogin}
+                selectedKey={this.props.AppType}
+                parentJumpFunc={this.setLink}/>
 
             <Layout className="site-layout">
                 <Header
@@ -64,7 +83,7 @@ export default class App extends Component {
                         padding: 0,
                     }}>
                     <PageHeader
-                        onBack={() => null}
+                        onBack={() => window.history.back()}
                         className="site-page-header"
                         title={pageName}
                         subTitle={subTitle}/>
