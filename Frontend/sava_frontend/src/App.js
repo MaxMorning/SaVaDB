@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component, lazy } from 'react';
 import './App.css';
 import { Layout, PageHeader } from 'antd';
 import MySider from './component/MySider';
@@ -9,7 +9,6 @@ const { Header, Content, Footer } = Layout;
 
 // 设置懒加载
 const HomeApp = lazy(()=>import('./AppBuiltIn/HomeApp'))
-
 
 export default class App extends Component {
     constructor(props) {
@@ -36,7 +35,21 @@ export default class App extends Component {
         )
     }
 
-    render() { 
+    render() {
+        // 设置懒加载
+        var BuiltInApp;
+        var pageName, subTitle;
+
+        switch (this.props.AppType) {
+            case 'HomeApp':
+                BuiltInApp = HomeApp;
+                pageName = "Home";
+                subTitle = "";
+                break;
+
+            default:
+        }
+
         return (
         <Layout
             style={{
@@ -51,16 +64,16 @@ export default class App extends Component {
                         padding: 0,
                     }}>
                     <PageHeader
+                        onBack={() => null}
                         className="site-page-header"
-                        backIcon="false"
-                        title="Title"
-                        subTitle="This is a subtitle"/>
+                        title={pageName}
+                        subTitle={subTitle}/>
                 </Header>
                 <Content
                     style={{
                         margin: '32px 32px',
                     }}>
-                    <HomeApp />
+                    <BuiltInApp />
                 </Content>
                 <Footer
                     style={{

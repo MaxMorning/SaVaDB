@@ -16,7 +16,7 @@ root.render(
         <Suspense fallback={<div>Loading...</div>}>
             <Routes>
                 <Route path='login' element={<LoginPage/>} />
-                <Route path='/' element={<App/>} />
+                <Route path='/' element={<App AppType='HomeApp'/>} />
             </Routes>
         </Suspense>
     </Router>
