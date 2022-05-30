@@ -1,7 +1,7 @@
 package org.savadb.backend.security;
 
 import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.service.JPA.JpaUserService;
+import org.savadb.backend.service.JPA.Account.JpaUserService;
 import org.savadb.backend.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

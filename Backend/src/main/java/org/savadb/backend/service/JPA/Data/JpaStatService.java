@@ -1,10 +1,14 @@
-package org.savadb.backend.service.JPA;
+package org.savadb.backend.service.JPA.Data;
 
-import org.savadb.backend.repo.JpaStatRepo;
+import org.savadb.backend.entity.StatisticEntity;
+import org.savadb.backend.repo.Data.JpaStatRepo;
+import org.savadb.backend.service.JPA.JpaInfoMapService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -32,5 +36,9 @@ public class JpaStatService {
         result.put("updateTime", jpaInfoMapService.getValue("stat_update_time"));
 
         return result;
+    }
+
+    public List<StatisticEntity> getStatByArgs(Long regionId, Date startDate, Date endDate, Long step) {
+        return jpaStatRepo.getStatByArgs(regionId, startDate, endDate, step);
     }
 }

@@ -4,8 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.service.JPA.JpaUserService;
+import org.savadb.backend.service.JPA.Account.JpaUserService;
 
 import javax.annotation.Resource;
 import java.util.*;

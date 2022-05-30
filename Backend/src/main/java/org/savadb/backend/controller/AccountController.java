@@ -1,7 +1,8 @@
 package org.savadb.backend.controller;
 
 import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.service.JPA.JpaUserService;
+import org.savadb.backend.service.JPA.Account.JpaUserService;
+import org.savadb.backend.service.JPA.Account.JpaUserWatchingRegionsService;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
 import org.savadb.backend.utils.PasswordUtils;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class AccountController {
     @Resource
     private JpaUserService jpaUserService;
+
+    @Resource
+    private JpaUserWatchingRegionsService jpaUserWatchingRegionsService;
 
     private int idCnt = 0;
 
@@ -108,5 +112,29 @@ public class AccountController {
         userInfo.put("role", user.getRole());
 
         return Result.resultFactory(EResult.SUCCESS, userInfo);
+    }
+
+    @GetMapping("user/getUserSubRegions")
+    public Result<List<String>> getUserSubRegions() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        }
+        else {
+            username = principal.toString();
+        }
+        List<UserEntity> userList = jpaUserService.findAllByUsrName(username);
+        if (userList.isEmpty()) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+
+        if (userList.size() > 1) {
+            return Result.resultFactory(EResult.DATA_DUPLICATE, null);
+        }
+
+        UserEntity user = userList.get(0);
+
+        return Result.resultFactory(EResult.SUCCESS, jpaUserWatchingRegionsService.getAllWatchingRegions(user.getUsrId()));
     }
 }

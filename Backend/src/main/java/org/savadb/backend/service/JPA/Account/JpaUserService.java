@@ -1,7 +1,7 @@
-package org.savadb.backend.service.JPA;
+package org.savadb.backend.service.JPA.Account;
 
 import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.repo.JpaUserRepo;
+import org.savadb.backend.repo.Account.JpaUserRepo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
