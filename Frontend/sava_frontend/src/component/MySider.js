@@ -114,6 +114,15 @@ export default class MySider extends React.Component {
                 window.history.pushState(null,null, './SubRegions');
                 break;
 
+            case 'Login':
+                window.location.href = './login';
+                break;
+
+            case 'Logout':
+                window.localStorage.removeItem("sava-token");
+                window.location.href = './login';
+                break;
+
             default:
                 break;
         }
