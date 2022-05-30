@@ -137,6 +137,11 @@ def update_cache(db_cursor):
     db_cursor.execute(update_sql)
 
 
+def update_time(db_cursor):
+    update_sql = "insert into info_map value ('stat_update_time', sysdate())"
+    db_cursor.execute(update_sql)
+
+
 if __name__ == '__main__':
     connection = pymysql.connect(host='127.0.0.1', port=3306, user='savaer', password='Sava@1951581', db='SaVa',
                                  cursorclass=pymysql.cursors.DictCursor)
@@ -151,6 +156,8 @@ if __name__ == '__main__':
     store_to_db_dict(cursor, global_stat_dict)
 
     update_cache(cursor)
+
+    update_time(cursor)
 
     connection.commit()
     print("[LOG]\tCommit done.")

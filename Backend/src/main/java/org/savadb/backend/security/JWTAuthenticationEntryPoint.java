@@ -15,6 +15,7 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException, ServletException {
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/javascript;charset=utf-8");
-        response.getWriter().print("您未登录，没有访问权限");
+        response.setStatus(403);
+        response.getWriter().print("{\"code\": 403, \"msg\": \"您未登录，没有访问权限\"}");
     }
 }

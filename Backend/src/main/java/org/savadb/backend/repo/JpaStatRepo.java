@@ -10,5 +10,8 @@ import java.util.Map;
 
 public interface JpaStatRepo  extends JpaRepository<StatisticEntity, StatisticEntityPK> {
     @Query(value = "select existing_confirmed_cnt, death_cnt, cured_cnt from cached_world_stat_info where stat_date = (select max(stat_date) from cached_world_stat_info)", nativeQuery = true)
-    public Map<String, Object> getCurrentWorldStat();
+    Map<String, Object> getCurrentWorldStat();
+
+    @Query(value = "select existing_confirmed_cnt, death_cnt, cured_cnt from cached_world_stat_info where (stat_date + 1) = (select max(stat_date) from cached_world_stat_info)", nativeQuery = true)
+    Map<String, Object> getYesterdayWorldStat();
 }

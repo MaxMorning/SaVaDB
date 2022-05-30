@@ -1,14 +1,10 @@
 package org.savadb.backend.service.JPA;
 
 import org.savadb.backend.repo.JpaStatRepo;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -16,15 +12,25 @@ public class JpaStatService {
     @Resource
     private JpaStatRepo jpaStatRepo;
 
-    public Map<String, Integer> getCurrentWorldStat() {
+    @Resource
+    private JpaInfoMapService jpaInfoMapService;
+
+    public Map<String, Object> getCurrentWorldStat() {
         Map<String, Object> queryResult = jpaStatRepo.getCurrentWorldStat();
+        Map<String, Object> yesterdayQueryResult = jpaStatRepo.getYesterdayWorldStat();
 
-        Map<String, Integer> result = new HashMap<>();
-        result.put("confirmed_cnt", (Integer) queryResult.get("existing_confirmed_cnt"));
+        Map<String, Object> result = new HashMap<>();
+        result.put("confirmedTotal", queryResult.get("existing_confirmed_cnt"));
+        result.put("confirmedYesterday", (Integer) queryResult.get("existing_confirmed_cnt") - (Integer) yesterdayQueryResult.get("existing_confirmed_cnt"));
 
-        result.put("death_cnt", (Integer) queryResult.get("death_cnt"));
+        result.put("deathTotal", queryResult.get("death_cnt"));
+        result.put("deathYesterday", (Integer) queryResult.get("death_cnt") - (Integer) yesterdayQueryResult.get("death_cnt"));
 
-        result.put("cured_cnt", (Integer) queryResult.get("cured_cnt"));
+        result.put("curedTotal", queryResult.get("cured_cnt"));
+        result.put("curedYesterday", (Integer) queryResult.get("cured_cnt") - (Integer) yesterdayQueryResult.get("cured_cnt"));
+
+        result.put("updateTime", jpaInfoMapService.getValue("stat_update_time"));
+
         return result;
     }
 }

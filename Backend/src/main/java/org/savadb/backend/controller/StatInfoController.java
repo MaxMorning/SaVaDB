@@ -16,8 +16,8 @@ public class StatInfoController {
     @Resource
     private JpaStatService jpaStatService;
 
-    @GetMapping("/stat/getCurrentWorldStat")
-    public Result<Map<String, Integer>> getCurrentWorldStat() {
+    @GetMapping("/data/getGlobalLatestStat")
+    public Result<Map<String, Object>> getCurrentWorldStat() {
         return Result.resultFactory(EResult.SUCCESS, jpaStatService.getCurrentWorldStat());
     }
 }
