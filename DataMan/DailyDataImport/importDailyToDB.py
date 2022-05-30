@@ -13,8 +13,10 @@ start_date = datetime.date(2020, 1, 22)
 def init(db_cursor):
     delete_region_sql = "DELETE FROM `region`"
     delete_stat_sql = "DELETE FROM `statistic`"
+    delete_cache_sql = "DELETE FROM `cached_world_stat_info`"
     db_cursor.execute(delete_stat_sql)
     db_cursor.execute(delete_region_sql)
+    db_cursor.execute(delete_cache_sql)
 
 
 def store_region_to_db(db_cursor, data):
@@ -109,19 +111,30 @@ def store_to_db_dict(db_cursor, stat_dict):
             store_region_to_db(db_cursor, [region_idx, key])
 
         date_idx = 0
+        max_data_per_day = [0, 0, 0]
         for data_per_day in data:
             stat_date = start_date + datetime.timedelta(days=date_idx)
+
+            # 一些地区没有数据为0，SaVa中沿用最近的有效数据
+            max_data_per_day = [max(max_data_per_day[0], data_per_day[0]),
+                                max(max_data_per_day[1], data_per_day[1]),
+                                max(max_data_per_day[2], data_per_day[2])]
 
             db_cursor.execute(insert_stat_sql, (region_idx,
                                                 "{year}-{mon}-{date} 00:00:00".format(year=stat_date.year,
                                                                                       mon=stat_date.month,
                                                                                       date=stat_date.day)
-                                                , data_per_day[0], data_per_day[1], data_per_day[2],))
+                                                , max_data_per_day[0], max_data_per_day[1], max_data_per_day[2],))
             date_idx += 1
 
         region_idx += 1
 
     print("[LOG]\tInsert done.")
+
+
+def update_cache(db_cursor):
+    update_sql = "insert into cached_world_stat_info select stat_date, sum(ALL existing_confirmed_cnt), sum(ALL death_cnt), sum(ALL cured_cnt) from statistic group by stat_date"
+    db_cursor.execute(update_sql)
 
 
 if __name__ == '__main__':
@@ -136,6 +149,8 @@ if __name__ == '__main__':
     global_stat_dict = load_csv_dict()
 
     store_to_db_dict(cursor, global_stat_dict)
+
+    update_cache(cursor)
 
     connection.commit()
     print("[LOG]\tCommit done.")
