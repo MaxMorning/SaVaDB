@@ -30,12 +30,12 @@ public class VariantEntity {
     private Double avgIncubation;
 
     @Basic
-    @Column(name = "descript", nullable = true, length = 256)
-    private String descript;
+    @Column(name = "seq_cnt", nullable = false)
+    private Integer seqCnt;
 
     @Basic
-    @Column(name = "add_admin", nullable = false)
-    private Integer addAdmin;
+    @Column(name = "descript", nullable = true, length = 256)
+    private String descript;
 
     @Basic
     @Column(name = "v_status", nullable = false)
@@ -62,10 +62,6 @@ public class VariantEntity {
 
     @OneToMany(mappedBy = "variantByWatchingVId")
     private Collection<UserWatchingEntity> userWatchingsByVId;
-
-    @ManyToOne
-    @JoinColumn(name = "add_admin", referencedColumnName = "usr_id", nullable = false, insertable = false, updatable = false)
-    private UserEntity userByAddAdmin;
 
     @OneToOne(mappedBy = "variantByVId")
     private WhoLabelEntity whoLabelByVId;
@@ -106,6 +102,14 @@ public class VariantEntity {
         return avgIncubation;
     }
 
+    public Integer getSeqCnt() {
+        return seqCnt;
+    }
+
+    public void setSeqCnt(Integer seqCnt) {
+        this.seqCnt = seqCnt;
+    }
+
     public void setAvgIncubation(Double avgIncubation) {
         this.avgIncubation = avgIncubation;
     }
@@ -116,14 +120,6 @@ public class VariantEntity {
 
     public void setDescript(String descript) {
         this.descript = descript;
-    }
-
-    public Integer getAddAdmin() {
-        return addAdmin;
-    }
-
-    public void setAddAdmin(Integer addAdmin) {
-        this.addAdmin = addAdmin;
     }
 
     public String getvStatus() {
@@ -140,41 +136,6 @@ public class VariantEntity {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        VariantEntity that = (VariantEntity) o;
-
-        if (!Objects.equals(vId, that.vId)) return false;
-        if (!Objects.equals(earliestDate, that.earliestDate)) return false;
-        if (!Objects.equals(monitorLevel, that.monitorLevel)) return false;
-        if (!Objects.equals(r0, that.r0)) return false;
-        if (!Objects.equals(avgIncubation, that.avgIncubation))
-            return false;
-        if (!Objects.equals(descript, that.descript)) return false;
-        if (!Objects.equals(addAdmin, that.addAdmin)) return false;
-        if (!Objects.equals(vStatus, that.vStatus)) return false;
-        if (!Objects.equals(updateTime, that.updateTime)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = vId != null ? vId.hashCode() : 0;
-        result = 31 * result + (earliestDate != null ? earliestDate.hashCode() : 0);
-        result = 31 * result + (monitorLevel != null ? monitorLevel.hashCode() : 0);
-        result = 31 * result + (r0 != null ? r0.hashCode() : 0);
-        result = 31 * result + (avgIncubation != null ? avgIncubation.hashCode() : 0);
-        result = 31 * result + (descript != null ? descript.hashCode() : 0);
-        result = 31 * result + (addAdmin != null ? addAdmin.hashCode() : 0);
-        result = 31 * result + (vStatus != null ? vStatus.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        return result;
     }
 
     public Collection<AAChangesEntity> getAaChangesByVId() {
@@ -223,14 +184,6 @@ public class VariantEntity {
 
     public void setUserWatchingsByVId(Collection<UserWatchingEntity> userWatchingsByVId) {
         this.userWatchingsByVId = userWatchingsByVId;
-    }
-
-    public UserEntity getUserByAddAdmin() {
-        return userByAddAdmin;
-    }
-
-    public void setUserByAddAdmin(UserEntity userByAddAdmin) {
-        this.userByAddAdmin = userByAddAdmin;
     }
 
     public WhoLabelEntity getWhoLabelByVId() {
