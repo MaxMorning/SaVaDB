@@ -1,7 +1,9 @@
 package org.savadb.backend.controller;
 
+import org.savadb.backend.entity.PangoNomenclatureEntity;
 import org.savadb.backend.entity.VariantEntity;
 import org.savadb.backend.entity.WhoLabelEntity;
+import org.savadb.backend.service.JPA.Data.JpaLineageService;
 import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
 import org.savadb.backend.service.JPA.Data.JpaVariantService;
 import org.savadb.backend.utils.EResult;
@@ -27,9 +29,16 @@ public class LineageController {
     @Resource
     private JpaVariantService jpaVariantService;
 
+    @Resource
+    private JpaLineageService jpaLineageService;
+
     @GetMapping("/data/lineageBrief")
     public Result<Map<String, Object>> getVariant(@RequestParam String lineage) {
-        Integer targetId = jpaPangoNomenclatureService.findByVariantName(lineage).getvId();
+        PangoNomenclatureEntity pangoNomenclature = jpaPangoNomenclatureService.findByVariantName(lineage);
+        if (pangoNomenclature == null) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+        Integer targetId = pangoNomenclature.getvId();
 
         VariantEntity variant = jpaVariantService.findVariantById(targetId);
 
@@ -58,6 +67,7 @@ public class LineageController {
         result.put("R0", variant.getR0());
         result.put("avgIncubation", variant.getAvgIncubation());
         result.put("seqCount", variant.getSeqCnt());
+        result.put("childCount", jpaLineageService.getChildrenCnt(variant.getvId()));
 
         Timestamp updateTime = variant.getUpdateTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

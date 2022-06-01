@@ -7,8 +7,9 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "variant", schema = "SaVa")
+@Table(name = "variant", schema = "sava")
 public class VariantEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "v_id", nullable = false)
     private Integer vId;
@@ -51,11 +52,11 @@ public class VariantEntity {
     @OneToOne(mappedBy = "variantByVId")
     private GeneInfoEntity geneInfoByVId;
 
-    @OneToOne(mappedBy = "variantByChildVariantId")
-    private LineageEntity lineageByVId;
+    @OneToMany(mappedBy = "variantByChildVariantId")
+    private Collection<LineageEntity> childrenLineageByVId;
 
     @OneToMany(mappedBy = "variantByParentVariantId")
-    private Collection<LineageEntity> lineagesByVId;
+    private Collection<LineageEntity> parentLineagesByVId;
 
     @OneToOne(mappedBy = "variantByVId")
     private PangoNomenclatureEntity pangoNomenclatureByVId;
@@ -102,16 +103,16 @@ public class VariantEntity {
         return avgIncubation;
     }
 
+    public void setAvgIncubation(Double avgIncubation) {
+        this.avgIncubation = avgIncubation;
+    }
+
     public Integer getSeqCnt() {
         return seqCnt;
     }
 
     public void setSeqCnt(Integer seqCnt) {
         this.seqCnt = seqCnt;
-    }
-
-    public void setAvgIncubation(Double avgIncubation) {
-        this.avgIncubation = avgIncubation;
     }
 
     public String getDescript() {
@@ -154,20 +155,20 @@ public class VariantEntity {
         this.geneInfoByVId = geneInfoByVId;
     }
 
-    public LineageEntity getLineageByVId() {
-        return lineageByVId;
+    public Collection<LineageEntity> getChildrenLineageByVId() {
+        return childrenLineageByVId;
     }
 
-    public void setLineageByVId(LineageEntity lineageByVId) {
-        this.lineageByVId = lineageByVId;
+    public void setChildrenLineageByVId(Collection<LineageEntity> lineageByVId) {
+        this.childrenLineageByVId = lineageByVId;
     }
 
-    public Collection<LineageEntity> getLineagesByVId() {
-        return lineagesByVId;
+    public Collection<LineageEntity> getParentLineagesByVId() {
+        return parentLineagesByVId;
     }
 
-    public void setLineagesByVId(Collection<LineageEntity> lineagesByVId) {
-        this.lineagesByVId = lineagesByVId;
+    public void setParentLineagesByVId(Collection<LineageEntity> lineagesByVId) {
+        this.parentLineagesByVId = lineagesByVId;
     }
 
     public PangoNomenclatureEntity getPangoNomenclatureByVId() {
@@ -192,5 +193,42 @@ public class VariantEntity {
 
     public void setWhoLabelByVId(WhoLabelEntity whoLabelByVId) {
         this.whoLabelByVId = whoLabelByVId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VariantEntity variant = (VariantEntity) o;
+
+        if (!Objects.equals(vId, variant.vId)) return false;
+        if (!Objects.equals(earliestDate, variant.earliestDate))
+            return false;
+        if (!Objects.equals(monitorLevel, variant.monitorLevel))
+            return false;
+        if (!Objects.equals(r0, variant.r0)) return false;
+        if (!Objects.equals(avgIncubation, variant.avgIncubation))
+            return false;
+        if (!Objects.equals(seqCnt, variant.seqCnt)) return false;
+        if (!Objects.equals(descript, variant.descript)) return false;
+        if (!Objects.equals(vStatus, variant.vStatus)) return false;
+        if (!Objects.equals(updateTime, variant.updateTime)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = vId != null ? vId.hashCode() : 0;
+        result = 31 * result + (earliestDate != null ? earliestDate.hashCode() : 0);
+        result = 31 * result + (monitorLevel != null ? monitorLevel.hashCode() : 0);
+        result = 31 * result + (r0 != null ? r0.hashCode() : 0);
+        result = 31 * result + (avgIncubation != null ? avgIncubation.hashCode() : 0);
+        result = 31 * result + (seqCnt != null ? seqCnt.hashCode() : 0);
+        result = 31 * result + (descript != null ? descript.hashCode() : 0);
+        result = 31 * result + (vStatus != null ? vStatus.hashCode() : 0);
+        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
+        return result;
     }
 }

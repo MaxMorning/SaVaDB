@@ -7,18 +7,16 @@ import java.util.Objects;
 @Table(name = "lineage", schema = "sava")
 @IdClass(LineageEntityPK.class)
 public class LineageEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "child_variant_id", nullable = false)
     private Integer childVariantId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Basic
     @Column(name = "parent_variant_id", nullable = false)
     private Integer parentVariantId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "child_variant_id", referencedColumnName = "v_id", nullable = false, insertable = false, updatable = false)
     private VariantEntity variantByChildVariantId;
 
