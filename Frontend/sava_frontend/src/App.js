@@ -10,6 +10,7 @@ const { Header, Content, Footer } = Layout;
 // 设置懒加载
 const HomeApp = lazy(()=>import('./AppBuiltIn/HomeApp'));
 const SubRegionsApp = lazy(()=>import('./AppBuiltIn/SubscribedRegions'));
+const SubLineagesApp = lazy(() => import('./AppBuiltIn/SubscribedLineages'));
 
 export default class App extends Component {
     constructor(props) {
@@ -59,6 +60,12 @@ export default class App extends Component {
             case 'SubRegions':
                 BuiltInApp = SubRegionsApp;
                 pageName = "Subscribed Regions";
+                subTitle = "";
+                break;
+
+            case 'SubLineages':
+                BuiltInApp = SubLineagesApp;
+                pageName = "Subscribed Lineages";
                 subTitle = "";
                 break;
 

@@ -66,7 +66,13 @@ export default class SubscribedRegions extends Component {
                     // this.getMainStat(firstRegion);
                 }
             },
-            (error) => {}
+            (error) => {
+                if (error.response.status === 403) {
+                    this.setState(
+                        {is403: true, isSubLoaded: true}
+                    );
+                }
+            }
         );
 
         this.dateList = [];

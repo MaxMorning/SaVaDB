@@ -148,7 +148,8 @@ export default class BriefStatVisualizeCard extends Component {
         else {
             return (
                 <Col span={12}>
-                    <Card bordered={true} hoverable title={this.state.region}>
+                    <Card bordered={true} hoverable title={this.state.region}
+                        extra={<a href={'./region/' + this.state.region}>Detail</a>}>
                         <Spin indicator={antIcon} size="large"/>
                     </Card>
                 </Col>

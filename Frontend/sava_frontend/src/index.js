@@ -18,6 +18,7 @@ root.render(
                 <Route path='login' element={<LoginPage/>} />
                 <Route path='/' element={<App AppType='HomeApp'/>} />
                 <Route path='/SubRegions' element={<App AppType='SubRegions'/>} />
+                <Route path='/SubLineages' element={<App AppType='SubLineages'/>} />
             </Routes>
         </Suspense>
     </Router>
