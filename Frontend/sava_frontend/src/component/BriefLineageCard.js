@@ -115,6 +115,10 @@ export default class BriefLineageCard extends Component {
                                 {this.lineageData.seqCount}
                             </Descriptions.Item>
 
+                            <Descriptions.Item label="Children Count">
+                                {this.lineageData.childCount}
+                            </Descriptions.Item>
+
                             <Descriptions.Item label="Update time" span={2}>
                                 {this.lineageData.updateTime}
                             </Descriptions.Item>

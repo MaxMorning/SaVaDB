@@ -11,6 +11,7 @@ const { Header, Content, Footer } = Layout;
 const HomeApp = lazy(()=>import('./AppBuiltIn/HomeApp'));
 const SubRegionsApp = lazy(()=>import('./AppBuiltIn/SubscribedRegions'));
 const SubLineagesApp = lazy(() => import('./AppBuiltIn/SubscribedLineages'));
+const SearchApp = lazy(() => import('./AppBuiltIn/SearchApp'));
 
 export default class App extends Component {
     constructor(props) {
@@ -66,6 +67,12 @@ export default class App extends Component {
             case 'SubLineages':
                 BuiltInApp = SubLineagesApp;
                 pageName = "Subscribed Lineages";
+                subTitle = "";
+                break;
+
+            case 'Search':
+                BuiltInApp = SearchApp;
+                pageName = "Search";
                 subTitle = "";
                 break;
 

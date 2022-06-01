@@ -119,6 +119,11 @@ export default class MySider extends React.Component {
                 window.history.pushState(null,null, './SubLineages');
                 break;
 
+            case 'Search':
+                this.props.parentJumpFunc('Search');
+                window.history.pushState(null,null, './Search');
+                break;
+
             case 'Login':
                 window.location.href = './login';
                 break;

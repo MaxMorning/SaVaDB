@@ -19,6 +19,7 @@ root.render(
                 <Route path='/' element={<App AppType='HomeApp'/>} />
                 <Route path='/SubRegions' element={<App AppType='SubRegions'/>} />
                 <Route path='/SubLineages' element={<App AppType='SubLineages'/>} />
+                <Route path='/Search' element={<App AppType='Search'/>} />
             </Routes>
         </Suspense>
     </Router>
