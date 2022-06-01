@@ -19,4 +19,7 @@ public interface JpaStatRepo  extends JpaRepository<StatisticEntity, StatisticEn
 
     @Query(value = "select * from statistic where (region_id = ?1) and (datediff(stat_date, ?2) % ?4 = 0) and (datediff(stat_date, ?3) < 0) order by stat_date", nativeQuery = true)
     List<StatisticEntity> getStatByArgs(Long regionId, Date startDate, Date endDate, Long step);
+
+    @Query(value = "select existing_confirmed_cnt, death_cnt, cured_cnt from statistic where region_id=?1 and stat_date = (select max(stat_date) from statistic)", nativeQuery = true)
+    Map<String, Object> getLatestStat(Integer regionId);
 }

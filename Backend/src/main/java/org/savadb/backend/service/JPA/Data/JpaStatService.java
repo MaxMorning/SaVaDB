@@ -41,4 +41,15 @@ public class JpaStatService {
     public List<StatisticEntity> getStatByArgs(Long regionId, Date startDate, Date endDate, Long step) {
         return jpaStatRepo.getStatByArgs(regionId, startDate, endDate, step);
     }
+
+    public Integer[] getLatestStat(Integer regionId) {
+        Map<String, Object> mapStat = jpaStatRepo.getLatestStat(regionId);
+        Integer[] listStat = new Integer[3];
+
+        listStat[0] = (Integer) mapStat.get("existing_confirmed_cnt");
+        listStat[1] = (Integer) mapStat.get("death_cnt");
+        listStat[2] = (Integer) mapStat.get("cured_cnt");
+
+        return listStat;
+    }
 }

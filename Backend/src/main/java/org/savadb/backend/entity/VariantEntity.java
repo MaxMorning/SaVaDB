@@ -14,7 +14,7 @@ public class VariantEntity {
     private Integer vId;
 
     @Basic
-    @Column(name = "earliest_date", nullable = false)
+    @Column(name = "earliest_date")
     private Date earliestDate;
 
     @Basic

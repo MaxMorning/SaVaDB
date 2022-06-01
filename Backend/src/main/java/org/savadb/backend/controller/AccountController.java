@@ -3,6 +3,7 @@ package org.savadb.backend.controller;
 import org.savadb.backend.entity.UserEntity;
 import org.savadb.backend.service.JPA.Account.JpaUserService;
 import org.savadb.backend.service.JPA.Account.JpaUserWatchingRegionsService;
+import org.savadb.backend.service.JPA.Account.JpaUserWatchingVariantsService;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
 import org.savadb.backend.utils.PasswordUtils;
@@ -26,7 +27,12 @@ public class AccountController {
     @Resource
     private JpaUserWatchingRegionsService jpaUserWatchingRegionsService;
 
+    @Resource
+    private JpaUserWatchingVariantsService jpaUserWatchingVariantsService;
+
     private int idCnt = 0;
+
+    private UserEntity currentUser;
 
     /**
      * 用户注册
@@ -85,8 +91,7 @@ public class AccountController {
         return Result.resultFactory(EResult.SUCCESS, token);
     }
 
-    @GetMapping("user/getUserInfo")
-    public Result<Map<String, String>> getUserInfo() {
+    private EResult getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
@@ -97,44 +102,49 @@ public class AccountController {
         }
         List<UserEntity> userList = jpaUserService.findAllByUsrName(username);
         if (userList.isEmpty()) {
-            return Result.resultFactory(EResult.DATA_NULL, null);
+            return EResult.DATA_NULL;
         }
 
         if (userList.size() > 1) {
-            return Result.resultFactory(EResult.DATA_DUPLICATE, null);
+            return EResult.DATA_DUPLICATE;
         }
 
-        UserEntity user = userList.get(0);
+        this.currentUser = userList.get(0);
+        return EResult.SUCCESS;
+    }
+
+    @GetMapping("user/getUserInfo")
+    public Result<Map<String, String>> getUserInfo() {
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
 
         Map<String, String> userInfo = new HashMap<>();
 
-        userInfo.put("username", user.getUsrName());
-        userInfo.put("role", user.getRole());
+        userInfo.put("username", this.currentUser.getUsrName());
+        userInfo.put("role", this.currentUser.getRole());
 
         return Result.resultFactory(EResult.SUCCESS, userInfo);
     }
 
     @GetMapping("user/getUserSubRegions")
     public Result<List<String>> getUserSubRegions() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        }
-        else {
-            username = principal.toString();
-        }
-        List<UserEntity> userList = jpaUserService.findAllByUsrName(username);
-        if (userList.isEmpty()) {
-            return Result.resultFactory(EResult.DATA_NULL, null);
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
         }
 
-        if (userList.size() > 1) {
-            return Result.resultFactory(EResult.DATA_DUPLICATE, null);
+        return Result.resultFactory(EResult.SUCCESS, jpaUserWatchingRegionsService.getAllWatchingRegions(this.currentUser.getUsrId()));
+    }
+
+    @GetMapping("/user/getUserSubLineages")
+    public Result<List<String>> getUserSubLineage() {
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
         }
 
-        UserEntity user = userList.get(0);
-
-        return Result.resultFactory(EResult.SUCCESS, jpaUserWatchingRegionsService.getAllWatchingRegions(user.getUsrId()));
+        return Result.resultFactory(EResult.SUCCESS, jpaUserWatchingVariantsService.getAllWatchingVariants(this.currentUser.getUsrId()));
     }
 }

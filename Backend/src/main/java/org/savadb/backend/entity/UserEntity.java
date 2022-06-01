@@ -35,9 +35,6 @@ public class UserEntity {
     @OneToMany(mappedBy = "userByUsrId")
     private Collection<UserWatchingEntity> userWatchingsByUsrId;
 
-    @OneToMany(mappedBy = "userByAddAdmin")
-    private Collection<VariantEntity> variantsByUsrId;
-
     public Integer getUsrId() {
         return usrId;
     }
@@ -120,13 +117,5 @@ public class UserEntity {
 
     public void setUserWatchingsByUsrId(Collection<UserWatchingEntity> userWatchingsByUsrId) {
         this.userWatchingsByUsrId = userWatchingsByUsrId;
-    }
-
-    public Collection<VariantEntity> getVariantsByUsrId() {
-        return variantsByUsrId;
-    }
-
-    public void setVariantsByUsrId(Collection<VariantEntity> variantsByUsrId) {
-        this.variantsByUsrId = variantsByUsrId;
     }
 }
