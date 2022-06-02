@@ -48,7 +48,7 @@ export default class MySider extends React.Component {
         ]),
         getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
             getItem('Search', 'Search', <SearchOutlined />),
-            getItem('Lineages', 'Lineage', <BranchesOutlined />),
+            getItem('Lineages', 'Lineages', <BranchesOutlined />),
             getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
         ]),
         getItem('Data', 'data', <DatabaseOutlined />, [
@@ -70,7 +70,7 @@ export default class MySider extends React.Component {
         ]),
         getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
             getItem('Search', 'Search', <SearchOutlined />),
-            getItem('Lineages', 'Lineage', <BranchesOutlined />),
+            getItem('Lineages', 'Lineages', <BranchesOutlined />),
             getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
         ]),
         getItem('Data', 'data', <DatabaseOutlined />, [
@@ -122,6 +122,11 @@ export default class MySider extends React.Component {
             case 'Search':
                 this.props.parentJumpFunc('Search');
                 window.history.pushState(null,null, './Search');
+                break;
+
+            case 'Lineages':
+                this.props.parentJumpFunc('Lineages');
+                window.history.pushState(null,null, './Lineages');
                 break;
 
             case 'Login':
