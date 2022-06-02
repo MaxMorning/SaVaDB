@@ -13,6 +13,7 @@ const SubRegionsApp = lazy(()=>import('./AppBuiltIn/SubscribedRegions'));
 const SubLineagesApp = lazy(() => import('./AppBuiltIn/SubscribedLineages'));
 const SearchApp = lazy(() => import('./AppBuiltIn/SearchApp'));
 const LineagesApp = lazy(() => import('./AppBuiltIn/LineagesApp'));
+const CompareApp = lazy(() => import('./AppBuiltIn/CompareApp'));
 
 export default class App extends Component {
     constructor(props) {
@@ -80,6 +81,12 @@ export default class App extends Component {
             case 'Lineages':
                 BuiltInApp = LineagesApp;
                 pageName = "Lineages";
+                subTitle = "";
+                break;
+
+            case 'Compare':
+                BuiltInApp = CompareApp;
+                pageName = "Compare";
                 subTitle = "";
                 break;
 

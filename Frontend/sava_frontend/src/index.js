@@ -21,6 +21,7 @@ root.render(
                 <Route path='/SubLineages' element={<App AppType='SubLineages'/>} />
                 <Route path='/Search' element={<App AppType='Search'/>} />
                 <Route path='/Lineages' element={<App AppType='Lineages'/>} />
+                <Route path='/Compare' element={<App AppType='Compare'/>} />
             </Routes>
         </Suspense>
     </Router>
