@@ -15,7 +15,18 @@ public interface JpaCompRecordRepo extends JpaRepository<CompRecordEntity, CompR
     CompRecordEntity getSingleRecord(Integer idxOfUsr, Integer usrId);
 
     @Query("select c from CompRecordEntity c where c.seqSha1Value = ?1")
-    CompRecordEntity findSameSeq(String seqSha1Value);
+    List<CompRecordEntity> findSameSeq(String seqSha1Value);
 
+//    @Query(value = "select * from comp_record where seq_sha1_value = ?1 limit 1", nativeQuery = true)
+//    CompRecordEntity findSameSeq(String seqSha1Value);
 
+    @Deprecated
+    @Query(value = "select * from comp_record where status = 0 limit 1 order by comp_date", nativeQuery = true)
+    CompRecordEntity findOneCompareTask();
+
+    @Query("select c from CompRecordEntity c where c.status = 0 order by c.compDate")
+    List<CompRecordEntity> findAllCompareTask();
+
+    @Query(value = "select count(*) from comp_record where status = 1", nativeQuery = true)
+    Integer getComparingTaskCount();
 }

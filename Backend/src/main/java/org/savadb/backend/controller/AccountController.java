@@ -22,6 +22,8 @@ import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -190,7 +192,9 @@ public class AccountController {
                     singleList.add("Done");
             }
 
-            singleList.add(compRecord.getCompDate());
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            singleList.add(compRecord.getCompDate().toLocalDateTime().format(dateTimeFormatter));
 
             --index;
             result.add(singleList);
@@ -299,11 +303,11 @@ public class AccountController {
             }
 
             String hexSHA1 = hexValue.toString();
-            CompRecordEntity compRecord = jpaCompRecordService.findSameSeq(hexSHA1);
+            List<CompRecordEntity> compRecordList = jpaCompRecordService.findSameSeq(hexSHA1);
 
-            if (compRecord == null) {
+            if (compRecordList.isEmpty()) {
                 // 从未匹配过
-                compRecord = new CompRecordEntity();
+                CompRecordEntity compRecord = new CompRecordEntity();
                 compRecord.setUsrId(this.currentUser.getUsrId());
                 compRecord.setIdxOfUsr(jpaCompRecordService.getUserRecords(this.currentUser.getUsrId()).size());
                 compRecord.setCompDate(new Timestamp(System.currentTimeMillis()));
@@ -329,6 +333,7 @@ public class AccountController {
             }
             else {
                 // 曾经匹配过，直接给缓存
+                CompRecordEntity compRecord = compRecordList.get(0);
                 CompRecordEntity newCompRecord = new CompRecordEntity();
                 newCompRecord.setUsrId(this.currentUser.getUsrId());
                 newCompRecord.setIdxOfUsr(jpaCompRecordService.getUserRecords(this.currentUser.getUsrId()).size());

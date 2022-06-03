@@ -20,11 +20,29 @@ public class JpaCompRecordService {
         return jpaCompRecordRepo.getSingleRecord(idxOfUsr, usrId);
     }
 
-    public CompRecordEntity findSameSeq(String seqSha1Value) {
+    public List<CompRecordEntity> findSameSeq(String seqSha1Value) {
         return jpaCompRecordRepo.findSameSeq(seqSha1Value);
     }
 
     public void insertRecord(CompRecordEntity compRecord) {
+        jpaCompRecordRepo.save(compRecord);
+    }
+
+    public CompRecordEntity findOneCompareTask() {
+        List<CompRecordEntity> compRecordEntityList = jpaCompRecordRepo.findAllCompareTask();
+        if (compRecordEntityList.isEmpty()) {
+            return null;
+        }
+        else {
+            return compRecordEntityList.get(0);
+        }
+    }
+
+    public Integer getComparingTaskCount() {
+        return jpaCompRecordRepo.getComparingTaskCount();
+    }
+
+    public void saveRecord(CompRecordEntity compRecord) {
         jpaCompRecordRepo.save(compRecord);
     }
 }
