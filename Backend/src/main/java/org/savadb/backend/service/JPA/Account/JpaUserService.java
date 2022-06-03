@@ -29,4 +29,9 @@ public class JpaUserService {
     public void insertUser(UserEntity user) {
         jpaUserRepo.save(user);
     }
+
+    public void decCompTime(UserEntity user) {
+        user.setRemainCompTime(user.getRemainCompTime() - 1);
+        jpaUserRepo.save(user);
+    }
 }
