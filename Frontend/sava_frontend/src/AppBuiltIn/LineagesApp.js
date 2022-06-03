@@ -5,6 +5,7 @@ import "antd/dist/antd.min.css";
 import Requester from '../utils/Requester';
 import * as echarts from 'echarts'
 import ReactEcharts from 'echarts-for-react';
+import Localizer from '../utils/Localizer';
 
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -142,6 +143,8 @@ export default class LineagesApp extends Component {
     };
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         if (this.state.isALoaded && this.state.isBLoaded) {
             return (
                 <div
@@ -174,7 +177,7 @@ export default class LineagesApp extends Component {
         else {
             return (
                 <Result
-                    title="Loading..."
+                    title={localizerDict["Loading..."]}
                     extra={<Spin indicator={antIcon} size="large"/>}
                 />
             );

@@ -5,6 +5,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import Requester from '../utils/Requester';
 import BriefLineageCard from '../component/BriefLineageCard';
+import Localizer from '../utils/Localizer';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -64,10 +65,12 @@ export default class SubscribedLineages extends Component {
     }
     
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         if (!this.state.isSubLoaded) {
             return (
                 <Result
-                    title="Loading..."
+                    title={localizerDict["Loading..."]}
                     extra={<Spin indicator={antIcon} size="large"/>}
                 />
             );
@@ -77,7 +80,7 @@ export default class SubscribedLineages extends Component {
                 <Result
                     status="403"
                     title="403"
-                    subTitle="Sorry, you are not authorized to access this page."
+                    subTitle={localizerDict['403Hint']}
                     extra={<Button type="primary">Back Home</Button>}
                 />
             );
@@ -86,8 +89,8 @@ export default class SubscribedLineages extends Component {
         if (this.state.notSubAnyLineage) {
             return (
                 <Result
-                    title="No Subscribe"
-                    subTitle="You are not subscribing any lineage."
+                    title={localizerDict["No Subscribing Lineage"]}
+                    subTitle=""
                 />
             );
         }

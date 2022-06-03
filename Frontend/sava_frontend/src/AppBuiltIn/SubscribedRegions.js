@@ -4,6 +4,7 @@ import "antd/dist/antd.min.css";
 import * as echarts from 'echarts'
 import ReactEcharts from 'echarts-for-react';
 import { LoadingOutlined } from '@ant-design/icons';
+import Localizer from '../utils/Localizer';
 
 import Requester from '../utils/Requester';
 import BriefStatVisualizeCard from '../component/BriefStatVisualizeCard'
@@ -126,10 +127,12 @@ export default class SubscribedRegions extends Component {
     // }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         if (!this.state.isSubLoaded) {
             return (
                 <Result
-                    title="Loading..."
+                    title={localizerDict["Loading..."]}
                     extra={<Spin indicator={antIcon} size="large"/>}
                 />
             );
@@ -139,8 +142,8 @@ export default class SubscribedRegions extends Component {
                 <Result
                     status="403"
                     title="403"
-                    subTitle="Sorry, you are not authorized to access this page."
-                    extra={<Button type="primary">Back Home</Button>}
+                    subTitle={localizerDict['403Hint']}
+                    // extra={<Button type="primary">Back Home</Button>}
                 />
             );
         }
@@ -148,8 +151,8 @@ export default class SubscribedRegions extends Component {
         if (this.state.notSubAnyRegion) {
             return (
                 <Result
-                    title="No Subscribe"
-                    subTitle="You are not subscribing any region."
+                    title={localizerDict["No Subscribing Region"]}
+                    subTitle={localizerDict['NoSubRegionHint']}
                 />
             );
         }
@@ -163,19 +166,6 @@ export default class SubscribedRegions extends Component {
         return (
             <div>
                 <Row gutter={[12, 12]}>
-                    {/* <Col span={24}>
-                        <Card bordered={true} hoverable>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column'                                    
-                                }}>
-
-
-                                <ReactEcharts option={this.getOption()}/>
-                            </div>
-                        </Card>
-                    </Col> */}
 
                     {briefCardList}
                 </Row>

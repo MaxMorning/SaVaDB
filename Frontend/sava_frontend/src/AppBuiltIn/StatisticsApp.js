@@ -5,6 +5,7 @@ import ReactEcharts from 'echarts-for-react';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Option } = Select;
@@ -323,11 +324,13 @@ export default class StatisticsApp extends Component {
     };
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         var visualizePart;
         if (this.state.firstRegionName.length === 0 && this.state.secondRegionName.length === 0) {
             visualizePart = <Result
-                                title="Not Selected"
-                                subTitle="Please select some regions to explore or compare."
+                                title={localizerDict["Not Selected"]}
+                                subTitle={localizerDict['NotSelectedHint']}
                             />
         }
         else {
@@ -353,7 +356,7 @@ export default class StatisticsApp extends Component {
                                 <Col span={8}>
                                     <Select
                                         showSearch
-                                        placeholder='First Region'
+                                        placeholder={localizerDict['First Region']}
                                         defaultActiveFirstOption={false}
                                         showArrow={false}
                                         filterOption={false}
@@ -371,7 +374,7 @@ export default class StatisticsApp extends Component {
                                 <Col span={8}>
                                     <Select
                                         showSearch
-                                        placeholder='Second Region'
+                                        placeholder={localizerDict['Second Region']}
                                         defaultActiveFirstOption={false}
                                         showArrow={false}
                                         filterOption={false}
@@ -397,12 +400,12 @@ export default class StatisticsApp extends Component {
                     </Col>
 
                     <Col span={12}>
-                        <Card title="First Region Detail">
+                        <Card title={localizerDict["First Region Detail"]}>
                         </Card>
                     </Col>
 
                     <Col span={12}>
-                        <Card title="Second Region Detail">
+                        <Card title={localizerDict["Second Region Detail"]}>
                         </Card>
                     </Col>
                 </Row>

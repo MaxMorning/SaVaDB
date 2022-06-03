@@ -15,6 +15,7 @@ import {
     LoginOutlined
 } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
+import Localizer from '../utils/Localizer';
 
 function getItem(label, key, icon, children) {
     return {
@@ -38,48 +39,82 @@ export default class MySider extends React.Component {
             collapsed: false,
             didLogin: props.didLogin,
             selectedKey: props.selectedKey};
+
+        this.localizerDict = Localizer.getCurrentLocalDict();
+
+        var baseItems = [
+            getItem(this.localizerDict['HomeAppTitle'], 'HomeApp', <HomeOutlined />),
+            getItem(this.localizerDict['SiderSubscribe'], 'subscribe', <DesktopOutlined />, [
+                getItem(this.localizerDict['SiderRegions'], 'SubRegions', <MyIcon type="icon-earth" />),
+                getItem(this.localizerDict['SiderLineages'], 'SubLineages', <BranchesOutlined />),
+            ]),
+            getItem(this.localizerDict['SiderVariants'], 'variants', <MyIcon type="icon-dna" />, [
+                getItem(this.localizerDict['SearchTitle'], 'Search', <SearchOutlined />),
+                getItem(this.localizerDict['LineagesTitle'], 'Lineages', <BranchesOutlined />),
+                getItem(this.localizerDict['CompareTitle'], 'Compare', <MyIcon type="icon-compare" />),
+            ]),
+            getItem(this.localizerDict['SiderData'], 'data', <DatabaseOutlined />, [
+                getItem(this.localizerDict['StatisticsTitle'], 'Statistics', <LineChartOutlined />),
+                getItem('API', 'Api', <ConsoleSqlOutlined />),
+                getItem(this.localizerDict['SiderDataSource'], 'DataSource', <CloudServerOutlined />)
+            ]),
+        ];
+
+        this.didLoginItems = Object.assign([], baseItems);
+        this.notLoginItems = Object.assign([], baseItems);
+
+        this.didLoginItems.push(
+            getItem(this.localizerDict['SiderUser'], 'user', <UserOutlined />, [
+                getItem(this.localizerDict['SiderInfo'], 'Info', <InfoCircleOutlined />),
+                getItem(this.localizerDict['SiderLogout'], 'Logout', <LogoutOutlined />)
+            ])
+        );
+
+        this.notLoginItems.push(
+            getItem(this.localizerDict['SiderLogin'], 'Login', <LoginOutlined/>)
+        );
+
+        // this.didLoginItems = [
+        //     getItem(localizerDict['HomeAppTitle'], 'HomeApp', <HomeOutlined />),
+        //     getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
+        //         getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
+        //         getItem('Lineages', 'SubLineages', <BranchesOutlined />),
+        //     ]),
+        //     getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
+        //         getItem(localizerDict['SearchTitle'], 'Search', <SearchOutlined />),
+        //         getItem(localizerDict['LineagesTitle'], 'Lineages', <BranchesOutlined />),
+        //         getItem(localizerDict['CompareTitle'], 'Compare', <MyIcon type="icon-compare" />),
+        //     ]),
+        //     getItem('Data', 'data', <DatabaseOutlined />, [
+        //         getItem(localizerDict['StatisticsTitle'], 'Statistics', <LineChartOutlined />),
+        //         getItem('API', 'Api', <ConsoleSqlOutlined />),
+        //         getItem('Data source', 'DataSource', <CloudServerOutlined />)
+        //     ]),
+        //     getItem('User', 'user', <UserOutlined />, [
+        //         getItem('Info', 'Info', <InfoCircleOutlined />),
+        //         getItem('Log out', 'Logout', <LogoutOutlined />)
+        //     ]),
+        // ];
+
+        // this.notLoginItems = [
+        //     getItem(localizerDict['HomeAppTitle'], 'HomeApp', <HomeOutlined />),
+        //     getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
+        //         getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
+        //         getItem('Lineages', 'SubLineages', <BranchesOutlined />),
+        //     ]),
+        //     getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
+        //         getItem('Search', 'Search', <SearchOutlined />),
+        //         getItem('Lineages', 'Lineages', <BranchesOutlined />),
+        //         getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
+        //     ]),
+        //     getItem('Data', 'data', <DatabaseOutlined />, [
+        //         getItem('Statistics', 'Statistics', <LineChartOutlined />),
+        //         getItem('API', 'Api', <ConsoleSqlOutlined />),
+        //         getItem('Data source', 'DataSource', <CloudServerOutlined />)
+        //     ]),
+        //     getItem('Log in', 'Login', <LoginOutlined/>),
+        // ];
     }
-
-    didLoginItems = [
-        getItem('Home', 'HomeApp', <HomeOutlined />),
-        getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-            getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
-            getItem('Lineages', 'SubLineages', <BranchesOutlined />),
-        ]),
-        getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-            getItem('Search', 'Search', <SearchOutlined />),
-            getItem('Lineages', 'Lineages', <BranchesOutlined />),
-            getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
-        ]),
-        getItem('Data', 'data', <DatabaseOutlined />, [
-            getItem('Statistics', 'Statistics', <LineChartOutlined />),
-            getItem('API', 'Api', <ConsoleSqlOutlined />),
-            getItem('Data source', 'DataSource', <CloudServerOutlined />)
-        ]),
-        getItem('User', 'user', <UserOutlined />, [
-            getItem('Info', 'Info', <InfoCircleOutlined />),
-            getItem('Log out', 'Logout', <LogoutOutlined />)
-        ]),
-    ];
-
-    notLoginItems = [
-        getItem('Home', 'HomeApp', <HomeOutlined />),
-        getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-            getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
-            getItem('Lineages', 'SubLineages', <BranchesOutlined />),
-        ]),
-        getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-            getItem('Search', 'Search', <SearchOutlined />),
-            getItem('Lineages', 'Lineages', <BranchesOutlined />),
-            getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
-        ]),
-        getItem('Data', 'data', <DatabaseOutlined />, [
-            getItem('Statistics', 'Statistics', <LineChartOutlined />),
-            getItem('API', 'Api', <ConsoleSqlOutlined />),
-            getItem('Data source', 'DataSource', <CloudServerOutlined />)
-        ]),
-        getItem('Log in', 'Login', <LoginOutlined/>),
-    ];
 
     onCollapse = (inCollapsed) => {
         console.log(inCollapsed);

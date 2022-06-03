@@ -5,6 +5,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import "antd/dist/antd.min.css";
 
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const { Search } = Input;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -122,12 +123,14 @@ export default class SearchApp extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+        
         console.log(this.searchResult);
         var searchResultWidget;
         if (this.state.searching) {
             searchResultWidget = 
                 <Result
-                    title="Loading..."
+                    title={localizerDict["Loading..."]}
                     extra={<Spin indicator={antIcon} size="large"/>}
                 />
             ;
@@ -250,17 +253,17 @@ export default class SearchApp extends Component {
                         padding: '10px 10px'
                     }}
                     onChange={this.onRadioChange}>
-                    <Radio.Button value="Lineage">Lineage</Radio.Button>
-                    <Radio.Button value="Region">Region</Radio.Button>
-                    <Radio.Button value="Notification">Notification</Radio.Button>
+                    <Radio.Button value="Lineage">{localizerDict['Lineage']}</Radio.Button>
+                    <Radio.Button value="Region">{localizerDict['Region']}</Radio.Button>
+                    <Radio.Button value="Notification">{localizerDict['Notification']}</Radio.Button>
                     <Radio.Button value="API">API</Radio.Button>
 
                 </Radio.Group>
 
                 <Search
-                    placeholder="input search text"
+                    placeholder={localizerDict["input search text"]}
                     allowClear
-                    enterButton="Search"
+                    enterButton={localizerDict["Search"]}
                     size="large"
                     onSearch={this.onSearch}
                     style={{

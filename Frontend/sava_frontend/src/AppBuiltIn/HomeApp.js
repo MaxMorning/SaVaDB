@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Statistic, Card, Divider, Row, Col, List, Typography } from 'antd';
 import "antd/dist/antd.min.css";
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const { Text, Link } = Typography;
 
@@ -82,65 +83,61 @@ export default class HomeApp extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         return (
             <div>
                 <Row gutter={[12, 12]}>
                     <Col span={24}>
-                        <Card title="Introduction" bordered={true} hoverable>
+                        <Card title={localizerDict['HomeAppIntroduction']} bordered={true} hoverable>
                             <label>
-                                这是一个 SARS-Cov-19 病毒变种数据库网站，记录了从公开领域获取的病毒变种数据和统计信息。此外，本网站对公共领域提供API，供使用者进行数据分析用。
-                            </label>
-
-                            <br/>
-
-                            <label>
-                            希望疫情早日结束。
+                                {localizerDict['HomeAppIntroContent']}
                             </label>
                         </Card>
                     </Col>
 
                     <Col span={12} style={{minWidth: 600}}>
-                        <Card title="Global Statistics" bordered={true} hoverable 
+                        <Card title={localizerDict['HomeAppGlobalStat']} bordered={true} hoverable 
                             extra={<label style={{
                                 color: "#999999",
                                 fontSize: 12
-                            }}>Data updated at {this.state.updateTime}</label>}>
+                            }}> {localizerDict['HomeAppGlobalStatUpdateTimePrefix'] + this.state.updateTime}</label>}>
                             <Row gutter={16}>
                                 <Col span={12}>
-                                    <Statistic title="Confirm case yesterday" value={this.state.confirmedYesterday} />
+                                    <Statistic title={localizerDict["Confirm case yesterday"]} value={this.state.confirmedYesterday} />
                                     <Divider />
                                 </Col>
 
                                 <Col span={12}>
-                                    <Statistic title="Confirm case total" value={this.state.confirmedTotal} />
+                                    <Statistic title={localizerDict["Confirm case total"]} value={this.state.confirmedTotal} />
                                     <Divider />
                                 </Col>
                             </Row>
                             <Row gutter={16}>
                                 <Col span={12}>
-                                    <Statistic title="Death case yesterday" value={this.state.deathYesterday} />
+                                    <Statistic title={localizerDict["Death case yesterday"]} value={this.state.deathYesterday} />
                                     <Divider />
                                 </Col>
 
                                 <Col span={12}>
-                                    <Statistic title="Death case total" value={this.state.deathTotal} />
+                                    <Statistic title={localizerDict["Death case total"]} value={this.state.deathTotal} />
                                     <Divider />
                                 </Col>
                             </Row>
                             <Row gutter={16}>
                                 <Col span={12}>
-                                    <Statistic title="Cured case yesterday" value={this.state.curedYesterday} />
+                                    <Statistic title={localizerDict["Cured case yesterday"]} value={this.state.curedYesterday} />
                                 </Col>
 
                                 <Col span={12}>
-                                    <Statistic title="Cured case total" value={this.state.curedTotal} />
+                                    <Statistic title={localizerDict["Cured case total"]} value={this.state.curedTotal} />
                                 </Col>
                             </Row>
                         </Card>
                     </Col>
 
                     <Col span={12} flex="auto">
-                        <Card title="Notifications" bordered={true} hoverable style={{height: "100%"}}>
+                        <Card title={localizerDict["Notifications"]} bordered={true} hoverable style={{height: "100%"}}>
                             <List
                                 size="small"
                                 split={false}

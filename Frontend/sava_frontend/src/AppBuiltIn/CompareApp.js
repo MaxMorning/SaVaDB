@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Input, Row, Col, Form, List, Descriptions, notification, Button, Tag } from 'antd';
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const { TextArea } = Input;
 
@@ -137,6 +138,8 @@ export default class CompareApp extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         return (
             <div>
                 <div
@@ -154,7 +157,7 @@ export default class CompareApp extends Component {
                                 style={{
                                     margin: '0'
                                 }}>
-                                <TextArea placeholder="Paste sequence here"
+                                <TextArea placeholder={localizerDict["Paste sequence here"]}
                                     ref={this.seqText}
                                     style={{
                                         minHeight: '200px',
@@ -173,12 +176,12 @@ export default class CompareApp extends Component {
                             style={{
                                 margin: '10px'
                             }}
-                            onClick={this.openSeqFile}>Open FASTA file</Button>
+                            onClick={this.openSeqFile}>{localizerDict['Open FASTA file']}</Button>
                         <Button type="primary"
                             style={{
                                 margin: '10px'
                             }}
-                            onClick={this.submitSeq}>Upload to compare</Button>
+                            onClick={this.submitSeq}>{localizerDict['Upload to compare']}</Button>
                     </div>
                 </div>
 
@@ -189,7 +192,7 @@ export default class CompareApp extends Component {
                     <Row  gutter={[12, 12]}>
                         <Col span={12}>
                             <Card
-                                title="Compare Histroy">
+                                title={localizerDict["Compare Histroy"]}>
                                 <List
                                     pagination={true}
                                     itemLayout="horizontal"
@@ -208,11 +211,11 @@ export default class CompareApp extends Component {
                                                 title={<a onClick={this.getSelectRecordFunc(item[0])}>{item[1]}</a>}
                                                 description={
                                                     <Descriptions>
-                                                        <Descriptions.Item label='status'>
+                                                        <Descriptions.Item label={localizerDict['status']}>
                                                             <Tag color="red">{item[2]}</Tag>
                                                         </Descriptions.Item>
 
-                                                        <Descriptions.Item label="Time" span={2}>
+                                                        <Descriptions.Item label={localizerDict["Time"]} span={2}>
                                                             {item[3]}
                                                         </Descriptions.Item>
                                                     </Descriptions>
@@ -230,7 +233,7 @@ export default class CompareApp extends Component {
 
                         <Col span={12}>
                             <Card
-                                title="Compare Result">
+                                title={localizerDict["Compare Result"]}>
                                 <List
                                     pagination={true}
                                     itemLayout="horizontal"
@@ -250,11 +253,11 @@ export default class CompareApp extends Component {
                                                 // description={'Lev Dis: ' + item[1] + ' , Simularity: ' + item[2]}
                                                 description={
                                                     <Descriptions>
-                                                        <Descriptions.Item label="Levenstain Distance" span={2}>
+                                                        <Descriptions.Item label={localizerDict["Levenstain Distance"]} span={2}>
                                                             {item[1]}
                                                         </Descriptions.Item>
 
-                                                        <Descriptions.Item label="Simularity">
+                                                        <Descriptions.Item label={localizerDict["Simularity"]}>
                                                             {item[2]}
                                                         </Descriptions.Item>
                                                     </Descriptions>

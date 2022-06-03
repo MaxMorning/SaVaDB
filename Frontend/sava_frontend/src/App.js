@@ -71,37 +71,37 @@ export default class App extends Component {
 
             case 'SubRegions':
                 BuiltInApp = SubRegionsApp;
-                pageName = "Subscribed Regions";
+                pageName = localizerDict['SubRegionsTitle'];
                 subTitle = "";
                 break;
 
             case 'SubLineages':
                 BuiltInApp = SubLineagesApp;
-                pageName = "Subscribed Lineages";
+                pageName = localizerDict['SubLineagesTitle'];
                 subTitle = "";
                 break;
 
             case 'Search':
                 BuiltInApp = SearchApp;
-                pageName = "Search";
+                pageName = localizerDict['SearchTitle'];
                 subTitle = "";
                 break;
 
             case 'Lineages':
                 BuiltInApp = LineagesApp;
-                pageName = "Lineages";
+                pageName = localizerDict['LineagesTitle'];
                 subTitle = "";
                 break;
 
             case 'Compare':
                 BuiltInApp = CompareApp;
-                pageName = "Compare";
+                pageName = localizerDict['CompareTitle'];
                 subTitle = "";
                 break;
 
             case 'Statistics':
                 BuiltInApp = StatisticsApp;
-                pageName = "Statistics";
+                pageName = localizerDict['StatisticsTitle'];
                 subTitle = "";
                 break;
 
@@ -142,7 +142,7 @@ export default class App extends Component {
                         textAlign: 'center',
                         color: '#999999'
                     }}>
-                    Sars-CoV-19 Variant DataBase Created by Morning Han
+                    {localizerDict['FooterText']}
                 </Footer>
             </Layout>
         </Layout>
