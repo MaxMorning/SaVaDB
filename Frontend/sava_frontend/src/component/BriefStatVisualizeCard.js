@@ -35,7 +35,7 @@ export default class BriefStatVisualizeCard extends Component {
                 
                 params: {
                     region: this.state.region,
-                    startDate: '2022-01-22',
+                    startDate: '2020-01-22',
                     endDate: dateStr,
                     step: 7
                 }

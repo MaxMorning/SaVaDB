@@ -79,6 +79,9 @@ export default class Localizer {
         'Simularity' : 'Simularity',
         'status' : 'Status',
         'Time' : 'Time',
+
+        'Get Data' : 'Get Data',
+        'Interval' : 'Interval Days',
     }
 
     static zh_CN_dict = {
@@ -145,5 +148,8 @@ export default class Localizer {
         'Levenstain Distance' : 'Levenstain 距离',
         'Simularity' : '相似度',
         'Time' : '提交时间',
+
+        'Get Data' : '检索数据',
+        'Interval' : '间隔天数',
     }
 }

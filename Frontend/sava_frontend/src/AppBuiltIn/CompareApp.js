@@ -60,6 +60,7 @@ export default class CompareApp extends Component {
                         this.setState({isResultLoaded: true});
                     }
                     else {
+                        this.compareResult = [];
                         this.setState({isResultLoaded: false});
                     }
                 },
@@ -128,6 +129,15 @@ export default class CompareApp extends Component {
                         message: 'Upload Done',
                         description:
                             'The server will compare the sequence you submitted with those in database.Please wait for a moment and refresh the page.',
+                        duration: 6,
+                    };
+                    notification.open(args);
+                }
+                else if (response.data.code === 403) {
+                    const args = {
+                        message: 'Compare Time ran out',
+                        description:
+                            'You cannot compare sequence any more.',
                         duration: 6,
                     };
                     notification.open(args);

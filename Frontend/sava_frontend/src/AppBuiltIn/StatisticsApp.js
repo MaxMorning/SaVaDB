@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
-import { Card, Row, Col, Select, Result, Spin, Button, DatePicker } from 'antd';
+import { Card, Row, Col, Select, Result, Spin, Button, DatePicker, InputNumber, List } from 'antd';
 import * as echarts from 'echarts'
 import ReactEcharts from 'echarts-for-react';
 import { LoadingOutlined } from '@ant-design/icons';
+
+import RegionSearchSelector from '../component/RegionSearchSelector';
 
 import Requester from '../utils/Requester';
 import Localizer from '../utils/Localizer';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 export default class StatisticsApp extends Component {
     constructor(props) {
         super(props);
 
-        this.firstData = null;
-        this.secondData = null;
+        this.firstData = [];
+        this.secondData = [];
         this.firstRegionNameSearchData = [];
         this.secondRegionNameSearchData = [];
+        this.firstRegionName = '';
+        this.secondRegionName = '';
 
         this.state = {
-            firstRegionName: '',
-            secondRegionName: ''
+            isLoading: false,
+            isLoaded: false,
         };
     }
 
@@ -53,7 +56,7 @@ export default class StatisticsApp extends Component {
         title: [
             {
             left: 'center',
-            text: this.state.firstRegionName + ' & ' + this.state.secondRegionName + ' (Per Day)'
+            text: this.firstRegionName + ' & ' + this.secondRegionName
             }
         ],
         xAxis: {
@@ -78,7 +81,7 @@ export default class StatisticsApp extends Component {
         ],
         series: [
             {
-            name: 'First Confirmed',
+            name: this.firstRegionName + ' Confirmed',
             type: 'line',
             symbol: 'none',
             sampling: 'lttb',
@@ -101,7 +104,7 @@ export default class StatisticsApp extends Component {
             },
 
             {
-                name: 'First Death',
+                name: this.firstRegionName + ' Death',
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -124,7 +127,7 @@ export default class StatisticsApp extends Component {
             },
 
             {
-                name: 'Second Confirmed',
+                name: this.secondRegionName + ' Confirmed',
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -147,7 +150,7 @@ export default class StatisticsApp extends Component {
             },
     
             {
-                name: 'Second Death',
+                name: this.secondRegionName + ' Death',
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -176,7 +179,8 @@ export default class StatisticsApp extends Component {
     getOneRegionOption = () =>{
         var confirmedValue;
         var deathValue;
-        if (this.firstData !== null) {
+        var regionName;
+        if (this.firstData.length !== 0) {
             confirmedValue = this.firstData.map(function (item) {
                 return item[0];
             });
@@ -184,6 +188,8 @@ export default class StatisticsApp extends Component {
             deathValue = this.firstData.map(function (item) {
                 return item[1];
             });
+
+            regionName = this.firstRegionName;
         }
         else {
             confirmedValue = this.secondData.map(function (item) {
@@ -193,6 +199,8 @@ export default class StatisticsApp extends Component {
             deathValue = this.secondData.map(function (item) {
                 return item[1];
             });
+
+            regionName = this.secondRegionName;
         }
         
 
@@ -206,7 +214,7 @@ export default class StatisticsApp extends Component {
         title: [
             {
             left: 'center',
-            text: this.state.firstRegionName + ' & ' + this.state.secondRegionName + ' (Per Day)'
+            text: regionName
             }
         ],
         xAxis: {
@@ -281,7 +289,8 @@ export default class StatisticsApp extends Component {
     };
 
     getOption = () => {
-        if (this.state.firstRegionName.length === 0 || this.state.secondRegionName.length === 0) {
+
+        if (this.firstRegionName.length === 0 || this.secondRegionName.length === 0) {
             return this.getOneRegionOption();
         }
         else {
@@ -289,57 +298,190 @@ export default class StatisticsApp extends Component {
         }
     }
 
-    handleFirstSearch = (newValue) => {
-        if (newValue) {
+    setFirstRegion = (value) => {
+        this.firstRegionName = value;
+    }
+
+    setSecondRegion = (value) => {
+        this.secondRegionName = value;
+    }
+
+    getData = () => {
+        console.log(this.dayInternal);
+        if (this.firstRegionName.length > 0) {
             Requester.requestJSON(
                 {
                     method: 'get',
-                    url: '/api/data/searchRegionBrief',
+                    url: '/api/data/getStat',
+    
                     params: {
-                        key: newValue
+                        region: this.firstRegionName,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        step: this.dayInternal
                     }
                 },
                 false,
                 (response) => {
                     if (response.data.code === 200) {
-                        this.firstRegionNameSearchData = response.data.data;
+                        this.firstData = response.data.data;
+
+
+                        var dateStart = new Date(this.startDate);
+
+                        this.dateList = [];
+                        for (var i = 0; i < this.firstData.length; ++i) {
+                            dateStart.setDate(dateStart.getDate() + this.dayInternal);
+                            var dateStr = this.convertDateToStr(dateStart);
+
+
+                            this.dateList.push(dateStr);
+                        }
+
+
+                        if (this.secondRegionName.length === 0 || this.secondData.length !== 0) {
+                            this.setState({
+                                isLoaded : true
+                            })
+                        }
                     }
                     else {
-                        this.firstRegionNameSearchData = [];
+                        this.firstData = [];
+                        this.setState({
+                            isLoaded : false
+                        })
                     }
                 },
                 (error) => {
-                    this.firstRegionNameSearchData = [];
+                    this.firstData = [];
+                    this.setState({
+                        isLoaded : false
+                    });
                 }
             );
-        } else {
-            this.firstRegionNameSearchData = [];
         }
-      };
+        
+        if (this.secondRegionName.length > 0) {
+            Requester.requestJSON(
+                {
+                    method: 'get',
+                    url: '/api/data/getStat',
     
-    handleFirstChange = (newValue) => {
-        this.setState({
-            firstRegionName: newValue
-        });
-    };
+                    params: {
+                        region: this.secondRegionName,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        step: this.dayInternal
+                    }
+                },
+                false,
+                (response) => {
+                    if (response.data.code === 200) {
+                        this.secondData = response.data.data;
+
+                        var dateStart = new Date(this.startDate);
+
+                        this.dateList = [];
+                        for (var i = 0; i < this.secondData.length; ++i) {
+                            dateStart.setDate(dateStart.getDate() + this.dayInternal);
+                            var dateStr = this.convertDateToStr(dateStart);
+
+
+                            this.dateList.push(dateStr);
+                        }
+
+
+                        if (this.firstData.length === 0 || this.firstData.length !== 0) {
+                            this.setState({
+                                isLoaded : true
+                            })
+                        }
+                    }
+                    else {
+                        this.secondData = [];
+                        this.setState({
+                            isLoaded : false
+                        })
+                    }
+                },
+                (error) => {
+                    this.secondData = [];
+                    this.setState({
+                        isLoaded : false
+                    });
+                }
+            );
+        }
+    }
+
+    onIntervalChange = (value) => {
+        this.dayInternal = value;
+    }
+
+    rangePickerOnChange = (dates, dateStrings) => {
+        this.startDate = dateStrings[0];
+        this.endDate = dateStrings[1];
+    }
+
+    convertDateToStr(dateInst) {
+        return dateInst.getFullYear() + '-' + (dateInst.getMonth() + 1) + '-' + dateInst.getDate();
+    }
 
     render() {
         var localizerDict = Localizer.getCurrentLocalDict();
 
         var visualizePart;
-        if (this.state.firstRegionName.length === 0 && this.state.secondRegionName.length === 0) {
+        if (this.firstRegionName.length === 0 && this.secondRegionName.length === 0) {
             visualizePart = <Result
                                 title={localizerDict["Not Selected"]}
                                 subTitle={localizerDict['NotSelectedHint']}
                             />
         }
-        else {
+        else if (this.state.isLoaded) {
             visualizePart = <ReactEcharts option={this.getOption()}/>
         }
+        else {
+            // 加载中
+            visualizePart = <Result
+                title={localizerDict["Loading..."]}
+                extra={<Spin indicator={antIcon} size="large"/>}
+            /> 
+        }
 
-        const firstOptions = this.firstRegionNameSearchData.map((d) => <Option key={d}>{d}</Option>);
-        const secondOptions = this.secondRegionNameSearchData.map((d) => <Option key={d}>{d}</Option>);
+        var firstDetailDataItems = [];
+        var dateStart = new Date(this.startDate);
 
+
+        if (this.firstData.length !== 0) {
+            for (var i = 0; i < this.firstData.length; ++i) {
+                firstDetailDataItems.push(
+                    <List.Item>
+                        <List.Item.Meta
+                            title={this.dateList[i]}
+                            description={'Confirmed: ' + this.firstData[i][0] + ' Death: ' + this.firstData[i][1] + ' Cured: ' + this.firstData[i][2]}
+                            />
+                    </List.Item>
+                );
+
+            }
+        }
+
+        var secondDetailDataItems = [];
+        dateStart = new Date(this.startDate);
+
+        if (this.secondData.length !== 0) {
+            for (var i = 0; i < this.secondData.length; ++i) {
+                secondDetailDataItems.push(
+                    <List.Item>
+                        <List.Item.Meta
+                            title={this.dateList[i]}
+                            description={'Confirmed: ' + this.secondData[i][0] + ' Death: ' + this.secondData[i][1] + ' Cured: ' + this.secondData[i][2]}
+                            />
+                    </List.Item>
+                );
+            }
+        }
+        
         return (
             <div>
                 <Row gutter={[12, 12]}>
@@ -353,47 +495,43 @@ export default class StatisticsApp extends Component {
                         <Card>
                             <Row
                                 gutter={[12, 12]}>
-                                <Col span={8}>
-                                    <Select
-                                        showSearch
+                                <Col span={5}>
+                                    <RegionSearchSelector
                                         placeholder={localizerDict['First Region']}
-                                        defaultActiveFirstOption={false}
-                                        showArrow={false}
-                                        filterOption={false}
-                                        onSearch={this.handleFirstSearch}
-                                        onChange={this.handleFirstChange}
-                                        notFoundContent={null}
-                                        style={{
-                                            width: '100%'
-                                        }}
-                                        >
-                                    {firstOptions}
-                                    </Select>
+                                        onChange={this.setFirstRegion}/>
                                 </Col>
 
-                                <Col span={8}>
-                                    <Select
-                                        showSearch
+                                <Col span={5}>
+                                <RegionSearchSelector
                                         placeholder={localizerDict['Second Region']}
-                                        defaultActiveFirstOption={false}
-                                        showArrow={false}
-                                        filterOption={false}
-                                        onSearch={this.handleFirstSearch}
-                                        onChange={this.handleFirstChange}
-                                        notFoundContent={null}
-                                        style={{
-                                            width: '100%'
-                                        }}
-                                    >
-                                    {secondOptions}
-                                    </Select>
+                                        onChange={this.setSecondRegion}/>
                                 </Col>
 
                                 <Col span={8}>
                                     <RangePicker 
                                     style={{
                                         width: '100%'
-                                    }}/>
+                                    }}
+                                    onChange={this.rangePickerOnChange}/>
+                                </Col>
+
+                                <Col span={3}>
+                                    <InputNumber  min={1} max={120}
+                                        placeholder={localizerDict['Interval']}
+                                        style={{
+                                            width: '100%'
+                                        }}
+                                        onChange={this.onIntervalChange}/>
+                                </Col>
+
+                                <Col span={3} >
+                                    <Button type='primary'
+                                        onClick={this.getData}
+                                        style={{
+                                            width: '100%'
+                                        }}>
+                                        {localizerDict['Get Data']}
+                                    </Button>
                                 </Col>
                             </Row>
                         </Card>
@@ -401,11 +539,33 @@ export default class StatisticsApp extends Component {
 
                     <Col span={12}>
                         <Card title={localizerDict["First Region Detail"]}>
+                            <List
+                                pagination={true}
+                                itemLayout="horizontal"
+                                dataSource={firstDetailDataItems}
+                                renderItem={
+                                    (item) => (
+                                        item
+                                    )
+                                }
+                                >
+                            </List>
                         </Card>
                     </Col>
 
                     <Col span={12}>
                         <Card title={localizerDict["Second Region Detail"]}>
+                            <List
+                                pagination={true}
+                                itemLayout="horizontal"
+                                dataSource={secondDetailDataItems}
+                                renderItem={
+                                    (item) => (
+                                        item
+                                    )
+                                }
+                                >
+                            </List>
                         </Card>
                     </Col>
                 </Row>
