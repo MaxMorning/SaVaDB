@@ -134,6 +134,11 @@ export default class MySider extends React.Component {
                 window.history.pushState(null,null, './Compare');
                 break;
 
+            case 'Statistics':
+                this.props.parentJumpFunc('Statistics');
+                window.history.pushState(null,null, './Statistics');
+                break;
+
             case 'Login':
                 window.location.href = './login';
                 break;

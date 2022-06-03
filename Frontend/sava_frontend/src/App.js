@@ -4,6 +4,8 @@ import { Layout, PageHeader } from 'antd';
 import MySider from './component/MySider';
 import "antd/dist/antd.min.css";
 import Requester from './utils/Requester';
+import moment from 'moment'
+import Localizer from './utils/Localizer';
 
 const { Header, Content, Footer } = Layout;
 
@@ -14,15 +16,20 @@ const SubLineagesApp = lazy(() => import('./AppBuiltIn/SubscribedLineages'));
 const SearchApp = lazy(() => import('./AppBuiltIn/SearchApp'));
 const LineagesApp = lazy(() => import('./AppBuiltIn/LineagesApp'));
 const CompareApp = lazy(() => import('./AppBuiltIn/CompareApp'));
+const StatisticsApp = lazy(() => import('./AppBuiltIn/StatisticsApp'));
 
 export default class App extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             username: 'Anonymous', 
             role: '', 
             didLogin: false,
+            locale: props.locale,
             AppType: props.AppType};
+
+        moment.locale(props.locale);
     }
 
     componentDidMount() {
@@ -53,10 +60,12 @@ export default class App extends Component {
         var BuiltInApp;
         var pageName, subTitle;
 
+        var localizerDict = Localizer.getLocalDict(this.state.locale);
+
         switch (this.state.AppType) {
             case 'HomeApp':
                 BuiltInApp = HomeApp;
-                pageName = "Home";
+                pageName = localizerDict['HomeAppTitle'];
                 subTitle = "";
                 break;
 
@@ -87,6 +96,12 @@ export default class App extends Component {
             case 'Compare':
                 BuiltInApp = CompareApp;
                 pageName = "Compare";
+                subTitle = "";
+                break;
+
+            case 'Statistics':
+                BuiltInApp = StatisticsApp;
+                pageName = "Statistics";
                 subTitle = "";
                 break;
 
