@@ -1,5 +1,6 @@
 package org.savadb.backend.controller;
 
+import org.savadb.backend.entity.LineageEntity;
 import org.savadb.backend.entity.PangoNomenclatureEntity;
 import org.savadb.backend.entity.VariantEntity;
 import org.savadb.backend.entity.WhoLabelEntity;
@@ -16,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -77,4 +76,31 @@ public class LineageController {
         return result;
     }
 
+    @GetMapping("/data/getAllChild")
+    public Result<Map<String, Object>> getAllChildrenOfA(@RequestParam String lineage) {
+        PangoNomenclatureEntity pangoNomenclature = jpaPangoNomenclatureService.findByVariantName(lineage);
+        if (pangoNomenclature == null) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+        Integer indexOfParent = pangoNomenclature.getvId();
+
+        return Result.resultFactory(EResult.SUCCESS, processLineageNode(indexOfParent));
+    }
+
+    private Map<String, Object> processLineageNode(Integer lineageId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("name", jpaPangoNomenclatureService.getById(lineageId).getVariant());
+
+        List<Map<String, Object>> childList = new ArrayList<>();
+
+        List<LineageEntity> childInstList = jpaLineageService.getAllChildren(lineageId);
+
+        for (LineageEntity child : childInstList) {
+            childList.add(processLineageNode(child.getChildVariantId()));
+        }
+
+        result.put("children", childList);
+
+        return result;
+    }
 }

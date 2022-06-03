@@ -57,6 +57,18 @@ public class SearchController {
         }
     }
 
+    @GetMapping("data/searchRegionBrief")
+    public Result<List<String>> searchRegionBrief(@RequestParam String key) {
+        List<RegionEntity> regionList = jpaRegionService.findAllContains(key);
+        List<String> result = new ArrayList<>();
+
+        for (RegionEntity region : regionList) {
+            result.add(region.getRegionName());
+        }
+
+        return Result.resultFactory(EResult.SUCCESS, result);
+    }
+
     private List<String[]> searchLineage(String key) {
         List<PangoNomenclatureEntity> lineageList = jpaPangoNomenclatureService.findLineageContains(key);
         List<String[]> result = new ArrayList<>();

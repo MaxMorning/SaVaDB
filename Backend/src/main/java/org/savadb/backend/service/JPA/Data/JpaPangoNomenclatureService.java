@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JpaPangoNomenclatureService {
@@ -18,5 +19,13 @@ public class JpaPangoNomenclatureService {
 
     public List<PangoNomenclatureEntity> findLineageContains(String key) {
         return jpaPangoNomenclatureRepo.findLineageContains(key);
+    }
+
+    public PangoNomenclatureEntity getById(Integer id) {
+        Optional<PangoNomenclatureEntity> optionalPangoNomenclature = jpaPangoNomenclatureRepo.findById(id);
+        if (optionalPangoNomenclature.isEmpty()) {
+            return null;
+        }
+        return optionalPangoNomenclature.get();
     }
 }

@@ -99,10 +99,10 @@ def process(cursor, lineage, earliest_date, description):
             parent_2_name = description[between_parents_and_idx + len(' and '):]
 
             parent_1_idx = select_lineage_in_db(cursor, parent_1_name)[0]['v_id']
-            insert_lineage_relation(cursor, child_idx, parent_1_idx)
+            insert_lineage_relation(cursor, parent_1_idx, child_idx)
 
             parent_2_idx = select_lineage_in_db(cursor, parent_2_name)[0]['v_id']
-            insert_lineage_relation(cursor, child_idx, parent_2_idx)
+            insert_lineage_relation(cursor, parent_2_idx, child_idx)
 
         else:
             # 并非重组谱系

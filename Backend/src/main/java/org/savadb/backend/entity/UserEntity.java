@@ -32,6 +32,10 @@ public class UserEntity {
     @Column(name = "role", nullable = false, length = 32)
     private String role;
 
+    @Basic
+    @Column(name = "remain_comp_time", nullable = false)
+    private Integer remainCompTime;
+
     @OneToMany(mappedBy = "userByUsrId")
     private Collection<UserWatchingEntity> userWatchingsByUsrId;
 
@@ -81,6 +85,14 @@ public class UserEntity {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Integer getRemainCompTime() {
+        return remainCompTime;
+    }
+
+    public void setRemainCompTime(Integer remainCompTime) {
+        this.remainCompTime = remainCompTime;
     }
 
     @Override
