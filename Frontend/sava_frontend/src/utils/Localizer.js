@@ -83,6 +83,8 @@ export default class Localizer {
         'Get Data' : 'Get Data',
         'Interval' : 'Interval Days',
         'LineageDetail' : 'Lineage Detail',
+
+        'RegionDetail' : 'Region Detail',
     }
 
     static zh_CN_dict = {
@@ -154,5 +156,6 @@ export default class Localizer {
         'Interval' : '间隔天数',
 
         'LineageDetail' : '变种详情',
+        'RegionDetail' : '地区详情',
     }
 }

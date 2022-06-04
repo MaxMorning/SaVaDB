@@ -20,6 +20,7 @@ const LineagesApp = lazy(() => import('./AppBuiltIn/LineagesApp'));
 const CompareApp = lazy(() => import('./AppBuiltIn/CompareApp'));
 const StatisticsApp = lazy(() => import('./AppBuiltIn/StatisticsApp'));
 const LineageDetailApp = lazy(() => import('./AppBuiltIn/LineageDetailApp'));
+const RegionDetailApp = lazy(() => import('./AppBuiltIn/RegionDetailApp'));
 
 class App extends Component {
     constructor(props) {
@@ -113,7 +114,6 @@ class App extends Component {
                 break;
 
             case 'LineageDetail':
-                console.log(this.props);
                 var variantIdx = this.props.location.pathname.lastIndexOf("\/");
                 var variant = this.props.location.pathname.substring(variantIdx + 1, this.props.location.length);
 
@@ -122,6 +122,19 @@ class App extends Component {
                 subTitle = variant;
                 appProps = {
                     'lineage': variant
+                };
+                secondPath = true;
+                break;
+
+            case 'RegionDetail':
+                var regionIdx = this.props.location.pathname.lastIndexOf("\/");
+                var region = this.props.location.pathname.substring(regionIdx + 1, this.props.location.length);
+
+                BuiltInApp = RegionDetailApp;
+                pageName = localizerDict['RegionDetail'];
+                subTitle = region.replaceAll('%20', ' ');
+                appProps = {
+                    'region': region.replaceAll('%20', ' ')
                 };
                 secondPath = true;
                 break;
