@@ -73,47 +73,6 @@ export default class MySider extends React.Component {
         this.notLoginItems.push(
             getItem(this.localizerDict['SiderLogin'], 'Login', <LoginOutlined/>)
         );
-
-        // this.didLoginItems = [
-        //     getItem(localizerDict['HomeAppTitle'], 'HomeApp', <HomeOutlined />),
-        //     getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-        //         getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
-        //         getItem('Lineages', 'SubLineages', <BranchesOutlined />),
-        //     ]),
-        //     getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-        //         getItem(localizerDict['SearchTitle'], 'Search', <SearchOutlined />),
-        //         getItem(localizerDict['LineagesTitle'], 'Lineages', <BranchesOutlined />),
-        //         getItem(localizerDict['CompareTitle'], 'Compare', <MyIcon type="icon-compare" />),
-        //     ]),
-        //     getItem('Data', 'data', <DatabaseOutlined />, [
-        //         getItem(localizerDict['StatisticsTitle'], 'Statistics', <LineChartOutlined />),
-        //         getItem('API', 'Api', <ConsoleSqlOutlined />),
-        //         getItem('Data source', 'DataSource', <CloudServerOutlined />)
-        //     ]),
-        //     getItem('User', 'user', <UserOutlined />, [
-        //         getItem('Info', 'Info', <InfoCircleOutlined />),
-        //         getItem('Log out', 'Logout', <LogoutOutlined />)
-        //     ]),
-        // ];
-
-        // this.notLoginItems = [
-        //     getItem(localizerDict['HomeAppTitle'], 'HomeApp', <HomeOutlined />),
-        //     getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-        //         getItem('Regions', 'SubRegions', <MyIcon type="icon-earth" />),
-        //         getItem('Lineages', 'SubLineages', <BranchesOutlined />),
-        //     ]),
-        //     getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-        //         getItem('Search', 'Search', <SearchOutlined />),
-        //         getItem('Lineages', 'Lineages', <BranchesOutlined />),
-        //         getItem('Compare', 'Compare', <MyIcon type="icon-compare" />),
-        //     ]),
-        //     getItem('Data', 'data', <DatabaseOutlined />, [
-        //         getItem('Statistics', 'Statistics', <LineChartOutlined />),
-        //         getItem('API', 'Api', <ConsoleSqlOutlined />),
-        //         getItem('Data source', 'DataSource', <CloudServerOutlined />)
-        //     ]),
-        //     getItem('Log in', 'Login', <LoginOutlined/>),
-        // ];
     }
 
     onCollapse = (inCollapsed) => {
@@ -138,49 +97,54 @@ export default class MySider extends React.Component {
     menuSelectHandler = (item, key, keyPath, selectedKeys, domEvent) => {
         console.log(item);
 
+        var pathPrefix = './';
+        if (this.props.secondPath) {
+            pathPrefix = '../';
+        }
+
         switch (item.key) {
             case 'HomeApp':
                 this.props.parentJumpFunc('HomeApp');
-                window.history.pushState(null,null, './');
+                window.history.pushState(null,null, pathPrefix);
                 break;
         
             case 'SubRegions':
                 this.props.parentJumpFunc('SubRegions');
-                window.history.pushState(null,null, './SubRegions');
+                window.history.pushState(null,null, pathPrefix + 'SubRegions');
                 break;
 
             case 'SubLineages':
                 this.props.parentJumpFunc('SubLineages');
-                window.history.pushState(null,null, './SubLineages');
+                window.history.pushState(null,null, pathPrefix + 'SubLineages');
                 break;
 
             case 'Search':
                 this.props.parentJumpFunc('Search');
-                window.history.pushState(null,null, './Search');
+                window.history.pushState(null,null, pathPrefix + 'Search');
                 break;
 
             case 'Lineages':
                 this.props.parentJumpFunc('Lineages');
-                window.history.pushState(null,null, './Lineages');
+                window.history.pushState(null,null, pathPrefix + 'Lineages');
                 break;
 
             case 'Compare':
                 this.props.parentJumpFunc('Compare');
-                window.history.pushState(null,null, './Compare');
+                window.history.pushState(null,null, pathPrefix + 'Compare');
                 break;
 
             case 'Statistics':
                 this.props.parentJumpFunc('Statistics');
-                window.history.pushState(null,null, './Statistics');
+                window.history.pushState(null,null, pathPrefix + 'Statistics');
                 break;
 
             case 'Login':
-                window.location.href = './login';
+                window.location.href = pathPrefix + 'login';
                 break;
 
             case 'Logout':
                 window.localStorage.removeItem("sava-token");
-                window.location.href = './login';
+                window.location.href = pathPrefix + 'login';
                 break;
 
             default:

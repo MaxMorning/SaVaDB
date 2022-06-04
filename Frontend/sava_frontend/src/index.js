@@ -33,6 +33,7 @@ root.render(
                             <Route path='Lineages' element={<App AppType='Lineages' locale='zh-cn'/>}/>
                             <Route path='Compare' element={<App AppType='Compare' locale='zh-cn'/>}/>
                             <Route path='Statistics' element={<App AppType='Statistics' locale='zh-cn'/>}/>
+                            <Route path='lineage/:variant' element={<App AppType='LineageDetail' locale='zh-cn'/>}/>
                         </Routes>
                     </Suspense>
                 </ConfigProvider>
@@ -50,6 +51,7 @@ root.render(
                             <Route path='Lineages' element={<App AppType='Lineages' locale='en-us' />}/>
                             <Route path='Compare' element={<App AppType='Compare' locale='en-us' />}/>
                             <Route path='Statistics' element={<App AppType='Statistics' locale='en-us' />}/>
+                            <Route path='lineage/:variant' element={<App AppType='LineageDetail' locale='en-us'/>}/>
                         </Routes>
                     </Suspense>
                 </ConfigProvider>

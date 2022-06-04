@@ -7,6 +7,8 @@ import Requester from './utils/Requester';
 import moment from 'moment'
 import Localizer from './utils/Localizer';
 
+import { withRouter, RoutedProps } from './utils/withRouter';
+
 const { Header, Content, Footer } = Layout;
 
 // 设置懒加载
@@ -17,11 +19,13 @@ const SearchApp = lazy(() => import('./AppBuiltIn/SearchApp'));
 const LineagesApp = lazy(() => import('./AppBuiltIn/LineagesApp'));
 const CompareApp = lazy(() => import('./AppBuiltIn/CompareApp'));
 const StatisticsApp = lazy(() => import('./AppBuiltIn/StatisticsApp'));
+const LineageDetailApp = lazy(() => import('./AppBuiltIn/LineageDetailApp'));
 
-export default class App extends Component {
+class App extends Component {
     constructor(props) {
         super(props);
 
+        console.log(props);
         this.state = {
             username: 'Anonymous', 
             role: '', 
@@ -61,6 +65,9 @@ export default class App extends Component {
         var pageName, subTitle;
 
         var localizerDict = Localizer.getLocalDict(this.state.locale);
+
+        var appProps = {};
+        var secondPath = false;
 
         switch (this.state.AppType) {
             case 'HomeApp':
@@ -105,6 +112,20 @@ export default class App extends Component {
                 subTitle = "";
                 break;
 
+            case 'LineageDetail':
+                console.log(this.props);
+                var variantIdx = this.props.location.pathname.lastIndexOf("\/");
+                var variant = this.props.location.pathname.substring(variantIdx + 1, this.props.location.length);
+
+                BuiltInApp = LineageDetailApp
+                pageName = localizerDict['LineageDetail'];
+                subTitle = variant;
+                appProps = {
+                    'lineage': variant
+                };
+                secondPath = true;
+                break;
+
             default:
         }
 
@@ -117,7 +138,8 @@ export default class App extends Component {
                 user={this.state.username}
                 didLogin={this.state.didLogin}
                 selectedKey={this.props.AppType}
-                parentJumpFunc={this.setLink}/>
+                parentJumpFunc={this.setLink}
+                secondPath={secondPath}/>
 
             <Layout className="site-layout">
                 <Header
@@ -135,7 +157,7 @@ export default class App extends Component {
                     style={{
                         margin: '32px 32px',
                     }}>
-                    <BuiltInApp />
+                    <BuiltInApp {...appProps}/>
                 </Content>
                 <Footer
                     style={{
@@ -148,3 +170,5 @@ export default class App extends Component {
         </Layout>
     );}
 }
+
+export default withRouter(App);
