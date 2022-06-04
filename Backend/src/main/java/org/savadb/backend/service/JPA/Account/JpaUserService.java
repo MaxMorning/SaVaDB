@@ -1,7 +1,7 @@
-package org.savadb.backend.service.JPA;
+package org.savadb.backend.service.JPA.Account;
 
 import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.repo.JpaUserRepo;
+import org.savadb.backend.repo.Account.JpaUserRepo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +27,11 @@ public class JpaUserService {
     }
 
     public void insertUser(UserEntity user) {
+        jpaUserRepo.save(user);
+    }
+
+    public void decCompTime(UserEntity user) {
+        user.setRemainCompTime(user.getRemainCompTime() - 1);
         jpaUserRepo.save(user);
     }
 }

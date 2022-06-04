@@ -1,6 +1,6 @@
 /**
  * @file SummaryCleaner.cpp
- * @brief 清洗从NCBI下载的CSV文件，清洗出Accession、变种名、发现时间、序列长度；每种变种取一个即可
+ * @brief 清洗从NCBI下载的CSV文件，该文件中仅有完整序列，清洗出Accession、变种名、发现时间、序列长度；每种变种取一个即可
  * @author Morning Han
  * @date 2022/5/13
  */

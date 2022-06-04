@@ -4,17 +4,19 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "lineage", schema = "SaVa")
+@Table(name = "lineage", schema = "sava")
+@IdClass(LineageEntityPK.class)
 public class LineageEntity {
     @Id
     @Column(name = "child_variant_id", nullable = false)
     private Integer childVariantId;
 
+    @Id
     @Basic
-    @Column(name = "parent_variant_id", nullable = true)
+    @Column(name = "parent_variant_id", nullable = false)
     private Integer parentVariantId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "child_variant_id", referencedColumnName = "v_id", nullable = false, insertable = false, updatable = false)
     private VariantEntity variantByChildVariantId;
 

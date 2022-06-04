@@ -51,8 +51,9 @@ def scratch_fasta(lineage_list, fasta_dir):
 
         print("[LOG]\tLineage {} data get.".format(entry[1]))
 
-        # 随机睡眠时长，避免为服务器造成过大压力
-        time.sleep(random.random())
+        # 不用睡，连接很慢，对服务器造不成太大压力
+        # # 随机睡眠时长，避免为服务器造成过大压力
+        # time.sleep(random.random())
 
 
 if __name__ == '__main__':

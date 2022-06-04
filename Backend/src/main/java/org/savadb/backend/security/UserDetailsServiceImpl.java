@@ -1,7 +1,7 @@
 package org.savadb.backend.security;
 
 import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.service.JPA.JpaUserService;
+import org.savadb.backend.service.JPA.Account.JpaUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 

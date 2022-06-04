@@ -32,11 +32,12 @@ public class UserEntity {
     @Column(name = "role", nullable = false, length = 32)
     private String role;
 
+    @Basic
+    @Column(name = "remain_comp_time", nullable = false)
+    private Integer remainCompTime;
+
     @OneToMany(mappedBy = "userByUsrId")
     private Collection<UserWatchingEntity> userWatchingsByUsrId;
-
-    @OneToMany(mappedBy = "userByAddAdmin")
-    private Collection<VariantEntity> variantsByUsrId;
 
     public Integer getUsrId() {
         return usrId;
@@ -86,6 +87,14 @@ public class UserEntity {
         this.role = role;
     }
 
+    public Integer getRemainCompTime() {
+        return remainCompTime;
+    }
+
+    public void setRemainCompTime(Integer remainCompTime) {
+        this.remainCompTime = remainCompTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,13 +129,5 @@ public class UserEntity {
 
     public void setUserWatchingsByUsrId(Collection<UserWatchingEntity> userWatchingsByUsrId) {
         this.userWatchingsByUsrId = userWatchingsByUsrId;
-    }
-
-    public Collection<VariantEntity> getVariantsByUsrId() {
-        return variantsByUsrId;
-    }
-
-    public void setVariantsByUsrId(Collection<VariantEntity> variantsByUsrId) {
-        this.variantsByUsrId = variantsByUsrId;
     }
 }

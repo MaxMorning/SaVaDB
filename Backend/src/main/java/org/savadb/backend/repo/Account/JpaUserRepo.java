@@ -1,4 +1,4 @@
-package org.savadb.backend.repo;
+package org.savadb.backend.repo.Account;
 
 import org.savadb.backend.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -54,7 +54,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String tokenHeader) {
         JWTUtils jwtUtils = new JWTUtils();
 
-        DecodedJWT decodedJWT = jwtUtils.verifyToken(tokenHeader);
+        DecodedJWT decodedJWT;
+        try {
+            decodedJWT = jwtUtils.verifyToken(tokenHeader);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
         // 从Token中解密获取用户名
         String username = decodedJWT.getClaim("name").asString();
