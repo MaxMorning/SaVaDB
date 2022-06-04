@@ -15,6 +15,7 @@ import {
     LoginOutlined
 } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
+import Localizer from '../utils/Localizer';
 
 function getItem(label, key, icon, children) {
     return {
@@ -36,49 +37,43 @@ export default class MySider extends React.Component {
         super(props);
         this.state = {
             collapsed: false,
-            didLogin: props.didLogin};
+            didLogin: props.didLogin,
+            selectedKey: props.selectedKey};
+
+        this.localizerDict = Localizer.getCurrentLocalDict();
+
+        var baseItems = [
+            getItem(this.localizerDict['HomeAppTitle'], 'HomeApp', <HomeOutlined />),
+            getItem(this.localizerDict['SiderSubscribe'], 'subscribe', <DesktopOutlined />, [
+                getItem(this.localizerDict['SiderRegions'], 'SubRegions', <MyIcon type="icon-earth" />),
+                getItem(this.localizerDict['SiderLineages'], 'SubLineages', <BranchesOutlined />),
+            ]),
+            getItem(this.localizerDict['SiderVariants'], 'variants', <MyIcon type="icon-dna" />, [
+                getItem(this.localizerDict['SearchTitle'], 'Search', <SearchOutlined />),
+                getItem(this.localizerDict['LineagesTitle'], 'Lineages', <BranchesOutlined />),
+                getItem(this.localizerDict['CompareTitle'], 'Compare', <MyIcon type="icon-compare" />),
+            ]),
+            getItem(this.localizerDict['SiderData'], 'data', <DatabaseOutlined />, [
+                getItem(this.localizerDict['StatisticsTitle'], 'Statistics', <LineChartOutlined />),
+                getItem('API', 'Api', <ConsoleSqlOutlined />),
+                getItem(this.localizerDict['SiderDataSource'], 'DataSource', <CloudServerOutlined />)
+            ]),
+        ];
+
+        this.didLoginItems = Object.assign([], baseItems);
+        this.notLoginItems = Object.assign([], baseItems);
+
+        this.didLoginItems.push(
+            getItem(this.localizerDict['SiderUser'], 'user', <UserOutlined />, [
+                getItem(this.localizerDict['SiderInfo'], 'Info', <InfoCircleOutlined />),
+                getItem(this.localizerDict['SiderLogout'], 'Logout', <LogoutOutlined />)
+            ])
+        );
+
+        this.notLoginItems.push(
+            getItem(this.localizerDict['SiderLogin'], 'Login', <LoginOutlined/>)
+        );
     }
-
-    didLoginItems = [
-        getItem('Home', 'home', <HomeOutlined />),
-        getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-            getItem('Regions', 'regions', <MyIcon type="icon-earth" />),
-            getItem('Lineages', 'sub_lineages', <BranchesOutlined />),
-        ]),
-        getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-            getItem('Search', 'search', <SearchOutlined />),
-            getItem('Lineages', 'lineages', <BranchesOutlined />),
-            getItem('Compare', 'compare', <MyIcon type="icon-compare" />),
-        ]),
-        getItem('Data', 'data', <DatabaseOutlined />, [
-            getItem('Statistics', 'statistics', <LineChartOutlined />),
-            getItem('API', 'api', <ConsoleSqlOutlined />),
-            getItem('Data source', 'dataSource', <CloudServerOutlined />)
-        ]),
-        getItem('User', 'user', <UserOutlined />, [
-            getItem('Info', 'info', <InfoCircleOutlined />),
-            getItem('Log out', 'logout', <LogoutOutlined />)
-        ]),
-    ];
-
-    notLoginItems = [
-        getItem('Home', 'home', <HomeOutlined />),
-        getItem('Subscribe', 'subscribe', <DesktopOutlined />, [
-            getItem('Regions', 'regions', <MyIcon type="icon-earth" />),
-            getItem('Lineages', 'sub_lineages', <BranchesOutlined />),
-        ]),
-        getItem('Variants', 'variants', <MyIcon type="icon-dna" />, [
-            getItem('Search', 'search', <SearchOutlined />),
-            getItem('Lineages', 'lineages', <BranchesOutlined />),
-            getItem('Compare', 'compare', <MyIcon type="icon-compare" />),
-        ]),
-        getItem('Data', 'data', <DatabaseOutlined />, [
-            getItem('Statistics', 'statistics', <LineChartOutlined />),
-            getItem('API', 'api', <ConsoleSqlOutlined />),
-            getItem('Data source', 'dataSource', <CloudServerOutlined />)
-        ]),
-        getItem('Log in', 'login', <LoginOutlined/>),
-    ];
 
     onCollapse = (inCollapsed) => {
         console.log(inCollapsed);
@@ -99,6 +94,64 @@ export default class MySider extends React.Component {
         return null;
     }
 
+    menuSelectHandler = (item, key, keyPath, selectedKeys, domEvent) => {
+        console.log(item);
+
+        var pathPrefix = './';
+        if (this.props.secondPath) {
+            pathPrefix = '../';
+        }
+
+        switch (item.key) {
+            case 'HomeApp':
+                this.props.parentJumpFunc('HomeApp');
+                window.history.pushState(null,null, pathPrefix);
+                break;
+        
+            case 'SubRegions':
+                this.props.parentJumpFunc('SubRegions');
+                window.history.pushState(null,null, pathPrefix + 'SubRegions');
+                break;
+
+            case 'SubLineages':
+                this.props.parentJumpFunc('SubLineages');
+                window.history.pushState(null,null, pathPrefix + 'SubLineages');
+                break;
+
+            case 'Search':
+                this.props.parentJumpFunc('Search');
+                window.history.pushState(null,null, pathPrefix + 'Search');
+                break;
+
+            case 'Lineages':
+                this.props.parentJumpFunc('Lineages');
+                window.history.pushState(null,null, pathPrefix + 'Lineages');
+                break;
+
+            case 'Compare':
+                this.props.parentJumpFunc('Compare');
+                window.history.pushState(null,null, pathPrefix + 'Compare');
+                break;
+
+            case 'Statistics':
+                this.props.parentJumpFunc('Statistics');
+                window.history.pushState(null,null, pathPrefix + 'Statistics');
+                break;
+
+            case 'Login':
+                window.location.href = pathPrefix + 'login';
+                break;
+
+            case 'Logout':
+                window.localStorage.removeItem("sava-token");
+                window.location.href = pathPrefix + 'login';
+                break;
+
+            default:
+                break;
+        }
+    }
+
     render() {
         const { collapsed } = this.state;
 
@@ -116,10 +169,10 @@ export default class MySider extends React.Component {
 
         var my_menu;
         if (this.state.didLogin) {
-            my_menu = <Menu theme="dark" defaultSelectedKeys={['home']} mode="inline" items={this.didLoginItems}/>;
+            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" items={this.didLoginItems} onSelect={this.menuSelectHandler}/>;
         }
         else {
-            my_menu = <Menu theme="dark" defaultSelectedKeys={['home']} mode="inline" items={this.notLoginItems}/>;
+            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" items={this.notLoginItems} onSelect={this.menuSelectHandler}/>;
         }
 
         var temp_items = {};

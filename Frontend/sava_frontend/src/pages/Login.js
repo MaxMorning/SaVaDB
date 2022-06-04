@@ -27,11 +27,11 @@ export default class LoginPage extends Component {
         var password = login_form_obj.password;
 
         var shad_password = CryptoJS.SHA512(password);
-        shad_password = CryptoJS.enc.Base64.stringify(shad_password.words);
-        
+        shad_password = shad_password.toString(CryptoJS.enc.Base64);
+
         Requester.requestJSON({
             method: 'post',
-            url: '/api/login',
+            url: '/login',
             data: {
                 username: login_form_obj.username,
                 password: shad_password,
@@ -40,11 +40,11 @@ export default class LoginPage extends Component {
         },
         false,
         (response) => {
-            if (200 === response.data.code) {
+            if ("success" === response.data.status) {
                 // 登录成功
                 // 将token写入local storage
                 // 不论是否选择keep_login都保存，因为都需要保证在之后一小段时间内可以用token访问其它API
-                Requester.storeAuthToken(response.data.data);
+                Requester.storeAuthToken(response.data.Authorization);
                 window.location.href='./';
             }
             else {

@@ -4,7 +4,14 @@ import './index.css';
 import "antd/dist/antd.min.css";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+
 import reportWebVitals from './reportWebVitals';
+
+import { ConfigProvider } from 'antd';
+import zh_CN from 'antd/es/locale/zh_CN';
+import en_US from 'antd/es/locale/en_US';
+import 'moment/locale/zh-cn'
+// moment.locale('zh-cn')
 
 // 设置懒加载
 const LoginPage = lazy(()=>import('./pages/Login'))
@@ -13,12 +20,43 @@ const App = lazy(()=>import('./App'))
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
-        <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-                <Route path='login' element={<LoginPage/>} />
-                <Route path='/' element={<App/>} />
-            </Routes>
-        </Suspense>
+        <Routes>
+            <Route path='zh_CN/*' element={
+                <ConfigProvider locale={zh_CN}>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Routes>
+                            <Route path='login' element={<LoginPage locale='zh-cn'/>}/>
+                            <Route path='' element={<App AppType='HomeApp' locale='zh-cn'/>}/>
+                            <Route path='SubRegions' element={<App AppType='SubRegions' locale='zh-cn'/>}/>
+                            <Route path='SubLineages' element={<App AppType='SubLineages' locale='zh-cn'/>}/>
+                            <Route path='Search' element={<App AppType='Search' locale='zh-cn'/>}/>
+                            <Route path='Lineages' element={<App AppType='Lineages' locale='zh-cn'/>}/>
+                            <Route path='Compare' element={<App AppType='Compare' locale='zh-cn'/>}/>
+                            <Route path='Statistics' element={<App AppType='Statistics' locale='zh-cn'/>}/>
+                            <Route path='lineage/:variant' element={<App AppType='LineageDetail' locale='zh-cn'/>}/>
+                        </Routes>
+                    </Suspense>
+                </ConfigProvider>
+            }/>
+
+            <Route path='en_US/*' element={
+                <ConfigProvider locale={en_US}>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Routes>
+                            <Route path='login' element={<LoginPage/>} />
+                            <Route path='' element={<App AppType='HomeApp' locale='en-us' />}/>
+                            <Route path='SubRegions' element={<App AppType='SubRegions' locale='en-us' />}/>
+                            <Route path='SubLineages' element={<App AppType='SubLineages' locale='en-us' />} />
+                            <Route path='Search' element={<App AppType='Search' locale='en-us' />}/>
+                            <Route path='Lineages' element={<App AppType='Lineages' locale='en-us' />}/>
+                            <Route path='Compare' element={<App AppType='Compare' locale='en-us' />}/>
+                            <Route path='Statistics' element={<App AppType='Statistics' locale='en-us' />}/>
+                            <Route path='lineage/:variant' element={<App AppType='LineageDetail' locale='en-us'/>}/>
+                        </Routes>
+                    </Suspense>
+                </ConfigProvider>
+            }/>
+        </Routes>
     </Router>
 );
 
