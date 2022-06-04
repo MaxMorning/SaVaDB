@@ -74,7 +74,7 @@ export default class BriefLineageCard extends Component {
             }
 
             var statusTag;
-            if (this.lineageData.status === 'withdraw') {
+            if (this.lineageData.status === 'Withdraw') {
                 statusTag = <Tag color="red">Withdraw</Tag>;
             }
             else {
@@ -100,7 +100,7 @@ export default class BriefLineageCard extends Component {
                             </Descriptions.Item>
 
                             <Descriptions.Item label="Earlist discover date" span={2}>
-                                {this.lineageData.earliestDate}
+                                {this.lineageData.earliestDate === null ? "NA" : this.lineageData.earliestDate}
                             </Descriptions.Item>
                             
                             <Descriptions.Item label="R0">
