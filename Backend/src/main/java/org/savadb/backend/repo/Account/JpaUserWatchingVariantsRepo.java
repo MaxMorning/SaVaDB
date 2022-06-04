@@ -11,4 +11,8 @@ public interface JpaUserWatchingVariantsRepo extends JpaRepository<UserWatchingE
     @Query("select u from UserWatchingEntity u where u.usrId = ?1")
     List<UserWatchingEntity> findAllByUsrId(Integer usrId);
 
+    @Query("select u from UserWatchingEntity u where u.usrId = ?1 and u.watchingVId = ?2")
+    UserWatchingEntity checkSubscribe(Integer usrId, Integer watchingVId);
+
+
 }

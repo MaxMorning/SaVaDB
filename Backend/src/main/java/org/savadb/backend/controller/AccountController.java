@@ -1,11 +1,12 @@
 package org.savadb.backend.controller;
 
-import org.savadb.backend.entity.CompRecordEntity;
-import org.savadb.backend.entity.UserEntity;
+import org.savadb.backend.entity.*;
 import org.savadb.backend.service.JPA.Account.JpaCompRecordService;
 import org.savadb.backend.service.JPA.Account.JpaUserService;
 import org.savadb.backend.service.JPA.Account.JpaUserWatchingRegionsService;
 import org.savadb.backend.service.JPA.Account.JpaUserWatchingVariantsService;
+import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
+import org.savadb.backend.service.JPA.JpaRegionService;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
 import org.savadb.backend.utils.PasswordUtils;
@@ -40,6 +41,12 @@ public class AccountController {
 
     @Resource
     private JpaCompRecordService jpaCompRecordService;
+
+    @Resource
+    private JpaPangoNomenclatureService jpaPangoNomenclatureService;
+
+    @Resource
+    private JpaRegionService jpaRegionService;
 
     private int idCnt = 0;
 
@@ -351,5 +358,125 @@ public class AccountController {
             return Result.resultFactory(EResult.UNKNOWN_ERROR, null);
         }
         return Result.resultFactory(EResult.SUCCESS, null);
+    }
+
+    @GetMapping("/user/subLineage")
+    public Result<String> changeSubLineage(@RequestParam String lineage) {
+        if (lineage == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        PangoNomenclatureEntity pangoNomenclature = jpaPangoNomenclatureService.findByVariantName(lineage);
+        if (pangoNomenclature == null) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+        Integer variantId = pangoNomenclature.getvId();
+
+        UserWatchingEntity userWatching = jpaUserWatchingVariantsService.getUserWatchingEntity(this.currentUser.getUsrId(), variantId);
+
+        if (userWatching == null) {
+            userWatching = new UserWatchingEntity();
+            userWatching.setUsrId(this.currentUser.getUsrId());
+            userWatching.setWatchingVId(variantId);
+            jpaUserWatchingVariantsService.saveWatchingEntity(userWatching);
+
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            jpaUserWatchingVariantsService.deleteEntity(userWatching);
+
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @GetMapping("/user/checkSubLineage")
+    public Result<String> checkSubLineage(@RequestParam String lineage) {
+        if (lineage == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        PangoNomenclatureEntity pangoNomenclature = jpaPangoNomenclatureService.findByVariantName(lineage);
+        if (pangoNomenclature == null) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+        Integer variantId = pangoNomenclature.getvId();
+
+        if (jpaUserWatchingVariantsService.checkSubscribeVariant(this.currentUser.getUsrId(), variantId)) {
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @GetMapping("/user/subRegion")
+    public Result<String> changeSubRegion(@RequestParam String region) {
+        if (region == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        RegionEntity regionEntity = jpaRegionService.findByRegionName(region);
+        if (regionEntity == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        Integer regionId = regionEntity.getRegionId();
+
+        UserWatchingRegionsEntity userWatchingRegions = jpaUserWatchingRegionsService.getUserWatchingEntity(this.currentUser.getUsrId(), regionId);
+
+        if (userWatchingRegions == null) {
+            userWatchingRegions = new UserWatchingRegionsEntity();
+            userWatchingRegions.setUsrId(this.currentUser.getUsrId());
+            userWatchingRegions.setWatchingRId(regionId);
+            jpaUserWatchingRegionsService.saveWatchingEntity(userWatchingRegions);
+
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            jpaUserWatchingRegionsService.deleteEntity(userWatchingRegions);
+
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @GetMapping("/user/checkSubRegion")
+    public Result<String> checkSubRegion(@RequestParam String region) {
+        if (region == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        RegionEntity regionEntity = jpaRegionService.findByRegionName(region);
+        if (regionEntity == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        Integer regionId = regionEntity.getRegionId();
+
+        if (jpaUserWatchingRegionsService.checkSubscribeRegion(this.currentUser.getUsrId(), regionId)) {
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
     }
 }

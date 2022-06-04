@@ -133,7 +133,7 @@ public class LineageController {
             BufferedReader bufferedReader = new BufferedReader(streamReader);
 
             while ((content = bufferedReader.readLine()) != null) {
-                builder.append(content);
+                builder.append(content).append('\n');
             }
 
             return Result.resultFactory(EResult.SUCCESS, builder.toString());

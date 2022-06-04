@@ -24,4 +24,22 @@ public class JpaUserWatchingVariantsService {
 
         return resultList;
     }
+
+    public UserWatchingEntity getUserWatchingEntity(Integer usrId, Integer variantId) {
+        return jpaUserWatchingVariantsRepo.checkSubscribe(usrId, variantId);
+    }
+
+    public boolean checkSubscribeVariant(Integer usrId, Integer variantId) {
+        UserWatchingEntity userWatching = getUserWatchingEntity(usrId, variantId);
+
+        return userWatching != null;
+    }
+
+    public void saveWatchingEntity(UserWatchingEntity userWatching) {
+        jpaUserWatchingVariantsRepo.save(userWatching);
+    }
+
+    public void deleteEntity(UserWatchingEntity userWatching) {
+        jpaUserWatchingVariantsRepo.delete(userWatching);
+    }
 }
