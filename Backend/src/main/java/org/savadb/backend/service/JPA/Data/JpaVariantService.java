@@ -19,4 +19,8 @@ public class JpaVariantService {
         }
         return optionalVariantEntity.get();
     }
+
+    public void saveVariant(VariantEntity variant) {
+        jpaVariantRepo.save(variant);
+    }
 }
