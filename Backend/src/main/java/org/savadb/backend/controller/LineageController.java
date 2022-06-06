@@ -4,10 +4,7 @@ import org.savadb.backend.entity.LineageEntity;
 import org.savadb.backend.entity.PangoNomenclatureEntity;
 import org.savadb.backend.entity.VariantEntity;
 import org.savadb.backend.entity.WhoLabelEntity;
-import org.savadb.backend.service.JPA.Data.JpaGeneInfoService;
-import org.savadb.backend.service.JPA.Data.JpaLineageService;
-import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
-import org.savadb.backend.service.JPA.Data.JpaVariantService;
+import org.savadb.backend.service.JPA.Data.*;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.Result;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +33,9 @@ public class LineageController {
 
     @Resource
     private JpaGeneInfoService jpaGeneInfoService;
+
+    @Resource
+    private JpaWHOLabelService jpaWHOLabelService;
 
     @GetMapping("/data/lineageBrief")
     public Result<Map<String, Object>> getVariant(@RequestParam String lineage) {
@@ -159,5 +159,86 @@ public class LineageController {
         }
 
         return Result.resultFactory(EResult.SUCCESS, parentName);
+    }
+
+    @GetMapping("/data/getMonitorVariants")
+    public Result<List<String[]>> getMonitorVariants(@RequestParam String None,
+                                                     @RequestParam String VOC,
+                                                     @RequestParam String VOI,
+                                                     @RequestParam String VUM,
+                                                     @RequestParam String FMV) {
+        try {
+            List<VariantEntity> resultVariantsList = new ArrayList<>();
+
+            if ("0".equals(None)) {
+                resultVariantsList.addAll(jpaVariantService.getAllMonitor("None"));
+            }
+
+            if ("0".equals(VOC)) {
+                resultVariantsList.addAll(jpaVariantService.getAllMonitor("VOC"));
+            }
+
+            if ("0".equals(VOI)) {
+                resultVariantsList.addAll(jpaVariantService.getAllMonitor("VOI"));
+            }
+
+            if ("0".equals(VUM)) {
+                resultVariantsList.addAll(jpaVariantService.getAllMonitor("VUM"));
+            }
+
+            if ("0".equals(FMV)) {
+                resultVariantsList.addAll(jpaVariantService.getAllMonitor("FMV"));
+            }
+
+
+            List<String[]> result = new ArrayList<>();
+
+            for (VariantEntity variant : resultVariantsList) {
+                String[] singleVariant = new String[2];
+                singleVariant[0] = variant.getPangoNomenclatureByVId().getVariant();
+
+                WhoLabelEntity whoLabel = variant.getWhoLabelByVId();
+                String whoLabelStr;
+                if (whoLabel == null) {
+                    whoLabelStr = "None";
+                }
+                else {
+                    whoLabelStr = whoLabel.getLabel();
+                }
+                singleVariant[1] = whoLabelStr + ' '
+                        + variant.getMonitorLevel() + ' '
+                        + variant.getvStatus();
+
+                result.add(singleVariant);
+            }
+
+            return Result.resultFactory(EResult.SUCCESS, result);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+    }
+
+    @GetMapping("/data/searchWHOLabel")
+    public Result<List<String[]>> searchWHOLabel(@RequestParam String key) {
+        List<WhoLabelEntity> whoLabelEntityList = jpaWHOLabelService.findAllLabelContains(key);
+
+        List<String[]> result = new ArrayList<>();
+        for (WhoLabelEntity whoLabel : whoLabelEntityList) {
+            String[] singleVariant = new String[2];
+            VariantEntity variant = whoLabel.getVariantByVId();
+
+            singleVariant[0] = variant.getPangoNomenclatureByVId().getVariant();
+
+            String whoLabelStr;
+            whoLabelStr = whoLabel.getLabel();
+            singleVariant[1] = whoLabelStr + ' '
+                    + variant.getMonitorLevel() + ' '
+                    + variant.getvStatus();
+
+            result.add(singleVariant);
+        }
+        return Result.resultFactory(EResult.SUCCESS, result);
     }
 }

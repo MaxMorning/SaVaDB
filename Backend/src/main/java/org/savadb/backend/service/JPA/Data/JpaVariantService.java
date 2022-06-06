@@ -5,6 +5,7 @@ import org.savadb.backend.repo.Data.JpaVariantRepo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,5 +23,9 @@ public class JpaVariantService {
 
     public void saveVariant(VariantEntity variant) {
         jpaVariantRepo.save(variant);
+    }
+
+    public List<VariantEntity> getAllMonitor(String monitorLevel) {
+        return jpaVariantRepo.getAllMonitor(monitorLevel);
     }
 }

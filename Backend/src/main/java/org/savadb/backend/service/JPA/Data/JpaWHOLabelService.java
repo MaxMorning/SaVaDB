@@ -5,6 +5,7 @@ import org.savadb.backend.repo.Data.JpaWHOLabelRepo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class JpaWHOLabelService {
@@ -17,5 +18,9 @@ public class JpaWHOLabelService {
 
     public void deleteWHOLabel(WhoLabelEntity whoLabel) {
         jpaWHOLabelRepo.delete(whoLabel);
+    }
+
+    public List<WhoLabelEntity> findAllLabelContains(String label) {
+        return jpaWHOLabelRepo.findAllLabelContains(label);
     }
 }
