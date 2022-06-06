@@ -45,7 +45,7 @@ export default class SubscribedLineages extends Component {
                     this.subList = response.data.data;
                     
                     if (this.subList.length === 0) {
-                        this.setState({notSubAnyLineage: true});
+                        this.setState({notSubAnyLineage: true, isSubLoaded: true});
                         return;
                     }
 

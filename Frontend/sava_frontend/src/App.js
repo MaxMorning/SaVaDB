@@ -3,7 +3,6 @@ import './App.css';
 import { Layout, PageHeader } from 'antd';
 import MySider from './component/MySider';
 import "antd/dist/antd.min.css";
-import Requester from './utils/Requester';
 import moment from 'moment'
 import Localizer from './utils/Localizer';
 
@@ -28,32 +27,12 @@ class App extends Component {
 
         console.log(props);
         this.state = {
-            username: 'Anonymous', 
             role: '', 
             didLogin: false,
             locale: props.locale,
             AppType: props.AppType};
 
         moment.locale(props.locale);
-    }
-
-    componentDidMount() {
-        // 获取用户名
-        Requester.requestJSON({
-            method: 'get',
-            url: '/api/user/getUserInfo'
-        }, true,
-        (response) => {
-            if (response.data.code === 200) {
-                this.setState({
-                    username: response.data.data.username,
-                    role: response.data.data.role,
-                    didLogin: true
-                });
-            }
-        },
-        (error) => {}
-        )
     }
 
     setLink = (dstApp) => {
@@ -152,7 +131,6 @@ class App extends Component {
                 minHeight: '100vh'
             }}>
             <MySider
-                user={this.state.username}
                 didLogin={this.state.didLogin}
                 selectedKey={this.props.AppType}
                 parentJumpFunc={this.setLink}

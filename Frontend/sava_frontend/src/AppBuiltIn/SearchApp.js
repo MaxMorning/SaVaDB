@@ -73,7 +73,7 @@ export default class SearchApp extends Component {
             whoLabelTag = <Tag color="default">None</Tag>;
         }
         else {
-            whoLabelTag = <Tag color="blue">{this.lineageData.WHOLabel}</Tag>
+            whoLabelTag = <Tag color="blue">{infoList[0]}</Tag>
         }
 
         var monitorLevelTag;

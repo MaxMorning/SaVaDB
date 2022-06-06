@@ -52,7 +52,7 @@ export default class SubscribedRegions extends Component {
                     this.subList = response.data.data;
                     
                     if (this.subList.length === 0) {
-                        this.setState({notSubAnyRegion: true});
+                        this.setState({isSubLoaded: true, notSubAnyRegion: true});
                         return;
                     }
 

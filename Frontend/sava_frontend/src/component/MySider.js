@@ -19,6 +19,8 @@ import { createFromIconfontCN } from '@ant-design/icons';
 import EditInfoModal from '../component/EditInfoModal';
 
 import Localizer from '../utils/Localizer';
+import AdminControlModal from '../component/AdminControlModal';
+import Requester from '../utils/Requester';
 
 function getItem(label, key, icon, children) {
     return {
@@ -39,11 +41,13 @@ export default class MySider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: 'Anonymous',
             collapsed: false,
-            didLogin: props.didLogin,
+            didLogin: false,
             selectedKey: props.selectedKey,
             currentSelectedKey: props.selectedKey,
             
+            controlPanelVisible: false,
             editInfoModalVisible: false
         };
 
@@ -84,10 +88,30 @@ export default class MySider extends React.Component {
 
         this.adminItems.push(
             getItem(this.localizerDict['Admin'], 'admin', <UserOutlined />, [
-                getItem(this.localizerDict['Control Pannel'], 'ControlPannel', <ControlOutlined />),
+                getItem(this.localizerDict['Edit Info'], 'EditInfo', <InfoCircleOutlined />),
+                getItem(this.localizerDict['Control Pannel'], 'ControlPanel', <ControlOutlined />),
                 getItem(this.localizerDict['SiderLogout'], 'Logout', <LogoutOutlined />)
             ])
         );
+    }
+
+    componentDidMount() {
+        // 获取用户名
+        Requester.requestJSON({
+            method: 'get',
+            url: '/api/user/getUserInfo'
+        }, true,
+        (response) => {
+            if (response.data.code === 200) {
+                this.setState({
+                    username: response.data.data.username,
+                    role: response.data.data.role,
+                    didLogin: true
+                });
+            }
+        },
+        (error) => {}
+        )
     }
 
     onCollapse = (inCollapsed) => {
@@ -97,22 +121,26 @@ export default class MySider extends React.Component {
         });
     };
 
-
-    static getDerivedStateFromProps(new_props, my_state) {
-        console.log("Enter");
-        if (new_props.didLogin !== my_state.didLogin) {
-            console.log("Hit");
-            return {
-                didLogin: new_props.didLogin
+    resetVisible = (newName) => {
+        setTimeout(() => {
+            if (newName === null) {
+                this.setState({
+                    editInfoModalVisible: false
+                });
             }
-        }
-        return null;
+            else {
+                this.setState({
+                    username: newName,
+                    editInfoModalVisible: false
+                })
+            }
+        }, 500);
     }
 
-    resetVisible = () => {
+    resetControlVisible = () => {
         setTimeout(() => {
             this.setState({
-                editInfoModalVisible: false
+                controlPanelVisible: false
             })
         }, 500);
     }
@@ -188,6 +216,12 @@ export default class MySider extends React.Component {
                 });
                 break;
 
+            case 'ControlPanel':
+                this.setState({
+                    controlPanelVisible: true
+                });
+                break;
+
             case 'Login':
                 window.location.href = pathPrefix + 'login';
                 break;
@@ -205,7 +239,7 @@ export default class MySider extends React.Component {
     render() {
         const { collapsed } = this.state;
 
-        let user = this.props.user;
+        let user = this.state.username;
 
         let userName;
         if (collapsed) {
@@ -219,7 +253,7 @@ export default class MySider extends React.Component {
 
         var my_menu;
         if (this.state.didLogin) {
-            if (this.props.role === 'ADMIN') {
+            if (this.state.role.indexOf('ADMIN') !== -1) {
                 my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" selectedKeys={[this.state.currentSelectedKey]} items={this.adminItems} onSelect={this.menuSelectHandler}/>;
             }
             else {
@@ -246,6 +280,7 @@ export default class MySider extends React.Component {
                 }}>
                 {userName}
                 {this.state.editInfoModalVisible && <EditInfoModal resetParent={this.resetVisible}/>}
+                {this.state.controlPanelVisible && <AdminControlModal resetParent={this.resetControlVisible}/>}
                 </div>
                 {my_menu}
             </Layout.Sider>

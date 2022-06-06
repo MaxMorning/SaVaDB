@@ -62,7 +62,7 @@ export default class EditInfoModal extends Component {
                     // 修改成功
                     Requester.storeAuthToken(response.data.data);
                     
-                    this.resetParent();
+                    this.resetParent(username_form_obj.username);
                     this.setState({
                         confirmLoading: false,
                         visible: false
@@ -138,7 +138,7 @@ export default class EditInfoModal extends Component {
             (response) => {
                 if (200 === response.data.code) {
                     // 修改成功                    
-                    this.resetParent();
+                    this.resetParent(null);
                     this.setState({
                         confirmLoading: false,
                         visible: false
