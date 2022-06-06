@@ -36,6 +36,10 @@ export default class Localizer {
         'SiderInfo' : 'Info',
         'SiderLogout' : 'Log out',
         'SiderLogin' : 'Log in',
+        'Edit Info': 'Edit Info',
+        'EditInfoTitle': 'Edit Info', 
+        'Control Pannel' : 'Control Pannel',
+        'Admin' : 'Admin',
 
         // HomeApp
         'HomeAppIntroduction' : 'Introduction',
@@ -109,6 +113,10 @@ export default class Localizer {
         'SiderInfo' : '用户信息',
         'SiderLogout' : '登出',
         'SiderLogin' : '登录',
+        'Edit Info' : '修改信息',
+        'EditInfoTitle': '修改信息', 
+        'Control Pannel' : '控制面板',
+        'Admin' : '管理员',
 
         // HomeApp
         'HomeAppIntroduction' : '简介',

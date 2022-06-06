@@ -12,9 +12,12 @@ import {
     LogoutOutlined,
     InfoCircleOutlined,
     CloudServerOutlined,
+    ControlOutlined,
     LoginOutlined
 } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
+import EditInfoModal from '../component/EditInfoModal';
+
 import Localizer from '../utils/Localizer';
 
 function getItem(label, key, icon, children) {
@@ -38,7 +41,11 @@ export default class MySider extends React.Component {
         this.state = {
             collapsed: false,
             didLogin: props.didLogin,
-            selectedKey: props.selectedKey};
+            selectedKey: props.selectedKey,
+            currentSelectedKey: props.selectedKey,
+            
+            editInfoModalVisible: false
+        };
 
         this.localizerDict = Localizer.getCurrentLocalDict();
 
@@ -62,16 +69,24 @@ export default class MySider extends React.Component {
 
         this.didLoginItems = Object.assign([], baseItems);
         this.notLoginItems = Object.assign([], baseItems);
+        this.adminItems = Object.assign([], baseItems);
 
         this.didLoginItems.push(
             getItem(this.localizerDict['SiderUser'], 'user', <UserOutlined />, [
-                getItem(this.localizerDict['SiderInfo'], 'Info', <InfoCircleOutlined />),
+                getItem(this.localizerDict['Edit Info'], 'EditInfo', <InfoCircleOutlined />),
                 getItem(this.localizerDict['SiderLogout'], 'Logout', <LogoutOutlined />)
             ])
         );
 
         this.notLoginItems.push(
             getItem(this.localizerDict['SiderLogin'], 'Login', <LoginOutlined/>)
+        );
+
+        this.adminItems.push(
+            getItem(this.localizerDict['Admin'], 'admin', <UserOutlined />, [
+                getItem(this.localizerDict['Control Pannel'], 'ControlPannel', <ControlOutlined />),
+                getItem(this.localizerDict['SiderLogout'], 'Logout', <LogoutOutlined />)
+            ])
         );
     }
 
@@ -94,6 +109,14 @@ export default class MySider extends React.Component {
         return null;
     }
 
+    resetVisible = () => {
+        setTimeout(() => {
+            this.setState({
+                editInfoModalVisible: false
+            })
+        }, 500);
+    }
+
     menuSelectHandler = (item, key, keyPath, selectedKeys, domEvent) => {
         console.log(item);
 
@@ -106,36 +129,63 @@ export default class MySider extends React.Component {
             case 'HomeApp':
                 this.props.parentJumpFunc('HomeApp');
                 window.history.pushState(null,null, pathPrefix);
+                this.setState({
+                    currentSelectedKey: item.key
+                });
                 break;
         
             case 'SubRegions':
                 this.props.parentJumpFunc('SubRegions');
                 window.history.pushState(null,null, pathPrefix + 'SubRegions');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
                 break;
 
             case 'SubLineages':
                 this.props.parentJumpFunc('SubLineages');
                 window.history.pushState(null,null, pathPrefix + 'SubLineages');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
                 break;
 
             case 'Search':
                 this.props.parentJumpFunc('Search');
                 window.history.pushState(null,null, pathPrefix + 'Search');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
                 break;
 
             case 'Lineages':
                 this.props.parentJumpFunc('Lineages');
                 window.history.pushState(null,null, pathPrefix + 'Lineages');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
                 break;
 
             case 'Compare':
                 this.props.parentJumpFunc('Compare');
                 window.history.pushState(null,null, pathPrefix + 'Compare');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
                 break;
 
             case 'Statistics':
                 this.props.parentJumpFunc('Statistics');
                 window.history.pushState(null,null, pathPrefix + 'Statistics');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
+                break;
+
+            case 'EditInfo':
+                this.setState({
+                    editInfoModalVisible: true
+                });
                 break;
 
             case 'Login':
@@ -169,10 +219,15 @@ export default class MySider extends React.Component {
 
         var my_menu;
         if (this.state.didLogin) {
-            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" items={this.didLoginItems} onSelect={this.menuSelectHandler}/>;
+            if (this.props.role === 'ADMIN') {
+                my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" selectedKeys={[this.state.currentSelectedKey]} items={this.adminItems} onSelect={this.menuSelectHandler}/>;
+            }
+            else {
+                my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" selectedKeys={[this.state.currentSelectedKey]} items={this.didLoginItems} onSelect={this.menuSelectHandler}/>;
+            }
         }
         else {
-            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" items={this.notLoginItems} onSelect={this.menuSelectHandler}/>;
+            my_menu = <Menu theme="dark" defaultSelectedKeys={[this.state.selectedKey]} mode="inline" selectedKeys={[this.state.currentSelectedKey]} items={this.notLoginItems} onSelect={this.menuSelectHandler}/>;
         }
 
         var temp_items = {};
@@ -190,6 +245,7 @@ export default class MySider extends React.Component {
                     height: 70,
                 }}>
                 {userName}
+                {this.state.editInfoModalVisible && <EditInfoModal resetParent={this.resetVisible}/>}
                 </div>
                 {my_menu}
             </Layout.Sider>

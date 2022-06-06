@@ -139,6 +139,10 @@ class App extends Component {
                 secondPath = true;
                 break;
 
+            case 'EditInfo':
+                // do nothing
+                break;
+
             default:
         }
 
@@ -152,7 +156,8 @@ class App extends Component {
                 didLogin={this.state.didLogin}
                 selectedKey={this.props.AppType}
                 parentJumpFunc={this.setLink}
-                secondPath={secondPath}/>
+                secondPath={secondPath}
+                role={this.state.role}/>
 
             <Layout className="site-layout">
                 <Header

@@ -3,7 +3,7 @@
  */
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://192.168.10.26:8080'
+axios.defaults.baseURL = 'http://192.168.0.103:8080'
 
 export default class Requester {
     static getAuthToken() {
