@@ -20,6 +20,7 @@ const CompareApp = lazy(() => import('./AppBuiltIn/CompareApp'));
 const StatisticsApp = lazy(() => import('./AppBuiltIn/StatisticsApp'));
 const LineageDetailApp = lazy(() => import('./AppBuiltIn/LineageDetailApp'));
 const RegionDetailApp = lazy(() => import('./AppBuiltIn/RegionDetailApp'));
+const StatusApp = lazy(() => import('./AppBuiltIn/StatusApp'));
 
 class App extends Component {
     constructor(props) {
@@ -71,6 +72,12 @@ class App extends Component {
             case 'Search':
                 BuiltInApp = SearchApp;
                 pageName = localizerDict['SearchTitle'];
+                subTitle = "";
+                break;
+
+            case 'Status':
+                BuiltInApp = StatusApp;
+                pageName = localizerDict['StatusTitle'];
                 subTitle = "";
                 break;
 

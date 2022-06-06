@@ -30,6 +30,7 @@ root.render(
                             <Route path='SubRegions' element={<App AppType='SubRegions' locale='zh-cn'/>}/>
                             <Route path='SubLineages' element={<App AppType='SubLineages' locale='zh-cn'/>}/>
                             <Route path='Search' element={<App AppType='Search' locale='zh-cn'/>}/>
+                            <Route path='Status' element={<App AppType='Status' locale='zh-cn'/>}/>
                             <Route path='Lineages' element={<App AppType='Lineages' locale='zh-cn'/>}/>
                             <Route path='Compare' element={<App AppType='Compare' locale='zh-cn'/>}/>
                             <Route path='Statistics' element={<App AppType='Statistics' locale='zh-cn'/>}/>
@@ -50,6 +51,7 @@ root.render(
                             <Route path='SubRegions' element={<App AppType='SubRegions' locale='en-us' />}/>
                             <Route path='SubLineages' element={<App AppType='SubLineages' locale='en-us' />} />
                             <Route path='Search' element={<App AppType='Search' locale='en-us' />}/>
+                            <Route path='Status' element={<App AppType='Status' locale='en-us'/>}/>
                             <Route path='Lineages' element={<App AppType='Lineages' locale='en-us' />}/>
                             <Route path='Compare' element={<App AppType='Compare' locale='en-us' />}/>
                             <Route path='Statistics' element={<App AppType='Statistics' locale='en-us' />}/>

@@ -22,6 +22,7 @@ export default class Localizer {
         'LineagesTitle' : 'Lineages',
         'CompareTitle' : 'Compare',
         'StatisticsTitle' : 'Statistics',
+        'StatusTitle' : 'Lineage Status',
         
         'FooterText' : 'Sars-CoV-19 Variant DataBase Created by Morning Han',
 
@@ -40,6 +41,7 @@ export default class Localizer {
         'EditInfoTitle': 'Edit Info', 
         'Control Pannel' : 'Control Pannel',
         'Admin' : 'Admin',
+        'Status' : 'Status',
 
         // HomeApp
         'HomeAppIntroduction' : 'Introduction',
@@ -89,6 +91,8 @@ export default class Localizer {
         'LineageDetail' : 'Lineage Detail',
 
         'RegionDetail' : 'Region Detail',
+        'MonitorLevel' : 'Monitor Level',
+        'WHOLabel' : 'WHO Label',
     }
 
     static zh_CN_dict = {
@@ -99,6 +103,7 @@ export default class Localizer {
         'LineagesTitle' : '谱系树',
         'CompareTitle' : '序列匹配',
         'StatisticsTitle' : '统计数据',
+        'StatusTitle' : '变种状态',
 
         'FooterText' : 'Sars-CoV-19 病毒变种数据库',
 
@@ -117,6 +122,7 @@ export default class Localizer {
         'EditInfoTitle': '修改信息', 
         'Control Pannel' : '控制面板',
         'Admin' : '管理员',
+        'Status' : '状态',
 
         // HomeApp
         'HomeAppIntroduction' : '简介',
@@ -165,5 +171,8 @@ export default class Localizer {
 
         'LineageDetail' : '变种详情',
         'RegionDetail' : '地区详情',
+
+        'MonitorLevel' : '监视等级',
+        'WHOLabel' : 'WHO 命名',
     }
 }

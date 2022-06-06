@@ -13,6 +13,7 @@ import {
     InfoCircleOutlined,
     CloudServerOutlined,
     ControlOutlined,
+    TagsOutlined,
     LoginOutlined
 } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
@@ -59,8 +60,9 @@ export default class MySider extends React.Component {
                 getItem(this.localizerDict['SiderRegions'], 'SubRegions', <MyIcon type="icon-earth" />),
                 getItem(this.localizerDict['SiderLineages'], 'SubLineages', <BranchesOutlined />),
             ]),
+            getItem(this.localizerDict['SearchTitle'], 'Search', <SearchOutlined />),
             getItem(this.localizerDict['SiderVariants'], 'variants', <MyIcon type="icon-dna" />, [
-                getItem(this.localizerDict['SearchTitle'], 'Search', <SearchOutlined />),
+                getItem(this.localizerDict['Status'], 'Status', <TagsOutlined />),
                 getItem(this.localizerDict['LineagesTitle'], 'Lineages', <BranchesOutlined />),
                 getItem(this.localizerDict['CompareTitle'], 'Compare', <MyIcon type="icon-compare" />),
             ]),
@@ -181,6 +183,14 @@ export default class MySider extends React.Component {
             case 'Search':
                 this.props.parentJumpFunc('Search');
                 window.history.pushState(null,null, pathPrefix + 'Search');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
+                break;
+
+            case 'Status':
+                this.props.parentJumpFunc('Status');
+                window.history.pushState(null,null, pathPrefix + 'Status');
                 this.setState({
                     currentSelectedKey: item.key
                 });
