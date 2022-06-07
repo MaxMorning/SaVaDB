@@ -1,6 +1,7 @@
 package org.savadb.backend.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +18,10 @@ public class NotificationsEntity {
     @Basic
     @Column(name = "content", nullable = false, length = 1024)
     private String content;
+
+    @Basic
+    @Column(name = "create_time", nullable = false)
+    private Timestamp createTime;
 
     public Integer getIdx() {
         return idx;
@@ -62,5 +67,13 @@ public class NotificationsEntity {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 }

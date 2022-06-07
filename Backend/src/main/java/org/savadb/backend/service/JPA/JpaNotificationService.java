@@ -5,6 +5,8 @@ import org.savadb.backend.repo.JpaNotificationRepo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class JpaNotificationService {
@@ -16,7 +18,20 @@ public class JpaNotificationService {
         notification.setIdx((int) jpaNotificationRepo.getNotiCount());
         notification.setTitle(title);
         notification.setContent(content);
+        notification.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
         jpaNotificationRepo.save(notification);
+    }
+
+    public List<NotificationsEntity> getAllNotifications() {
+        return jpaNotificationRepo.getAllNotifications();
+    }
+
+    public NotificationsEntity getNotificationById(Integer idx) {
+        return jpaNotificationRepo.getById(idx);
+    }
+
+    public List<NotificationsEntity> searchKeyInTitle(String key) {
+        return jpaNotificationRepo.searchKeyInTitle(key);
     }
 }
