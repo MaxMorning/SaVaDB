@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Radio, Input, Empty, List, Descriptions, Tag, Result, Spin } from 'antd';
+import { Radio, Input, Empty, List, Descriptions, Tag, Result, Spin, Typography } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import NotificationModal from '../component/NotificationModal';
 
 import "antd/dist/antd.min.css";
 
@@ -9,6 +10,7 @@ import Localizer from '../utils/Localizer';
 
 const { Search } = Input;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const { Text, Link } = Typography;
 
 export default class SearchApp extends Component {
     constructor(props) {
@@ -17,6 +19,7 @@ export default class SearchApp extends Component {
         this.searchResult = [];
         this.searchTypeStr = "Lineage";
         this.state = {
+            notiModalVisible: false,
             searching: false,
             searched: false
         };
@@ -122,6 +125,24 @@ export default class SearchApp extends Component {
                 </Descriptions>;
     }
 
+    getOpenModalCallback = (item) => {
+        return () => {
+            this.notiTitle = item[1];
+            this.setState({
+                notiModalVisible: true,
+                notiModalIndex: item[0]
+            });
+        }
+    } 
+
+    resetVisible = () => {
+        setTimeout(() => {
+            this.setState({
+                notiModalVisible: false
+            })
+        }, 500);
+    }
+
     render() {
         var localizerDict = Localizer.getCurrentLocalDict();
         
@@ -195,8 +216,12 @@ export default class SearchApp extends Component {
                             (item) => (
                                 <List.Item>
                                     <List.Item.Meta
-                                    title={<a href={item[2]}>{item[0]}</a>}
-                                    description={item[1]}
+                                    title={
+                                        <Link onClick={this.getOpenModalCallback(item)} ellipsis>
+                                            {'[' + item[3] + '] ' + item[1]}
+                                        </Link>
+                                    }
+                                    description={<Text ellipsis>{item[2]}</Text>}
                                     />
                                 </List.Item>
                             )
@@ -204,6 +229,7 @@ export default class SearchApp extends Component {
                         style={{
                             padding: '10px'
                         }}>
+                            {this.state.notiModalVisible && <NotificationModal resetParent={this.resetVisible} notiIndex={this.state.notiModalIndex} title={this.notiTitle}/>}
                     </List>;
                     break;
 
