@@ -2,6 +2,7 @@ package org.savadb.backend.controller;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.savadb.backend.entity.*;
+import org.savadb.backend.service.JPA.Data.JpaAPIInfoService;
 import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
 import org.savadb.backend.service.JPA.Data.JpaStatService;
 import org.savadb.backend.service.JPA.JpaNotificationService;
@@ -35,6 +36,9 @@ public class SearchController {
     @Resource
     private JpaNotificationService jpaNotificationService;
 
+    @Resource
+    private JpaAPIInfoService jpaAPIInfoService;
+
     @GetMapping("/search")
     public Result<List<String[]>> search(@RequestParam String type, @RequestParam String key) {
         switch (type) {
@@ -48,9 +52,7 @@ public class SearchController {
                 return Result.resultFactory(EResult.SUCCESS, searchNotification(key));
 
             case "API":
-                throw new NotImplementedException();
-//                return Result.resultFactory(EResult.DATA_NULL, null);
-//                break;
+                return Result.resultFactory(EResult.SUCCESS, searchAPI(key));
 
             default:
                 return Result.resultFactory(EResult.BAD_REQUEST, null);
@@ -126,6 +128,24 @@ public class SearchController {
             singleResult[3] = dateFormat.format(notification.getCreateTime());
 
             resultList.add(singleResult);
+        }
+
+        return resultList;
+    }
+
+    private List<String[]> searchAPI(String key) {
+        List<ApiInfoEntity> apiInfoEntityList = jpaAPIInfoService.searchAPI(key);
+
+        List<String[]> resultList = new ArrayList<>();
+
+        for (ApiInfoEntity apiInfo : apiInfoEntityList) {
+            String[] singleEntity = new String[3];
+
+            singleEntity[0] = apiInfo.getUrl();
+            singleEntity[1] = apiInfo.getDescZhCn();
+            singleEntity[2] = apiInfo.getDescEnUs();
+
+            resultList.add(singleEntity);
         }
 
         return resultList;
