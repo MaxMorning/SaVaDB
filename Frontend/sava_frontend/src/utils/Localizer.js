@@ -93,6 +93,8 @@ export default class Localizer {
         'RegionDetail' : 'Region Detail',
         'MonitorLevel' : 'Monitor Level',
         'WHOLabel' : 'WHO Label',
+
+        'DataSource' : 'Data Source',
     }
 
     static zh_CN_dict = {
@@ -174,5 +176,7 @@ export default class Localizer {
 
         'MonitorLevel' : '监视等级',
         'WHOLabel' : 'WHO 命名',
+
+        'DataSource' : '数据来源',
     }
 }

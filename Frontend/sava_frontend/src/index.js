@@ -35,6 +35,7 @@ root.render(
                             <Route path='Compare' element={<App AppType='Compare' locale='zh-cn'/>}/>
                             <Route path='Statistics' element={<App AppType='Statistics' locale='zh-cn'/>}/>
                             <Route path='Api' element={<App AppType='Api' locale='zh-cn'/>}/>
+                            <Route path='DataSource' element={<App AppType='DataSource' locale='zh-cn'/>}/>
                             <Route path='EditInfo' element={<App AppType='EditInfo' locale='zh-cn'/>}/>
                             <Route path='lineage/:variant' element={<App AppType='LineageDetail' locale='zh-cn'/>}/>
                             <Route path='region/:region' element={<App AppType='RegionDetail' locale='zh-cn'/>}/>
@@ -57,6 +58,7 @@ root.render(
                             <Route path='Compare' element={<App AppType='Compare' locale='en-us' />}/>
                             <Route path='Statistics' element={<App AppType='Statistics' locale='en-us' />}/>
                             <Route path='Api' element={<App AppType='Api' locale='en-us'/>}/>
+                            <Route path='DataSource' element={<App AppType='DataSource' locale='en-us'/>}/>
                             <Route path='EditInfo' element={<App AppType='EditInfo' locale='en-us'/>}/>
                             <Route path='lineage/:variant' element={<App AppType='LineageDetail' locale='en-us'/>}/>
                             <Route path='region/:region' element={<App AppType='RegionDetail' locale='en-us'/>}/>
