@@ -5,19 +5,22 @@ import { LoginOutlined, PlusCircleOutlined, UserOutlined, LockOutlined, MailOutl
 import "./Login.css"
 import '../utils/Requester'
 import Requester from '../utils/Requester';
+import moment from 'moment'
+import Localizer from '../utils/Localizer';
 
 const CryptoJS = require('crypto-js'); 
 const { TabPane } = Tabs;
 
 export default class LoginPage extends Component {
-    // onChangeCallback = (activeKey) => {
-    //     if (activeKey == 'login') {
-    //         this.tabsParentDiv.style.height = '386px';
-    //     }
-    //     else {
-    //         this.tabsParentDiv.style.height = '498px';
-    //     }
-    // }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            locale: props.locale,
+        };
+
+        moment.locale(props.locale);
+    }
 
     loginForm = React.createRef();
     regForm = React.createRef();
@@ -93,10 +96,12 @@ export default class LoginPage extends Component {
     };
 
     render() {
+        var localizerDict = Localizer.getLocalDict(this.state.locale);
+
         return (
             <div>
                 <h1 style={{margin: 25, textAlign: "center", fontSize: 45}}>SaVaDB</h1>
-                <h1 style={{margin: 25, textAlign: "center", fontSize: 35}}>Login {"&"} Register</h1>
+                <h1 style={{margin: 25, textAlign: "center", fontSize: 35}}>{localizerDict['Login'] + ' & ' + localizerDict['Register']}</h1>
                 <div style={{
                     display: 'flex',
                     justifyContent:'center',
@@ -113,7 +118,7 @@ export default class LoginPage extends Component {
                             <TabPane tab={
                                 <span>
                                     <LoginOutlined />
-                                    Login
+                                    {localizerDict['Login']}
                                 </span>
                             } key='login'>
                                 <Form
@@ -128,39 +133,39 @@ export default class LoginPage extends Component {
                                         rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your Username!',
+                                            message: localizerDict['Username empty time'],
                                         },
                                         ]}>
-                                        <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder="Username" />
+                                        <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder={localizerDict["Username"]} />
                                     </Form.Item>
                                     <Form.Item
                                         name="password"
                                         rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your Password!',
+                                            message: localizerDict['Password empty info'],
                                         },
                                         ]}>
                                         <Input
                                             prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                             type="password"
-                                            placeholder="Password"
+                                            placeholder={localizerDict["Password"]}
                                         />
                                     </Form.Item>
                                     <Form.Item>
                                         <Form.Item name="remember" valuePropName="checked" noStyle>
-                                        <Checkbox>Remember me</Checkbox>
+                                        <Checkbox>{localizerDict['Remember me']}</Checkbox>
                                         </Form.Item>
 
                                         <Typography.Link href="" style={{float: "right"}}>
-                                            Forgot password
+                                            {localizerDict['Forgot password']}
                                         </Typography.Link>
                                     </Form.Item>
 
                                     <Form.Item>
                                         <Button type="primary" htmlType="submit" className="login-form-button" block
                                         onClick={this.login}>
-                                        Log in
+                                        {localizerDict['Log in']}
                                         </Button>
                                     </Form.Item>
                                 </Form>
@@ -169,7 +174,7 @@ export default class LoginPage extends Component {
                             <TabPane tab={
                                 <span>
                                     <PlusCircleOutlined />
-                                    Register
+                                    {localizerDict['Register']}
                                 </span>
                             }>
                                 <Form
@@ -184,11 +189,11 @@ export default class LoginPage extends Component {
                                         rules={[
                                         {
                                             type: 'email',
-                                            message: 'The input is not valid E-mail!',
+                                            message: localizerDict['Invalid Email info'],
                                         },
                                         {
                                             required: true,
-                                            message: 'Please input your E-mail!',
+                                            message: localizerDict['Email empty info'],
                                         },
                                         ]}>
                                         <Input 
@@ -201,24 +206,24 @@ export default class LoginPage extends Component {
                                         rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your Username!',
+                                            message: localizerDict['Username empty time'],
                                         },
                                         ]}
                                         ref={(item) => (this.regUsername = item)}>
-                                        <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder="Username" />
+                                        <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder={localizerDict["Username"]} />
                                     </Form.Item>
                                     <Form.Item
                                         name="password"
                                         rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your Password!',
+                                            message: localizerDict['Password empty info'],
                                         },
                                         ]}>
                                         <Input
                                         prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                         type="password"
-                                        placeholder="Password"
+                                        placeholder={localizerDict["Password"]}
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -228,7 +233,7 @@ export default class LoginPage extends Component {
                                         rules={[
                                         {
                                             required: true,
-                                            message: 'Please confirm your password!',
+                                            message: localizerDict['Confirm empty'],
                                         },
                                         ({ getFieldValue }) => ({
                                             validator(_, value) {
@@ -236,26 +241,26 @@ export default class LoginPage extends Component {
                                                 return Promise.resolve();
                                             }
 
-                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                            return Promise.reject(new Error(localizerDict['Comfirm not equal']));
                                             },
                                         }),
                                         ]}>
                                         <Input
                                             prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                             type="password"
-                                            placeholder="Confirm Password"
+                                            placeholder={localizerDict["Confirm Password"]}
                                         />
                                     </Form.Item>
 
                                     <Form.Item>
                                         <Form.Item name="remember" valuePropName="checked" noStyle>
-                                        <Checkbox>Remember me</Checkbox>
+                                        <Checkbox>{localizerDict['Remember me']}</Checkbox>
                                         </Form.Item>
                                     </Form.Item>
 
                                     <Form.Item>
                                         <Button type="primary" htmlType="submit" className="login-form-button" block onClick={this.register}>
-                                        Register
+                                        {localizerDict['Register']}
                                         </Button>
                                     </Form.Item>
                                 </Form>

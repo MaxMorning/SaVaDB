@@ -30,6 +30,7 @@ export default class StatisticsApp extends Component {
     }
 
     getTwoRegionOption = () =>{
+        var localizerDict = Localizer.getCurrentLocalDict();
         const firstConfirmedValue = this.firstData.map(function (item) {
             return item[0];
         });
@@ -81,7 +82,7 @@ export default class StatisticsApp extends Component {
         ],
         series: [
             {
-            name: this.firstRegionName + ' Confirmed',
+            name: this.firstRegionName + ' ' + localizerDict['Confirmed'],
             type: 'line',
             symbol: 'none',
             sampling: 'lttb',
@@ -104,7 +105,7 @@ export default class StatisticsApp extends Component {
             },
 
             {
-                name: this.firstRegionName + ' Death',
+                name: this.firstRegionName + ' ' + localizerDict['Death'],
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -127,7 +128,7 @@ export default class StatisticsApp extends Component {
             },
 
             {
-                name: this.secondRegionName + ' Confirmed',
+                name: this.secondRegionName + ' ' + localizerDict['Confirmed'],
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -150,7 +151,7 @@ export default class StatisticsApp extends Component {
             },
     
             {
-                name: this.secondRegionName + ' Death',
+                name: this.secondRegionName + ' ' + localizerDict['Death'],
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -177,6 +178,7 @@ export default class StatisticsApp extends Component {
     };
 
     getOneRegionOption = () =>{
+        var localizerDict = Localizer.getCurrentLocalDict();
         var confirmedValue;
         var deathValue;
         var regionName;
@@ -239,7 +241,7 @@ export default class StatisticsApp extends Component {
         ],
         series: [
             {
-            name: 'Confirmed',
+            name: localizerDict['Confirmed'],
             type: 'line',
             symbol: 'none',
             sampling: 'lttb',
@@ -262,7 +264,7 @@ export default class StatisticsApp extends Component {
             },
 
             {
-                name: 'Death',
+                name: localizerDict['Death'],
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -458,7 +460,18 @@ export default class StatisticsApp extends Component {
                     <List.Item>
                         <List.Item.Meta
                             title={this.dateList[i]}
-                            description={'Confirmed: ' + this.firstData[i][0] + ' Death: ' + this.firstData[i][1] + ' Cured: ' + this.firstData[i][2]}
+                            description={
+                                <div
+                                style={{
+                                    whiteSpace: 'pre-wrap'
+                                }}>
+                                    {
+                                        localizerDict['Confirmed'] + ': ' + this.firstData[i][0] + '    ' + 
+                                        localizerDict['Death'] + ': ' + this.firstData[i][1] + '    ' + 
+                                        localizerDict['Cured'] + ': ' + this.firstData[i][2]
+                                    }
+                                </div>
+                            }
                             />
                     </List.Item>
                 );
@@ -475,7 +488,18 @@ export default class StatisticsApp extends Component {
                     <List.Item>
                         <List.Item.Meta
                             title={this.dateList[i]}
-                            description={'Confirmed: ' + this.secondData[i][0] + ' Death: ' + this.secondData[i][1] + ' Cured: ' + this.secondData[i][2]}
+                            description={
+                                <div
+                                style={{
+                                    whiteSpace: 'pre-wrap'
+                                }}>
+                                    {
+                                        localizerDict['Confirmed'] + ': ' + this.firstData[i][0] + '    ' + 
+                                        localizerDict['Death'] + ': ' + this.firstData[i][1] + '    ' + 
+                                        localizerDict['Cured'] + ': ' + this.firstData[i][2]
+                                    }
+                                </div>
+                            }
                             />
                     </List.Item>
                 );

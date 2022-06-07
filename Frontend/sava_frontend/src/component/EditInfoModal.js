@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, Tabs, Modal, notification } from 'antd';
 import { LoginOutlined, PlusCircleOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const CryptoJS = require('crypto-js'); 
 
@@ -35,6 +36,8 @@ export default class EditInfoModal extends Component {
     }
 
     handleOk = () => {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         this.setState({
             confirmLoading: true
         });
@@ -70,9 +73,9 @@ export default class EditInfoModal extends Component {
                 }
                 else if (402 === response.data.code) {
                     const args = {
-                        message: 'Name duplicated',
+                        message: localizerDict['Name duplicated'],
                         description:
-                            'New username is used, please use another username.',
+                            localizerDict['Name dup info'],
                         duration: 4,
                     };
                     notification.open(args);
@@ -84,9 +87,9 @@ export default class EditInfoModal extends Component {
                 }
                 else {
                     const args = {
-                        message: 'Change Failed',
+                        message: localizerDict['Change Failed'],
                         description:
-                          'Change username failed because of some unknown reason.',
+                          localizerDict['Change failed Info'],
                         duration: 4,
                     };
                     notification.open(args);
@@ -99,9 +102,9 @@ export default class EditInfoModal extends Component {
             },
             (error) => {
                 const args = {
-                    message: 'Change Failed',
+                    message: localizerDict['Change Failed'],
                     description:
-                      'Change username failed because of some unknown reason.',
+                    localizerDict['Change user failed Info'],
                     duration: 4,
                 };
                 notification.open(args);
@@ -146,9 +149,9 @@ export default class EditInfoModal extends Component {
                 }
                 else {
                     const args = {
-                        message: 'Change Failed',
+                        message: localizerDict['Change Failed'],
                         description:
-                          'Change password failed because of some unknown reason.',
+                          localizerDict['Change password failed Info'],
                         duration: 4,
                     };
                     notification.open(args);
@@ -161,9 +164,9 @@ export default class EditInfoModal extends Component {
             },
             (error) => {
                 const args = {
-                    message: 'Change Failed',
+                    message: localizerDict['Change Failed'],
                     description:
-                      'Change password failed because of some unknown reason.',
+                    localizerDict['Change password failed Info'],
                     duration: 4,
                 };
                 notification.open(args);
@@ -185,16 +188,18 @@ export default class EditInfoModal extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         return (
             <Modal
-                title='Edit Info'
+                title={localizerDict['Edit Info']}
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 confirmLoading={this.state.confirmLoading}>
                 <Tabs defaultActiveKey="1" centered
                     onTabClick={this.onTabClick}>
-                    <TabPane tab='Change Username' key='1'>
+                    <TabPane tab={localizerDict['Change Username']} key='1'>
                         <Form
                             name='new_name'
                             style={{
@@ -206,10 +211,10 @@ export default class EditInfoModal extends Component {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input your new username!',
+                                        message: localizerDict['Username empty info'],
                                     },
                                 ]}>
-                                <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder="New username" />
+                                <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder={localizerDict["New username"]} />
                             </Form.Item>
 
                             <Form.Item
@@ -217,18 +222,18 @@ export default class EditInfoModal extends Component {
                                 rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your password!',
+                                    message: localizerDict['Password empty info'],
                                 },
                             ]}>
                                 <Input
                                     prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder={localizerDict["Password"]}
                                 />
                             </Form.Item>
                         </Form>
                     </TabPane>
-                        <TabPane tab='Change password' key='2'>
+                        <TabPane tab={localizerDict['Change password']} key='2'>
                             <Form
                                 name="new_password"
                                 style={{
@@ -240,13 +245,13 @@ export default class EditInfoModal extends Component {
                                     rules={[
                                     {
                                         required: true,
-                                        message: 'Please input your old password!',
+                                        message: localizerDict['Old password empty'],
                                     },
                                 ]}>
                                 <Input
                                     prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                     type="password"
-                                    placeholder="Old password"
+                                    placeholder={localizerDict["Old password"]}
                                 />
                                 </Form.Item>
 
@@ -255,13 +260,13 @@ export default class EditInfoModal extends Component {
                                     rules={[
                                     {
                                         required: true,
-                                        message: 'Please input your new password!',
+                                        message: localizerDict['New password empty'],
                                     },
                                 ]}>
                                 <Input
                                     prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                     type="password"
-                                    placeholder="New password"
+                                    placeholder={localizerDict["New password"]}
                                 />
                                 </Form.Item>
                                 <Form.Item
@@ -271,7 +276,7 @@ export default class EditInfoModal extends Component {
                                     rules={[
                                     {
                                         required: true,
-                                        message: 'Please confirm your password!',
+                                        message: localizerDict['Confirm empty'],
                                     },
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
@@ -279,14 +284,14 @@ export default class EditInfoModal extends Component {
                                             return Promise.resolve();
                                         }
 
-                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    return Promise.reject(new Error(localizerDict['Comfirm not equal']));
                                     },
                                 }),
                                 ]}>
                                 <Input
                                     prefix={<LockOutlined style={{color: "#BBBBBB"}} />}
                                     type="password"
-                                    placeholder="Confirm Password"
+                                    placeholder={localizerDict["Confirm Password"]}
                                 />
                             </Form.Item>
                         </Form>

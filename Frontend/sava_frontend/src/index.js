@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import "antd/dist/antd.min.css";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
 
 import reportWebVitals from './reportWebVitals';
@@ -66,6 +66,9 @@ root.render(
                     </Suspense>
                 </ConfigProvider>
             }/>
+
+            <Route path='/' element={<Navigate to="zh_CN/" replace />} />
+
         </Routes>
     </Router>
 );

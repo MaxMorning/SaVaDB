@@ -28,7 +28,7 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
+        // console.log(props);
         this.state = {
             role: '', 
             didLogin: false,
@@ -133,7 +133,7 @@ class App extends Component {
 
             case 'Api':
                 BuiltInApp = APIPageApp;
-                pageName = 'API Details';
+                pageName = localizerDict['API Details'];
 
                 appProps = {
                     'lang': this.state.locale

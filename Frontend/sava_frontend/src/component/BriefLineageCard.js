@@ -5,6 +5,7 @@ import "antd/dist/antd.min.css";
 
 import Requester from '../utils/Requester';
 import DescriptionsItem from 'antd/lib/descriptions/Item';
+import Localizer from '../utils/Localizer';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -41,6 +42,8 @@ export default class BriefLineageCard extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         if (this.state.isLoaded) {
             var whoLabelTag;
             if (this.lineageData.WHOLabel === null) {
@@ -85,21 +88,21 @@ export default class BriefLineageCard extends Component {
                 <Col span={12}>
                     <Card bordered={true} hoverable
                         title={this.state.lineage}
-                        extra={<a href={'./lineage/' + this.state.lineage}>Detail</a>}>
+                        extra={<a href={'./lineage/' + this.state.lineage}>{localizerDict['Detail']}</a>}>
                         <Descriptions>
-                            <Descriptions.Item label="WHO label">
+                            <Descriptions.Item label={localizerDict["WHO label"]}>
                                 {whoLabelTag}
                             </Descriptions.Item>
                             
-                            <Descriptions.Item label="Monitor level">
+                            <Descriptions.Item label={localizerDict["Monitor level"]}>
                                 {monitorLevelTag}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Status">
+                            <Descriptions.Item label={localizerDict["Status"]}>
                                 {statusTag}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Earlist discover date" span={2}>
+                            <Descriptions.Item label={localizerDict["Earlist discover date"]} span={2}>
                                 {this.lineageData.earliestDate === null ? "NA" : this.lineageData.earliestDate}
                             </Descriptions.Item>
                             
@@ -107,19 +110,19 @@ export default class BriefLineageCard extends Component {
                                 {this.lineageData.R0}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Average incubation" span={2}>
-                                {this.lineageData.avgIncubation + ' Day'}
+                            <Descriptions.Item label={localizerDict["Average incubation"]} span={2}>
+                                {this.lineageData.avgIncubation + ' ' + localizerDict['Day']}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Sequence Count">
+                            <Descriptions.Item label={localizerDict["Sequence Count"]}>
                                 {this.lineageData.seqCount}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Children Count">
+                            <Descriptions.Item label={localizerDict["Children Count"]}>
                                 {this.lineageData.childCount}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Update time" span={2}>
+                            <Descriptions.Item label={localizerDict["Update time"]} span={2}>
                                 {this.lineageData.updateTime}
                             </Descriptions.Item>
                         </Descriptions>
@@ -131,7 +134,7 @@ export default class BriefLineageCard extends Component {
             return (
                 <Col span={12}>
                     <Card bordered={true} hoverable title={this.state.lineage}
-                        extra={<a href={'./lineage/' + this.state.lineage}>Detail</a>}>
+                        extra={<a href={'./lineage/' + this.state.lineage}>{localizerDict['Detail']}</a>}>
                         <Spin indicator={antIcon} size="large"/>
                     </Card>
                 </Col>

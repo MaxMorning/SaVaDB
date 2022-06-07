@@ -6,6 +6,7 @@ import * as echarts from 'echarts'
 import ReactEcharts from 'echarts-for-react';
 
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -68,6 +69,8 @@ export default class BriefStatVisualizeCard extends Component {
     }
 
     getBriefOption = (regionName) => {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         const dateList = this.dateList;
         const confirmedValue = this.statData.map(function (item) {
             return item[0];
@@ -88,7 +91,7 @@ export default class BriefStatVisualizeCard extends Component {
         title: [
             {
             left: 'center',
-            text: regionName + ' (Per Week)'
+            text: regionName + localizerDict[' (Per Week)']
             }
         ],
         tooltip: {
@@ -98,7 +101,7 @@ export default class BriefStatVisualizeCard extends Component {
                 var result = ''
                 var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#F07840"></span>'    // 定义第一个数据前的圆点颜色
                 var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#F00000"></span>'    // 定义第二个数据前的圆点颜色
-                result += params[0].axisValue + "</br>" + dotHtml + ' Confirmed ' + params[0].data + "</br>" + dotHtml2 + ' Death ' + params[1].data;
+                result += params[0].axisValue + "</br>" + dotHtml + ' ' + localizerDict['Confirmed'] + ' ' + params[0].data + "</br>" + dotHtml2 + ' ' + localizerDict['Death'] + ' ' + params[1].data;
                 return result
             }
         },
@@ -134,12 +137,14 @@ export default class BriefStatVisualizeCard extends Component {
     };
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+        
         if (this.state.isLoaded) {
             return (
                 <Col span={12}>
                     <Card bordered={true} hoverable
                         title={this.state.region}
-                        extra={<a href={'./region/' + this.state.region}>Detail</a>}>
+                        extra={<a href={'./region/' + this.state.region}>{localizerDict['Detail']}</a>}>
                         <ReactEcharts option={this.getBriefOption(this.state.region)}/>
                     </Card>
                 </Col>
@@ -149,7 +154,7 @@ export default class BriefStatVisualizeCard extends Component {
             return (
                 <Col span={12}>
                     <Card bordered={true} hoverable title={this.state.region}
-                        extra={<a href={'./region/' + this.state.region}>Detail</a>}>
+                        extra={<a href={'./region/' + this.state.region}>{localizerDict['Detail']}</a>}>
                         <Spin indicator={antIcon} size="large"/>
                     </Card>
                 </Col>
