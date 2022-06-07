@@ -41,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 跨域伪造请求限制无效
                 .csrf().disable()
                 .authorizeRequests()
-                // 访问/data需要ADMIN角色
                 .antMatchers("/api/user/**").hasRole("USER")
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 // 其余资源任何人都可访问

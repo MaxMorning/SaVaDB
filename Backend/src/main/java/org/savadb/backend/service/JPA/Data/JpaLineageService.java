@@ -19,4 +19,14 @@ public class JpaLineageService {
     public long getChildrenCnt(Integer parentVariantId) {
         return jpaLineageRepo.getChildrenCnt(parentVariantId);
     }
+
+    public String getParentLineage(Integer childVariantId) {
+        LineageEntity lineage = jpaLineageRepo.findByChildVariantId(childVariantId);
+
+        if (lineage == null) {
+            return null;
+        }
+
+        return lineage.getVariantByParentVariantId().getPangoNomenclatureByVId().getVariant();
+    }
 }

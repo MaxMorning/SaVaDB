@@ -1,11 +1,12 @@
 package org.savadb.backend.controller;
 
-import org.savadb.backend.entity.CompRecordEntity;
-import org.savadb.backend.entity.UserEntity;
+import org.savadb.backend.entity.*;
 import org.savadb.backend.service.JPA.Account.JpaCompRecordService;
 import org.savadb.backend.service.JPA.Account.JpaUserService;
 import org.savadb.backend.service.JPA.Account.JpaUserWatchingRegionsService;
 import org.savadb.backend.service.JPA.Account.JpaUserWatchingVariantsService;
+import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
+import org.savadb.backend.service.JPA.JpaRegionService;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
 import org.savadb.backend.utils.PasswordUtils;
@@ -21,6 +22,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +42,12 @@ public class AccountController {
 
     @Resource
     private JpaCompRecordService jpaCompRecordService;
+
+    @Resource
+    private JpaPangoNomenclatureService jpaPangoNomenclatureService;
+
+    @Resource
+    private JpaRegionService jpaRegionService;
 
     private int idCnt = 0;
 
@@ -73,6 +81,7 @@ public class AccountController {
         byte[] saltedPassword = PasswordUtils.passwordHash(password, salt);
         user.setSalt(salt);
         user.setPasswd(saltedPassword);
+        user.setRemainCompTime(5);
 
         jpaUserService.insertUser(user);
 
@@ -83,18 +92,7 @@ public class AccountController {
         tokenMap.put("role", user.getRole());
 
         String[] roles = user.getRole().split(",");
-        if (roles.length == 1) {
-            tokenMap.put("role", roles[0]);
-        }
-        else {
-            StringBuilder roleStr = new StringBuilder("[");
-            for (String role : roles) {
-                roleStr.append("ROLE_").append(role).append(", ");
-            }
-            roleStr.replace(roleStr.length() - 1, roleStr.length() - 1, "]");
-
-            tokenMap.put("role", roleStr.toString());
-        }
+        storeRoleIntoMap(tokenMap, roles);
 
         int expiredDay = keep_login ? 1 : 15;
         String token = jwtUtils.getToken(tokenMap, expiredDay);
@@ -351,5 +349,222 @@ public class AccountController {
             return Result.resultFactory(EResult.UNKNOWN_ERROR, null);
         }
         return Result.resultFactory(EResult.SUCCESS, null);
+    }
+
+    @GetMapping("/user/subLineage")
+    public Result<String> changeSubLineage(@RequestParam String lineage) {
+        if (lineage == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        PangoNomenclatureEntity pangoNomenclature = jpaPangoNomenclatureService.findByVariantName(lineage);
+        if (pangoNomenclature == null) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+        Integer variantId = pangoNomenclature.getvId();
+
+        UserWatchingEntity userWatching = jpaUserWatchingVariantsService.getUserWatchingEntity(this.currentUser.getUsrId(), variantId);
+
+        if (userWatching == null) {
+            userWatching = new UserWatchingEntity();
+            userWatching.setUsrId(this.currentUser.getUsrId());
+            userWatching.setWatchingVId(variantId);
+            jpaUserWatchingVariantsService.saveWatchingEntity(userWatching);
+
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            jpaUserWatchingVariantsService.deleteEntity(userWatching);
+
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @GetMapping("/user/checkSubLineage")
+    public Result<String> checkSubLineage(@RequestParam String lineage) {
+        if (lineage == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        PangoNomenclatureEntity pangoNomenclature = jpaPangoNomenclatureService.findByVariantName(lineage);
+        if (pangoNomenclature == null) {
+            return Result.resultFactory(EResult.DATA_NULL, null);
+        }
+        Integer variantId = pangoNomenclature.getvId();
+
+        if (jpaUserWatchingVariantsService.checkSubscribeVariant(this.currentUser.getUsrId(), variantId)) {
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @GetMapping("/user/subRegion")
+    public Result<String> changeSubRegion(@RequestParam String region) {
+        if (region == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        RegionEntity regionEntity = jpaRegionService.findByRegionName(region);
+        if (regionEntity == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        Integer regionId = regionEntity.getRegionId();
+
+        UserWatchingRegionsEntity userWatchingRegions = jpaUserWatchingRegionsService.getUserWatchingEntity(this.currentUser.getUsrId(), regionId);
+
+        if (userWatchingRegions == null) {
+            userWatchingRegions = new UserWatchingRegionsEntity();
+            userWatchingRegions.setUsrId(this.currentUser.getUsrId());
+            userWatchingRegions.setWatchingRId(regionId);
+            jpaUserWatchingRegionsService.saveWatchingEntity(userWatchingRegions);
+
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            jpaUserWatchingRegionsService.deleteEntity(userWatchingRegions);
+
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @GetMapping("/user/checkSubRegion")
+    public Result<String> checkSubRegion(@RequestParam String region) {
+        if (region == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        EResult getUserResult = getCurrentUser();
+        if (getUserResult != EResult.SUCCESS) {
+            return Result.resultFactory(getUserResult, null);
+        }
+
+        RegionEntity regionEntity = jpaRegionService.findByRegionName(region);
+        if (regionEntity == null) {
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+
+        Integer regionId = regionEntity.getRegionId();
+
+        if (jpaUserWatchingRegionsService.checkSubscribeRegion(this.currentUser.getUsrId(), regionId)) {
+            return Result.resultFactory(EResult.SUCCESS, "true");
+        }
+        else {
+            return Result.resultFactory(EResult.SUCCESS, "false");
+        }
+    }
+
+    @PostMapping("/user/changeUsername")
+    public Result<String> changeUsername(@RequestBody Map<String, Object> requestBody) {
+        try {
+            String username = (String) requestBody.get("username");
+            byte[] password = Base64.getDecoder().decode((String) requestBody.get("password"));
+
+            // 验证密码
+            EResult getUserResult = getCurrentUser();
+            if (getUserResult != EResult.SUCCESS) {
+                return Result.resultFactory(getUserResult, null);
+            }
+
+            if (Arrays.equals(PasswordUtils.passwordHash(password, this.currentUser.getSalt()), this.currentUser.getPasswd())) {
+                // 密码正确
+                // 检查用户名重复
+                if (jpaUserService.findAllByUsrName(username).isEmpty()) {
+                    this.currentUser.setUsrName(username);
+                    jpaUserService.insertUser(this.currentUser);
+
+                    // 签发新的token
+                    JWTUtils jwtUtils = new JWTUtils();
+                    Map<String, String> tokenMap = new HashMap<>();
+                    tokenMap.put("name", username);
+                    String[] roles = this.currentUser.getRole().split(",");
+                    storeRoleIntoMap(tokenMap, roles);
+
+                    String authorization = jwtUtils.getToken(tokenMap, 1);
+
+
+                    return Result.resultFactory(EResult.SUCCESS, authorization);
+                }
+                else {
+                    return Result.resultFactory(EResult.DATA_DUPLICATE, "Duplicate username");
+                }
+
+            }
+            else {
+                // 密码错误
+                return Result.resultFactory(EResult.AUTH_FAIL, "Wrong password");
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Result.resultFactory(EResult.BAD_REQUEST, "Invalid data.");
+        }
+    }
+
+    @PostMapping("/user/changePassword")
+    public Result<String> changePassword(@RequestBody Map<String, Object> requestBody) {
+        try {
+            byte[] oldPassword = Base64.getDecoder().decode((String) requestBody.get("oldPassword"));
+            byte[] newPassword = Base64.getDecoder().decode((String) requestBody.get("newPassword"));
+
+            // 验证密码
+            EResult getUserResult = getCurrentUser();
+            if (getUserResult != EResult.SUCCESS) {
+                return Result.resultFactory(getUserResult, null);
+            }
+
+            if (Arrays.equals(PasswordUtils.passwordHash(oldPassword, this.currentUser.getSalt()), this.currentUser.getPasswd())) {
+                byte[] newSalt = PasswordUtils.genRandom512bit();
+                byte[] newHashedPassword = PasswordUtils.passwordHash(newPassword, newSalt);
+
+                this.currentUser.setPasswd(newHashedPassword);
+                this.currentUser.setSalt(newSalt);
+
+                jpaUserService.insertUser(this.currentUser);
+
+                // 无需重新签发token
+                return Result.resultFactory(EResult.SUCCESS, "Success");
+            }
+            else {
+                // 密码错误
+                return Result.resultFactory(EResult.AUTH_FAIL, "Wrong password");
+            }
+        }
+        catch (Exception e) {
+            return Result.resultFactory(EResult.BAD_REQUEST, "Invalid request");
+        }
+    }
+
+    private void storeRoleIntoMap(Map<String, String> tokenMap, String[] roles) {
+        if (roles.length == 1) {
+            tokenMap.put("role", roles[0]);
+        }
+        else {
+            StringBuilder roleStr = new StringBuilder("[");
+            for (String role : roles) {
+                roleStr.append("ROLE_").append(role).append(", ");
+            }
+            roleStr.replace(roleStr.length() - 1, roleStr.length() - 1, "]");
+
+            tokenMap.put("role", roleStr.toString());
+        }
     }
 }

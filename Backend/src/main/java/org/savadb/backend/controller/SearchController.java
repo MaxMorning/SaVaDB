@@ -1,12 +1,11 @@
 package org.savadb.backend.controller;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.savadb.backend.entity.PangoNomenclatureEntity;
-import org.savadb.backend.entity.RegionEntity;
-import org.savadb.backend.entity.VariantEntity;
-import org.savadb.backend.entity.WhoLabelEntity;
+import org.savadb.backend.entity.*;
+import org.savadb.backend.service.JPA.Data.JpaAPIInfoService;
 import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
 import org.savadb.backend.service.JPA.Data.JpaStatService;
+import org.savadb.backend.service.JPA.JpaNotificationService;
 import org.savadb.backend.service.JPA.JpaRegionService;
 import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.Result;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +33,12 @@ public class SearchController {
     @Resource
     private JpaStatService jpaStatService;
 
+    @Resource
+    private JpaNotificationService jpaNotificationService;
+
+    @Resource
+    private JpaAPIInfoService jpaAPIInfoService;
+
     @GetMapping("/search")
     public Result<List<String[]>> search(@RequestParam String type, @RequestParam String key) {
         switch (type) {
@@ -43,14 +49,10 @@ public class SearchController {
                 return Result.resultFactory(EResult.SUCCESS, searchRegion(key));
 
             case "Notification":
-                throw new NotImplementedException();
-//                return Result.resultFactory(EResult.DATA_NULL, null);
-//                break;
+                return Result.resultFactory(EResult.SUCCESS, searchNotification(key));
 
             case "API":
-                throw new NotImplementedException();
-//                return Result.resultFactory(EResult.DATA_NULL, null);
-//                break;
+                return Result.resultFactory(EResult.SUCCESS, searchAPI(key));
 
             default:
                 return Result.resultFactory(EResult.BAD_REQUEST, null);
@@ -108,5 +110,44 @@ public class SearchController {
         }
 
         return result;
+    }
+
+    private List<String[]> searchNotification(String key) {
+        List<NotificationsEntity> notificationsEntityList = jpaNotificationService.searchKeyInTitle(key);
+
+        List<String[]> resultList = new ArrayList<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        for (NotificationsEntity notification : notificationsEntityList) {
+            String[] singleResult = new String[4];
+
+            singleResult[0] = notification.getIdx().toString();
+            singleResult[1] = notification.getTitle();
+            singleResult[2] = notification.getContent();
+            singleResult[3] = dateFormat.format(notification.getCreateTime());
+
+            resultList.add(singleResult);
+        }
+
+        return resultList;
+    }
+
+    private List<String[]> searchAPI(String key) {
+        List<ApiInfoEntity> apiInfoEntityList = jpaAPIInfoService.searchAPI(key);
+
+        List<String[]> resultList = new ArrayList<>();
+
+        for (ApiInfoEntity apiInfo : apiInfoEntityList) {
+            String[] singleEntity = new String[3];
+
+            singleEntity[0] = apiInfo.getUrl();
+            singleEntity[1] = apiInfo.getDescZhCn();
+            singleEntity[2] = apiInfo.getDescEnUs();
+
+            resultList.add(singleEntity);
+        }
+
+        return resultList;
     }
 }

@@ -13,4 +13,6 @@ public interface JpaLineageRepo extends JpaRepository<LineageEntity, LineageEnti
 
     @Query(value = "select count(*) from lineage where parent_variant_id = ?1", nativeQuery = true)
     long getChildrenCnt(Integer parentVariantId);
+
+    LineageEntity findByChildVariantId(Integer childVId);
 }

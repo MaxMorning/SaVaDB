@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_watching_region", schema = "SaVa")
 @IdClass(UserWatchingRegionsPK.class)
-public class UserWatchingRegions {
+public class UserWatchingRegionsEntity {
     @Id
     @Column(name = "usr_id", nullable = false)
     private Integer usrId;
