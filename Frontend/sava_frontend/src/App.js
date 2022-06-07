@@ -3,7 +3,6 @@ import './App.css';
 import { Layout, PageHeader } from 'antd';
 import MySider from './component/MySider';
 import "antd/dist/antd.min.css";
-import Requester from './utils/Requester';
 import moment from 'moment'
 import Localizer from './utils/Localizer';
 
@@ -20,6 +19,9 @@ const LineagesApp = lazy(() => import('./AppBuiltIn/LineagesApp'));
 const CompareApp = lazy(() => import('./AppBuiltIn/CompareApp'));
 const StatisticsApp = lazy(() => import('./AppBuiltIn/StatisticsApp'));
 const LineageDetailApp = lazy(() => import('./AppBuiltIn/LineageDetailApp'));
+const RegionDetailApp = lazy(() => import('./AppBuiltIn/RegionDetailApp'));
+const StatusApp = lazy(() => import('./AppBuiltIn/StatusApp'));
+const APIPageApp = lazy(() => import('./AppBuiltIn/APIPageApp'));
 
 class App extends Component {
     constructor(props) {
@@ -27,32 +29,12 @@ class App extends Component {
 
         console.log(props);
         this.state = {
-            username: 'Anonymous', 
             role: '', 
             didLogin: false,
             locale: props.locale,
             AppType: props.AppType};
 
         moment.locale(props.locale);
-    }
-
-    componentDidMount() {
-        // 获取用户名
-        Requester.requestJSON({
-            method: 'get',
-            url: '/api/user/getUserInfo'
-        }, true,
-        (response) => {
-            if (response.data.code === 200) {
-                this.setState({
-                    username: response.data.data.username,
-                    role: response.data.data.role,
-                    didLogin: true
-                });
-            }
-        },
-        (error) => {}
-        )
     }
 
     setLink = (dstApp) => {
@@ -92,6 +74,16 @@ class App extends Component {
                 BuiltInApp = SearchApp;
                 pageName = localizerDict['SearchTitle'];
                 subTitle = "";
+
+                appProps = {
+                    'lang': this.state.locale
+                };
+                break;
+
+            case 'Status':
+                BuiltInApp = StatusApp;
+                pageName = localizerDict['StatusTitle'];
+                subTitle = "";
                 break;
 
             case 'Lineages':
@@ -113,7 +105,6 @@ class App extends Component {
                 break;
 
             case 'LineageDetail':
-                console.log(this.props);
                 var variantIdx = this.props.location.pathname.lastIndexOf("\/");
                 var variant = this.props.location.pathname.substring(variantIdx + 1, this.props.location.length);
 
@@ -126,6 +117,32 @@ class App extends Component {
                 secondPath = true;
                 break;
 
+            case 'RegionDetail':
+                var regionIdx = this.props.location.pathname.lastIndexOf("\/");
+                var region = this.props.location.pathname.substring(regionIdx + 1, this.props.location.length);
+
+                BuiltInApp = RegionDetailApp;
+                pageName = localizerDict['RegionDetail'];
+                subTitle = region.replaceAll('%20', ' ');
+                appProps = {
+                    'region': region.replaceAll('%20', ' ')
+                };
+                secondPath = true;
+                break;
+
+            case 'Api':
+                BuiltInApp = APIPageApp;
+                pageName = 'API Details';
+
+                appProps = {
+                    'lang': this.state.locale
+                };
+                break;
+
+            case 'EditInfo':
+                // do nothing
+                break;
+
             default:
         }
 
@@ -135,11 +152,11 @@ class App extends Component {
                 minHeight: '100vh'
             }}>
             <MySider
-                user={this.state.username}
                 didLogin={this.state.didLogin}
                 selectedKey={this.props.AppType}
                 parentJumpFunc={this.setLink}
-                secondPath={secondPath}/>
+                secondPath={secondPath}
+                role={this.state.role}/>
 
             <Layout className="site-layout">
                 <Header

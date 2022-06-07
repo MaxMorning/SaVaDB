@@ -4,6 +4,8 @@ import "antd/dist/antd.min.css";
 import Requester from '../utils/Requester';
 import Localizer from '../utils/Localizer';
 
+import NotificationModal from '../component/NotificationModal';
+
 const { Text, Link } = Typography;
 
 export default class HomeApp extends Component {
@@ -11,6 +13,7 @@ export default class HomeApp extends Component {
         super(props);
 
         this.state = {
+            notiModalVisible: false,
             confirmedYesterday : '--',
             confirmedTotal : '--',
             
@@ -82,6 +85,24 @@ export default class HomeApp extends Component {
         );
     }
 
+    resetVisible = () => {
+        setTimeout(() => {
+            this.setState({
+                notiModalVisible: false
+            })
+        }, 500);
+    }
+
+    getOpenModalCallback = (item) => {
+        return () => {
+            this.notiTitle = item[1];
+            this.setState({
+                notiModalVisible: true,
+                notiModalIndex: item[0]
+            });
+        }
+    } 
+
     render() {
         var localizerDict = Localizer.getCurrentLocalDict();
 
@@ -96,7 +117,7 @@ export default class HomeApp extends Component {
                         </Card>
                     </Col>
 
-                    <Col span={12} style={{minWidth: 600}}>
+                    <Col span={12} style={{minWidth: 500}}>
                         <Card title={localizerDict['HomeAppGlobalStat']} bordered={true} hoverable 
                             extra={<label style={{
                                 color: "#999999",
@@ -144,11 +165,13 @@ export default class HomeApp extends Component {
                                 dataSource={this.state.notifications}
                                 renderItem={(item) => 
                                 <List.Item>
-                                    <Link href={item[1]}>
-                                        {item[0]}
+                                    <Link onClick={this.getOpenModalCallback(item)} ellipsis>
+                                        {'[' + item[2] + '] ' + item[1]}
                                     </Link>
                                 </List.Item>}
                             />
+
+                            {this.state.notiModalVisible && <NotificationModal resetParent={this.resetVisible} notiIndex={this.state.notiModalIndex} title={this.notiTitle}/>}
                         </Card>
                     </Col>
                 </Row>
