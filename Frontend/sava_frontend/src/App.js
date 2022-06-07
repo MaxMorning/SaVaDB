@@ -21,6 +21,7 @@ const StatisticsApp = lazy(() => import('./AppBuiltIn/StatisticsApp'));
 const LineageDetailApp = lazy(() => import('./AppBuiltIn/LineageDetailApp'));
 const RegionDetailApp = lazy(() => import('./AppBuiltIn/RegionDetailApp'));
 const StatusApp = lazy(() => import('./AppBuiltIn/StatusApp'));
+const APIPageApp = lazy(() => import('./AppBuiltIn/APIPageApp'));
 
 class App extends Component {
     constructor(props) {
@@ -73,6 +74,10 @@ class App extends Component {
                 BuiltInApp = SearchApp;
                 pageName = localizerDict['SearchTitle'];
                 subTitle = "";
+
+                appProps = {
+                    'lang': this.state.locale
+                };
                 break;
 
             case 'Status':
@@ -123,6 +128,15 @@ class App extends Component {
                     'region': region.replaceAll('%20', ' ')
                 };
                 secondPath = true;
+                break;
+
+            case 'Api':
+                BuiltInApp = APIPageApp;
+                pageName = 'API Details';
+
+                appProps = {
+                    'lang': this.state.locale
+                };
                 break;
 
             case 'EditInfo':

@@ -243,8 +243,11 @@ export default class SearchApp extends Component {
                             (item) => (
                                 <List.Item>
                                     <List.Item.Meta
-                                    title={<a href={"./apiIntro#" + item[0]}>{item[0]}</a>}
-                                    description={item[1]}
+                                    title={<a href={"./Api#" + item[0]}>{item[0]}</a>}
+                                    description={this.props.lang === 'en-us' ? item[2] : item[1]}
+                                    style={{
+                                        margin: '0 10px'
+                                    }}
                                     />
                                 </List.Item>
                             )

@@ -232,6 +232,14 @@ export default class MySider extends React.Component {
                 });
                 break;
 
+            case 'Api':
+                this.props.parentJumpFunc('Api');
+                window.history.pushState(null,null, pathPrefix + 'Api');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
+                break;
+
             case 'Login':
                 window.location.href = pathPrefix + 'login';
                 break;
