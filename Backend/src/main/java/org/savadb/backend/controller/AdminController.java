@@ -1,9 +1,6 @@
 package org.savadb.backend.controller;
 
-import org.savadb.backend.entity.PangoNomenclatureEntity;
-import org.savadb.backend.entity.UserEntity;
-import org.savadb.backend.entity.VariantEntity;
-import org.savadb.backend.entity.WhoLabelEntity;
+import org.savadb.backend.entity.*;
 import org.savadb.backend.service.JPA.Account.JpaUserService;
 import org.savadb.backend.service.JPA.Data.JpaPangoNomenclatureService;
 import org.savadb.backend.service.JPA.Data.JpaVariantService;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.Map;
 
 @RestController
@@ -91,15 +89,26 @@ public class AdminController {
                 return Result.resultFactory(EResult.DATA_NULL, null);
             }
             VariantEntity variantEntity = pangoNomenclature.getVariantByVId();
-            variantEntity.setMonitorLevel(monitorLevel);
 
-            jpaVariantService.saveVariant(variantEntity);
+            // 递归修改所有子变种
+            setMonitorLevelWithChild(variantEntity, monitorLevel);
 
             return Result.resultFactory(EResult.SUCCESS, null);
         }
         catch (Exception e) {
             e.printStackTrace();
             return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+    }
+
+    private void setMonitorLevelWithChild(VariantEntity rootVariant, String monitorLevel) {
+        rootVariant.setMonitorLevel(monitorLevel);
+        jpaVariantService.saveVariant(rootVariant);
+
+        Collection<LineageEntity> lineageEntityCollection = rootVariant.getParentLineagesByVId();
+
+        for (LineageEntity lineage : lineageEntityCollection) {
+            setMonitorLevelWithChild(lineage.getVariantByChildVariantId(), monitorLevel);
         }
     }
 
