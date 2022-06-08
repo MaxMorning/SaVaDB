@@ -68,6 +68,8 @@ export default class SearchApp extends Component {
     }
 
     getLineageInfoWidget(lineageInfo) {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         // lineageInfo 格式大致如下 "Delta VOC Normal"
         var infoList = lineageInfo.trim().split(" ");
 
@@ -111,15 +113,15 @@ export default class SearchApp extends Component {
         }
 
         return  <Descriptions>
-                    <Descriptions.Item label="WHO label">
+                    <Descriptions.Item label={localizerDict["WHO label"]}>
                         {whoLabelTag}
                     </Descriptions.Item>
                     
-                    <Descriptions.Item label="Monitor level">
+                    <Descriptions.Item label={localizerDict["Monitor level"]}>
                         {monitorLevelTag}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Status">
+                    <Descriptions.Item label={localizerDict["Status"]}>
                         {statusTag}
                     </Descriptions.Item>
                 </Descriptions>;
@@ -192,10 +194,24 @@ export default class SearchApp extends Component {
                         dataSource={this.searchResult}
                         renderItem={
                             (item) => (
-                                <List.Item>
+                                <List.Item
+                                style={{
+                                    margin: '0 10px'
+                                }}>
                                     <List.Item.Meta
                                     title={<a href={"./region/" + item[0]}>{item[0]}</a>}
-                                    description={item[1]}
+                                    description={
+                                        <div
+                                        style={{
+                                            whiteSpace: 'pre-wrap'
+                                        }}>
+                                            {
+                                                localizerDict['Total '] + localizerDict['Confirmed'] + ': ' + item[1] + '    ' +
+                                                localizerDict['Total '] + localizerDict['Death'] + ': ' + item[2] + '    ' +
+                                                localizerDict['Total '] + localizerDict['Cured'] + ': ' + item[3]        
+                                            }
+                                        </div>
+                                        }
                                     />
                                 </List.Item>
                             )

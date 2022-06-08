@@ -68,16 +68,16 @@ export default class StatusApp extends Component {
             false,
             (response) => {
                 if (response.data.code === 200) {
-                    this.searchResult = response.data.data;
-
-                    // if (this.searchResult !== null && this.searchResult.length === 0) {
-                    //     this.searchResult = null;
-                    // }
-
+                    this.setState({
+                        searchResult: response.data.data,
+                        searching: false
+                    })
                 }
-                this.setState({
-                    searching: false
-                });
+                else {
+                    this.setState({
+                        searching: false
+                    });
+                }
             },
             (error) => {
                 this.setState({
@@ -88,6 +88,8 @@ export default class StatusApp extends Component {
     }
 
     getLineageInfoWidget(lineageInfo) {
+        var localizerDict = Localizer.getCurrentLocalDict();
+        
         // lineageInfo 格式大致如下 "Delta VOC Normal"
         var infoList = lineageInfo.trim().split(" ");
 
@@ -131,15 +133,15 @@ export default class StatusApp extends Component {
         }
 
         return  <Descriptions>
-                    <Descriptions.Item label="WHO label">
+                    <Descriptions.Item label={localizerDict["WHO label"]}>
                         {whoLabelTag}
                     </Descriptions.Item>
                     
-                    <Descriptions.Item label="Monitor level">
+                    <Descriptions.Item label={localizerDict["Monitor level"]}>
                         {monitorLevelTag}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Status">
+                    <Descriptions.Item label={localizerDict["Status"]}>
                         {statusTag}
                     </Descriptions.Item>
                 </Descriptions>;
@@ -156,7 +158,7 @@ export default class StatusApp extends Component {
         return (<List
             pagination={true}
             itemLayout="horizontal"
-            dataSource={this.searchResult}
+            dataSource={this.state.searchResult}
             renderItem={
                 (item) => (
                     <List.Item
@@ -197,15 +199,16 @@ export default class StatusApp extends Component {
             false,
             (response) => {
                 if (response.data.code === 200) {
-                    this.searchResult = response.data.data;
-
-                    // if (this.searchResult !== null && this.searchResult.length === 0) {
-                    //     this.searchResult = null;
-                    // }
+                    this.setState({
+                        searchResult: response.data.data,
+                        searching: false
+                    })
                 }
-                this.setState({
-                    searching: false,
-                });
+                else {
+                    this.setState({
+                        searching: false
+                    });
+                }
             },
             (error) => {
                 this.setState({
@@ -213,6 +216,19 @@ export default class StatusApp extends Component {
                 });
             }
         );
+    }
+
+    tabsOnChange = () => {
+        this.setState({
+            searchResult: [],
+            selectedTags: {
+                'None': -1,
+                'VOC': -1,
+                'VOI': -1,
+                'VUM': -1,
+                'FMV': -1
+            },
+        });
     }
 
     render() {
@@ -228,7 +244,8 @@ export default class StatusApp extends Component {
                 <Tabs defaultActiveKey="1"
                     style={{
                     padding: '0px 10px'
-                    }}>
+                    }}
+                    onChange={this.tabsOnChange}>
                     <TabPane tab={localizerDict['MonitorLevel']} key="1">
                     {monitorTags.map((tag) => (
                         <CheckableTag

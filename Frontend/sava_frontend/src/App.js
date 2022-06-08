@@ -22,12 +22,13 @@ const LineageDetailApp = lazy(() => import('./AppBuiltIn/LineageDetailApp'));
 const RegionDetailApp = lazy(() => import('./AppBuiltIn/RegionDetailApp'));
 const StatusApp = lazy(() => import('./AppBuiltIn/StatusApp'));
 const APIPageApp = lazy(() => import('./AppBuiltIn/APIPageApp'));
+const DataSourceApp = lazy(() => import('./AppBuiltIn/DataSourceApp'));
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
+        // console.log(props);
         this.state = {
             role: '', 
             didLogin: false,
@@ -132,11 +133,17 @@ class App extends Component {
 
             case 'Api':
                 BuiltInApp = APIPageApp;
-                pageName = 'API Details';
+                pageName = localizerDict['API Details'];
 
                 appProps = {
                     'lang': this.state.locale
                 };
+                break;
+
+            case 'DataSource':
+                BuiltInApp = DataSourceApp;
+                pageName = localizerDict['DataSource'];
+                subTitle = '';
                 break;
 
             case 'EditInfo':

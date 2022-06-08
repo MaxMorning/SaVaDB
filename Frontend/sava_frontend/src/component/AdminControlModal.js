@@ -3,6 +3,7 @@ import { Form, Input, Tabs, Modal, notification, InputNumber, Select } from 'ant
 import { UserOutlined } from '@ant-design/icons';
 
 import Requester from '../utils/Requester';
+import Localizer from '../utils/Localizer';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -109,9 +110,10 @@ export default class AdminControlModal extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
         return (
             <Modal
-                title='Control Panel'
+                title={localizerDict['Control Panel']}
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -123,7 +125,7 @@ export default class AdminControlModal extends Component {
                     defaultActiveKey="0"
                     centered
                     onTabClick={this.onTabClick}>
-                    <TabPane tab='Publish New Notification' key='0'>
+                    <TabPane tab={localizerDict['Publish New Notification']} key='0'>
                         <Form
                             name='new_notification'
                             style={{
@@ -135,10 +137,10 @@ export default class AdminControlModal extends Component {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please type in the title.',
+                                        message: localizerDict['Noti title empty'],
                                     },
                                 ]}>
-                                <Input showCount maxLength={64} placeholder='Notification Title'/>
+                                <Input showCount maxLength={64} placeholder={localizerDict['Notification Title']}/>
                             </Form.Item>
 
                             <Form.Item
@@ -146,10 +148,10 @@ export default class AdminControlModal extends Component {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please type in the content.',
+                                        message: localizerDict['Noti content empty'],
                                     },
                                 ]}>
-                                <TextArea showCount maxLength={1024} placeholder='Notification Content'
+                                <TextArea showCount maxLength={1024} placeholder={localizerDict['Notification Content']}
                                     style={{
                                         height: '200px'
                                     }}/>
@@ -158,7 +160,7 @@ export default class AdminControlModal extends Component {
                     </TabPane>
 
 
-                    <TabPane tab='Set User Compare Time' key='1'>
+                    <TabPane tab={localizerDict['Set User Compare Time']} key='1'>
                         <Form
                             name='set_comp_title'
                             style={{
@@ -174,33 +176,33 @@ export default class AdminControlModal extends Component {
                                 span: 14,
                             }}>
                             <Form.Item
-                                label='Username'
+                                label={localizerDict['Username']}
                                 name='username'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the username',
+                                        message: localizerDict['Username empty time'],
                                     },
                                 ]}>
-                                <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder="Username" />
+                                <Input prefix={<UserOutlined style={{color: "#BBBBBB"}} />} placeholder={localizerDict["Username"]} />
                             </Form.Item>
 
                             <Form.Item
-                                label='New Compare Time'
+                                label={localizerDict['New Compare Time']}
                                 name='newCompTime'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the new compare time',
+                                        message: localizerDict['Comp time empty'],
                                     },
                                 ]}>
-                                <InputNumber min={0} value={this.state.currentCompTime} placeholder='Time'/>
+                                <InputNumber min={0} value={this.state.currentCompTime} placeholder={localizerDict['New Time']}/>
                             </Form.Item>
                         </Form>
                     </TabPane>
 
 
-                    <TabPane tab='Set Monitor Level' key='2'>
+                    <TabPane tab={localizerDict['Set Monitor Level']} key='2'>
                         <Form
                             name='set_monitor_level'
                             style={{
@@ -216,19 +218,19 @@ export default class AdminControlModal extends Component {
                             }}
                             ref={this.setMonitorLevel}>
                             <Form.Item
-                                label='Target Variant Name'
+                                label={localizerDict['Target Variant Name']}
                                 name='variantName'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the target variant',
+                                        message: localizerDict['Target variant empty'],
                                     },
                                 ]}>
-                                <Input placeholder='Variant Name'/>
+                                <Input placeholder={localizerDict['Variant Name']}/>
                             </Form.Item>
 
                             <Form.Item
-                                label='Monitor Level'
+                                label={localizerDict['MonitorLevel']}
                                 name='monitorLevel'>
                                 <Select
                                     defaultValue='None'>
@@ -243,7 +245,7 @@ export default class AdminControlModal extends Component {
                     </TabPane>
 
 
-                    <TabPane tab='Set WHO Label' key='3'>
+                    <TabPane tab={localizerDict['Set WHO Label']} key='3'>
                         <Form
                             name='set_who_label'
                             style={{
@@ -259,27 +261,27 @@ export default class AdminControlModal extends Component {
                             }}
                             ref={this.setWHOLabel}>
                             <Form.Item
-                                label='Target Variant Name'
+                                label={localizerDict['Target Variant Name']}
                                 name='variantName'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the target variant',
+                                        message: localizerDict['Target variant empty'],
                                     },
                                 ]}>
-                                <Input placeholder='Variant Name'/>
+                                <Input placeholder={localizerDict['Variant Name']}/>
                             </Form.Item>
 
                             <Form.Item
-                                label='WHO Label'
+                                label={localizerDict['WHOLabel']}
                                 name='whoLabel'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the target variant',
+                                        message: localizerDict['Target who empty'],
                                     },
                                 ]}>
-                                <Input placeholder='WHO Label'/>
+                                <Input placeholder={localizerDict['WHOLabel']}/>
                             </Form.Item>
                         </Form>
                     </TabPane>
@@ -289,6 +291,7 @@ export default class AdminControlModal extends Component {
     }
 
     submitToServer(params) {
+        var localizerDict = Localizer.getCurrentLocalDict();
         Requester.requestJSON(
             params,
             true,
@@ -302,9 +305,9 @@ export default class AdminControlModal extends Component {
                 }
                 else if (response.data.code === 404) {
                     const args = {
-                        message: 'Submit Failed',
+                        message: localizerDict['Submit Failed'],
                         description:
-                          'User / Variant not exist.',
+                          localizerDict['Entity not exist.'],
                         duration: 4,
                     };
                     notification.open(args);
@@ -316,9 +319,9 @@ export default class AdminControlModal extends Component {
                 }
                 else {
                     const args = {
-                        message: 'Submit Failed',
+                        message: localizerDict['Submit Failed'],
                         description:
-                          'Submit failed because of some unknown reason.',
+                          localizerDict['Submit failed info'],
                         duration: 4,
                     };
                     notification.open(args);
@@ -331,9 +334,9 @@ export default class AdminControlModal extends Component {
             },
             (error) => {
                 const args = {
-                    message: 'Submit Failed',
+                    message: localizerDict['Submit Failed'],
                     description:
-                      'Submit failed because of some unknown reason.',
+                        localizerDict['Submit failed info'],
                     duration: 4,
                 };
                 notification.open(args);

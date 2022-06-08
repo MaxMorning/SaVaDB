@@ -240,6 +240,14 @@ export default class MySider extends React.Component {
                 });
                 break;
 
+            case 'DataSource':
+                this.props.parentJumpFunc('DataSource');
+                window.history.pushState(null,null, pathPrefix + 'DataSource');
+                this.setState({
+                    currentSelectedKey: item.key
+                });
+                break;
+
             case 'Login':
                 window.location.href = pathPrefix + 'login';
                 break;

@@ -93,6 +93,113 @@ export default class Localizer {
         'RegionDetail' : 'Region Detail',
         'MonitorLevel' : 'Monitor Level',
         'WHOLabel' : 'WHO Label',
+
+        'DataSource' : 'Data Source',
+        'RegionStatSource' : 'Region Statistics',
+        'RegionStatSourceDetail' :
+`The confirmed, death and cured count of regions comes from a project of Johns Hopkins University.The repository address is \'https://github.com/CSSEGISandData/COVID-19\'.Data was scratched, cleaned and stored by SaVaDB. SaVaDB adjusted the naming of some regions in the original repository based on its own position and international consensus.
+In some regions, cure data are missing, so we chooses to use the most recent available cure data.
+The repositroy's data comes from the statistics of local governments. Please note that due to the special political nature of THE COVID-19 epidemic, there may be over-reporting or under-reporting of data in some regions. Please pay attention to these situation.
+`,
+        'BioDataSource' : ' Biological Data',
+        'BioDatasourceDetail' : 
+`The biological data includes cDNA sequence and lineage info.
+The former data were extracted from the National Center for Biotechnology Information, then be cleaned and stored by SaVaDB. As the reference sequence of each variant has not been clearly defined in the academic circle, SaVaDB takes a cDNA sequence of each variant as the reference sequence of this variant.
+The latter data comes from http://cov-lineages.org/lineage_list.html, which is crawled and cleaned by SaVaDB and processed by staff and automatically stored in the database.
+`,
+        'EpidemicDataSource' : 'Epidemic Data',
+        'EpidemicDataSourceDetail' :
+`At present, the prevention and control data consists of WHO label and monitoring level.
+These two data were obtained from who.int, the official website of WHO, and were manually added by the staff.
+`, 
+        'CopyrightSource' : 'Ownership and Licensing of Data',
+        'CopyrightSourceDetail' :
+`Data on confirms, deaths, and cures by region are from Johns Hopkins University, USA, under CC BY 4.0 license. JHU All rights reserved.
+The cDNA sequence information was obtained from the NCBI database and is in the public domain. NCBI aims to provide the scientific community with a timely and comprehensive source of information. Therefore, NCBI itself has no restrictions on the use or distribution of the data contained therein. However, submitters of some of the original data that have been submitted (or the country of origin of such data) may claim patent, copyright or other intellectual property rights for all or part of the data; SaVaDB does not warrant that it will be able to inform you of this change in a timely manner.
+Lineage information from COV-Lineages.org is under CC BY-NC 4.0 license and is not available for commercial use. cov-lineages.org All rights reserved.
+
+SaVaDB does not guarantee the accuracy or completeness or assume any legal responsibility for all data obtained from the system.
+All data in SaVaDB is freely available to the public domain, with the exception of user information and some data that we consider inappropriate for disclosure. The final interpretation right belongs to SaVaDB operator.
+`,
+        ' (Per Week)' : ' (Per Week)',
+        'Detail' : 'Detail',
+        'Confirmed' : 'Confirmed',
+        'Death' : 'Death',
+        'Cured' : 'Cured',
+        'WHO label' : 'WHO label',
+        'Monitor level' : 'Monitor level',
+        'Earlist discover date' : 'Earlist discover date',
+        'Average incubation' : 'Average incubation',
+        'Sequence Count' : 'Sequence Count',
+        'Children Count' : 'Children Count',
+        'Update time' : 'Update time',
+        'Day' : 'Day',
+        'Total ' : 'Total ',
+
+        'API Details' : 'API Details',
+
+        'Name duplicated' : 'Name duplicated',
+        'Name dup info' : 'New username is used, please use another username.',
+        'Change Failed' :  'Change Failed',
+        'Change user failed Info' : 'Change username failed because of some unknown reason.',
+        'Change password failed Info' : 'Change password failed because of some unknown reason.',
+
+        'Edit Info' : 'Edit Info',
+        'Change Username' : 'Change Username',
+        'New username' : 'New username',
+        'Username empty info' : 'Please input your new username!',
+        'Password empty info' : 'Please input your password!',
+        'Password' : 'Password',
+
+        'Change password' : 'Change password',
+        'Old password empty' : 'Please input your old password!',
+        'Old password' : 'Old password',
+        'New password empty' : 'Please input your new password!',
+        'New password' : 'New password',
+        'Confirm Password' : 'Confirm Password',
+        'Confirm empty' : 'Please confirm your password!',
+        'Comfirm not equal' : 'The two passwords that you entered do not match!',
+
+        'Submit Failed': 'Submit Failed',
+        'Entity not exist.' : 'Entity not exist.',
+        'Submit failed info' : 'Submit failed because of some unknown reason.',
+
+        'Control Panel' : 'Control Panel',
+        'Publish New Notification' : 'Publish New Notification',
+        'Notification Title' : 'Notification Title',
+        'Notification Content' : 'Notification Content',
+        'Noti title empty' : 'Please type in the title.',
+        'Noti content empty' : 'Please type in the content.',
+
+        'Set User Compare Time' : 'Set User Compare Time',
+        'Username' : 'Username',
+        'New Compare Time' : 'New Compare Time',
+        'New Time' : 'Time',
+        'Username empty time' : 'Please input the username',
+        'Comp time empty' : 'Please input the new compare time',
+
+        'Set Monitor Level' : 'Set Monitor Level',
+        'Target Variant Name' : 'Target Variant Name',
+        'Variant Name' : 'Variant Name',
+        'Target variant empty' : 'Please input the target variant',
+
+        'Set WHO Label' : 'Set WHO Label',
+        'Target who empty' : 'Please input the WHO label!',
+
+        'Login' : 'Login',
+        'Remember me' : 'Remember me',
+        'Forgot password' : 'Forgot password',
+        'Log in' : 'Log in',
+
+        'Register' : 'Register',
+        'Invalid Email info' : 'The input is not valid E-mail!',
+        'Email empty info' : 'Please input your E-mail!',
+
+        'Login Failed' : 'Login Failed',
+        'Login Failed Info' : 'Wrong username or password.',
+        'Register Failed' : 'Register Failed',
+        'Register Username Duplicated' : 'The username is already registered, please use another one.',
+        'Register Failed Info' : 'Register failed because of some unknown reason.',
     }
 
     static zh_CN_dict = {
@@ -174,5 +281,112 @@ export default class Localizer {
 
         'MonitorLevel' : '监视等级',
         'WHOLabel' : 'WHO 命名',
-    }
+
+        'DataSource' : '数据来源',
+        'RegionStatSource' : '地区统计数据',
+        'RegionStatSourceDetail' :
+`各地区确诊、死亡、治愈数据来源于约翰霍普金斯大学的新冠疫情数据统计项目，其数据仓库地址为\'https://github.com/CSSEGISandData/COVID-19\'，由SaVaDB进行爬取、清洗和入库。SaVaDB基于自身立场与国际普遍共识，对原始仓库的部分地区命名进行了调整。
+部分地区缺失治愈数据，SaVaDB选择沿用最近的有效治愈数据。
+该仓库的数据来源于各地区政府的统计信息。请注意，由于COVID疫情的特殊政治性，部分地区可能存在数据多报与漏报的情况，请注意甄别。
+`,
+        'BioDataSource' : '生物学数据',
+        'BioDatasourceDetail' : 
+`生物学信息包括病毒变种cDNA序列和谱系信息。
+前者数据来源于美国国家生物技术信息中心，由SaVaDB进行爬取、清洗和入库。由于目前学术界并未明确界定各个变种的参考序列，SaVaDB取各个变种中的一条cDNA序列作为该变种的参考序列。
+后者数据来源于http://cov-lineages.org/lineage_list.html，由SaVaDB在爬取、清洗后由工作人员处理并自动入库。
+`,
+        'EpidemicDataSource' : '疫情防治数据', 
+        'EpidemicDataSourceDetail' :
+`目前防治数据由WHO命名和监视等级两部分组成。
+这两部分数据均来源于世界卫生组织WHO官方网站who.int，由工作人员手动添加。
+`,
+        'CopyrightSource' : '数据所有权归属与使用许可',
+        'CopyrightSourceDetail' :
+`各地区确诊、死亡、治愈数据来自美国约翰霍普金斯大学，采用CC BY 4.0协议，版权归约翰霍普金斯大学所有。
+cDNA序列信息来自NCBI数据库，属于公共领域。NCBI旨在为科学界提供及时和全面的信息来源。因此，NCBI本身对其中包含的数据的使用或分发没有任何限制。然而，一些已经提交的原始数据(或这些数据的原产国)的提交人可能会要求专利、版权或其他知识产权的全部或部分数据；SaVaDB不保证能够向您及时通知这一变更。
+谱系信息来自cov-lineages.org，采用CC BY-NC 4.0协议，版权归cov-lineages.org所有，不可商用。
+
+对于从本系统获得的所有数据，SaVaDB不担保准确性与完整性或承担任何法律责任。
+除用户信息和一些我们认为不适宜公开的数据以外，SaVaDB中的其他所有数据免费向公共领域开放。最终解释权归SaVaDB运营方所有。
+`,
+        ' (Per Week)' : ' (每周)',
+        'Detail' : '详情',
+        'Confirmed' : '确诊',
+        'Death' : '死亡',
+        'Cured' : '治愈',
+        'WHO label' : 'WHO 命名',
+        'Monitor level' : '监视等级',
+        'Earlist discover date' : '最早发现日期',
+        'Average incubation' : '平均潜伏期',
+        'Sequence Count' : 'cDNA序列数量',
+        'Children Count' : '子变种数量',
+        'Update time' : '更新时间',
+        'Day' : '天',
+        'Total ' : '累计',
+
+        'API Details' : 'API 详情',
+
+        'Name duplicated' : '用户名重复',
+        'Name dup info' : '新用户名已被使用，请使用其他用户名。',
+        'Change Failed' : '修改失败',
+        'Change user failed Info' : '由于一些未知原因，修改用户名失败。',
+        'Change password failed Info' : '由于一些未知原因，修改密码失败。',
+
+        'Edit Info' : '修改信息',
+        'Change Username' : '修改用户名',
+        'New username' : '新用户名',
+        'Username empty info' : '请输入您的新用户名。',
+        'Password empty info' : '请输入您的密码。',
+        'Password' : '密码',
+
+        'Change password' : '修改密码',
+        'Old password empty' : '请输入您的旧密码。',
+        'Old password' : '旧密码',
+        'New password empty' : '请输入您的新密码。',
+        'New password' : '新密码',
+        'Confirm Password' : '二次确认密码',
+        'Confirm empty' : '请再次确认密码。',
+        'Comfirm not equal' : '两次输入密码不一致。',
+
+        'Submit Failed' : '提交失败',
+        'Entity not exist.' : '实体不存在。',
+        'Submit failed info' : '由于一些未知原因，提交失败。',
+
+        'Control Panel' : '控制面板',
+        'Publish New Notification' : '发布新公告',
+        'Notification Title' : '公告标题',
+        'Notification Content' : '公告内容',
+        'Noti title empty' : '请输入公告标题。',
+        'Noti content empty' : '请输入公告内容。',
+
+        'Set User Compare Time' : '设置用户可用匹配次数',
+        'Username' : '用户名',
+        'New Compare Time' : '新的可用匹配次数',
+        'New Time' : '新次数',
+        'Username empty time' : '请输入用户名。',
+        'Comp time empty' : '请输入新的可用匹配次数。',
+
+        'Set Monitor Level' : '设置监视等级',
+        'Target Variant Name' : '目标变种',
+        'Variant Name' : '变种名称',
+        'Target variant empty' : '请输入目标变种名称。',
+
+        'Set WHO Label' : '设置 WHO 命名',
+        'Target who empty' : '请输入 WHO 命名。',
+
+        'Login' : '登录',
+        'Remember me' : '保持登录',
+        'Forgot password' : '忘记密码',
+        'Log in' : '登录',
+
+        'Register' : '注册',
+        'Invalid Email info' : '输入邮箱名非法。',
+        'Email empty info' : '请输入您的邮箱。',
+        
+        'Login Failed' : '登录失败',
+        'Login Failed Info' : '用户名或密码错误。',
+        'Register Failed' : '注册失败',
+        'Register Username Duplicated' : '当前用户名已被注册，请使用其他用户名。',
+        'Register Failed Info' : '由于一些未知原因，注册失败。',
+}
 }
