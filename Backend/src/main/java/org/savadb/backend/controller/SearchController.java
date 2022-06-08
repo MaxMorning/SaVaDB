@@ -103,9 +103,11 @@ public class SearchController {
 
         for (RegionEntity region : regionList) {
             Integer[] statData = jpaStatService.getLatestStat(region.getRegionId());
-            String[] singleResult = new String[2];
+            String[] singleResult = new String[4];
             singleResult[0] = region.getRegionName();
-            singleResult[1] = "Total Confirmed: " + DecimalFormat.getNumberInstance().format(statData[0]) + "\tTotal Death: " + DecimalFormat.getNumberInstance().format(statData[1]) + "\tTotal Cured: " + DecimalFormat.getNumberInstance().format(statData[2]);
+            singleResult[1] = DecimalFormat.getNumberInstance().format(statData[0]);
+            singleResult[2] = DecimalFormat.getNumberInstance().format(statData[1]);
+            singleResult[3] = DecimalFormat.getNumberInstance().format(statData[2]);
             result.add(singleResult);
         }
 
