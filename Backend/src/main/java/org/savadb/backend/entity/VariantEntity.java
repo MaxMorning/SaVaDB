@@ -46,9 +46,6 @@ public class VariantEntity {
     @Column(name = "update_time", nullable = false)
     private Timestamp updateTime;
 
-    @OneToMany(mappedBy = "variantByVId")
-    private Collection<AAChangesEntity> aaChangesByVId;
-
     @OneToOne(mappedBy = "variantByVId")
     private GeneInfoEntity geneInfoByVId;
 
@@ -137,14 +134,6 @@ public class VariantEntity {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public Collection<AAChangesEntity> getAaChangesByVId() {
-        return aaChangesByVId;
-    }
-
-    public void setAaChangesByVId(Collection<AAChangesEntity> aaChangesByVId) {
-        this.aaChangesByVId = aaChangesByVId;
     }
 
     public GeneInfoEntity getGeneInfoByVId() {
