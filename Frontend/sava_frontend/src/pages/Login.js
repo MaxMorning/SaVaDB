@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "antd/dist/antd.min.css";
-import { Tabs, Form, Input, Button, Checkbox, Typography } from 'antd';
+import { Tabs, Form, Input, Button, Checkbox, Typography, notification } from 'antd';
 import { LoginOutlined, PlusCircleOutlined, UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import "./Login.css"
 import '../utils/Requester'
@@ -26,6 +26,7 @@ export default class LoginPage extends Component {
     regForm = React.createRef();
 
     login = () => {
+        var localizerDict = Localizer.getLocalDict(this.state.locale);
         var login_form_obj = this.loginForm.current.getFieldValue();
         var password = login_form_obj.password;
 
@@ -51,7 +52,14 @@ export default class LoginPage extends Component {
                 window.location.href='./';
             }
             else {
-                alert("Login failed.\nstatus: " + response.status);
+                const args = {
+                    message: localizerDict['Login Failed'],
+                    description:
+                      localizerDict['Login Failed Info'],
+                    duration: 4,
+                  };
+                
+                notification.open(args);
             }
         },
         (error) => {}
@@ -59,6 +67,8 @@ export default class LoginPage extends Component {
     };
 
     register = () => {
+        var localizerDict = Localizer.getLocalDict(this.state.locale);
+
         var reg_form_obj = this.regForm.current.getFieldValue();
 
         var password = reg_form_obj.password;
@@ -87,8 +97,25 @@ export default class LoginPage extends Component {
                 Requester.storeAuthToken(response.data.data);
                 window.location.href='./';
             }
+            else if (response.data.code === 402) {
+                const args = {
+                    message: localizerDict['Register Failed'],
+                    description:
+                      localizerDict['Register Username Duplicated'],
+                    duration: 4,
+                  };
+                
+                notification.open(args);
+            }
             else {
-                alert("Register failed.\nstatus: " + response.data.msg);
+                const args = {
+                    message: localizerDict['Register Failed'],
+                    description:
+                      localizerDict['Register Failed Info'],
+                    duration: 4,
+                  };
+                
+                notification.open(args);
             }
         },
         (error) => {}

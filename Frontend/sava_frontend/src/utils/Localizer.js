@@ -194,6 +194,12 @@ All data in SaVaDB is freely available to the public domain, with the exception 
         'Register' : 'Register',
         'Invalid Email info' : 'The input is not valid E-mail!',
         'Email empty info' : 'Please input your E-mail!',
+
+        'Login Failed' : 'Login Failed',
+        'Login Failed Info' : 'Wrong username or password.',
+        'Register Failed' : 'Register Failed',
+        'Register Username Duplicated' : 'The username is already registered, please use another one.',
+        'Register Failed Info' : 'Register failed because of some unknown reason.',
     }
 
     static zh_CN_dict = {
@@ -376,5 +382,11 @@ cDNA序列信息来自NCBI数据库，属于公共领域。NCBI旨在为科学�
         'Register' : '注册',
         'Invalid Email info' : '输入邮箱名非法。',
         'Email empty info' : '请输入您的邮箱。',
-    }
+        
+        'Login Failed' : '登录失败',
+        'Login Failed Info' : '用户名或密码错误。',
+        'Register Failed' : '注册失败',
+        'Register Username Duplicated' : '当前用户名已被注册，请使用其他用户名。',
+        'Register Failed Info' : '由于一些未知原因，注册失败。',
+}
 }
