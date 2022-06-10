@@ -11,19 +11,32 @@ start_date = datetime.date(2020, 1, 22)
 
 
 def init(db_cursor):
-    delete_region_sql = "DELETE FROM `region`"
+    delete_info_sql = "DELETE FROM `info_map` WHERE `key`='stat_update_time'"
     delete_stat_sql = "DELETE FROM `statistic`"
     delete_cache_sql = "DELETE FROM `cached_world_stat_info`"
+    db_cursor.execute(delete_info_sql)
     db_cursor.execute(delete_stat_sql)
-    db_cursor.execute(delete_region_sql)
     db_cursor.execute(delete_cache_sql)
 
 
-def store_region_to_db(db_cursor, data):
+'''
+一定返回一个index，如果已经入库，返回序号；反之，插入记录后返回序号
+'''
+def store_region_to_db(db_cursor, region_name):
+    select_sql = "SELECT region_id FROM region WHERE region_name = %s"
+    count_sql = "SELECT COUNT(*) FROM region"
     insert_region_sql = "INSERT INTO `region` (`region_id`, `region_name`) VALUES (%s, %s)"
 
-    db_cursor.execute(insert_region_sql, data)
-
+    db_cursor.execute(select_sql, [region_name])
+    select_result = cursor.fetchall()
+    if len(select_result) == 0:
+        # 不存在
+        db_cursor.execute(count_sql)
+        idx = db_cursor.fetchall()['COUNT(*)']
+        db_cursor.execute(insert_region_sql, [idx, region_name])
+        return idx
+    else:
+        return select_result[0]['region_id']
 
 def load_csv_dict():
     stat_dict = {}
@@ -98,17 +111,18 @@ def load_csv_dict():
 
 
 def store_to_db_dict(db_cursor, stat_dict):
-    region_idx = 0
     insert_stat_sql = "INSERT INTO `statistic` (`region_id`, `stat_date`, `existing_confirmed_cnt`, `death_cnt`, `cured_cnt`) VALUES (%s, %s, %s, %s, %s)"
 
     for key, data in stat_dict.items():
+        # region 采用增量更新
         # 源数据有问题，需要特判
+        valid_region_name = key
         if key == "China":
-            store_region_to_db(db_cursor, [region_idx, "China(Mainland)"])
+            valid_region_name = "China(Mainland)"
         elif key == "Taiwan*":
-            store_region_to_db(db_cursor, [region_idx, "Taiwan(PRC)"])
-        else:
-            store_region_to_db(db_cursor, [region_idx, key])
+            valid_region_name = "Taiwan(PRC)"
+
+        region_idx = store_region_to_db(db_cursor, valid_region_name)
 
         date_idx = 0
         max_data_per_day = [0, 0, 0]

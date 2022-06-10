@@ -36,6 +36,10 @@ public class UserEntity {
     @Column(name = "remain_comp_time", nullable = false)
     private Integer remainCompTime;
 
+    @Basic
+    @Column(name = "verify_code")
+    private String verifyCode;
+
     @OneToMany(mappedBy = "userByUsrId")
     private Collection<UserWatchingEntity> userWatchingsByUsrId;
 
@@ -93,6 +97,14 @@ public class UserEntity {
 
     public void setRemainCompTime(Integer remainCompTime) {
         this.remainCompTime = remainCompTime;
+    }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
     }
 
     @Override
