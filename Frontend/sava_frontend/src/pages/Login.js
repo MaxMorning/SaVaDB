@@ -184,7 +184,7 @@ export default class LoginPage extends Component {
                                         <Checkbox>{localizerDict['Remember me']}</Checkbox>
                                         </Form.Item>
 
-                                        <Typography.Link href="" style={{float: "right"}}>
+                                        <Typography.Link href="./forgetPassword" style={{float: "right"}}>
                                             {localizerDict['Forgot password']}
                                         </Typography.Link>
                                     </Form.Item>

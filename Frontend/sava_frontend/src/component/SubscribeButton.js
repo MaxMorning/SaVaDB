@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'antd';
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import Localizer from '../utils/Localizer';
 
 export default class SubscribeButton extends Component {
     constructor(props) {
@@ -14,13 +15,15 @@ export default class SubscribeButton extends Component {
     }
 
     render() {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         if (this.props.isSubed) {
             return (
                 <Button
                     icon={<MinusCircleOutlined />}
                     onClick={this.onClick}
                     >
-                        Unsubscribe
+                        {localizerDict['Unsubscribe']}
                 </Button>
             );
         }
@@ -31,7 +34,7 @@ export default class SubscribeButton extends Component {
                     icon={<PlusCircleOutlined />}
                     onClick={this.onClick}
                     >
-                        Subscribe
+                        {localizerDict['Subscribe']}
                 </Button>
             );
         }

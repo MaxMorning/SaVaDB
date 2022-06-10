@@ -16,6 +16,7 @@ import 'moment/locale/zh-cn'
 // 设置懒加载
 const LoginPage = lazy(()=>import('./pages/Login'))
 const App = lazy(()=>import('./App'))
+const ForgetPassword = lazy(() => import('./pages/ForgetPassword'));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +27,7 @@ root.render(
                     <Suspense fallback={<div>Loading...</div>}>
                         <Routes>
                             <Route path='login' element={<LoginPage locale='zh-cn'/>}/>
+                            <Route path='forgetPassword' element={<ForgetPassword locale='zh-cn'/>}/>
                             <Route path='' element={<App AppType='HomeApp' locale='zh-cn'/>}/>
                             <Route path='SubRegions' element={<App AppType='SubRegions' locale='zh-cn'/>}/>
                             <Route path='SubLineages' element={<App AppType='SubLineages' locale='zh-cn'/>}/>
@@ -49,6 +51,7 @@ root.render(
                     <Suspense fallback={<div>Loading...</div>}>
                         <Routes>
                             <Route path='login' element={<LoginPage/>} />
+                            <Route path='forgetPassword' element={<ForgetPassword locale='en-us'/>}/>
                             <Route path='' element={<App AppType='HomeApp' locale='en-us' />}/>
                             <Route path='SubRegions' element={<App AppType='SubRegions' locale='en-us' />}/>
                             <Route path='SubLineages' element={<App AppType='SubLineages' locale='en-us' />} />

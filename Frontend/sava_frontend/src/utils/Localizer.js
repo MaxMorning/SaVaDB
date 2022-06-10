@@ -45,7 +45,10 @@ export default class Localizer {
 
         // HomeApp
         'HomeAppIntroduction' : 'Introduction',
-        'HomeAppIntroContent' : 'This is a ...',
+        'HomeAppIntroContent' : 
+`SaVaDB is a SARS-Cov-19 variant database website that records virus variant data and statistics obtained from the public domain. In addition, the site provides APIs to the public domain for users to perform data analysis. Please pay attention to the copyright of the data source when using the data.
+May we come through the epidemic.
+`,
         'HomeAppGlobalStat' : 'Global Statistics',
         'HomeAppGlobalStatUpdateTimePrefix' : 'Data updated at ',
         'Confirm case yesterday' : 'Confirm case yesterday',
@@ -200,6 +203,36 @@ All data in SaVaDB is freely available to the public domain, with the exception 
         'Register Failed' : 'Register Failed',
         'Register Username Duplicated' : 'The username is already registered, please use another one.',
         'Register Failed Info' : 'Register failed because of some unknown reason.',
+
+        '404Hint' : 'Sorry, the page you visited does not exist.',
+        'Withdraw lineage seq' : 'This lineage has been withdrawn thus there is no reference sequence.',
+        'Parent Lineage' : 'Parent Lineage',
+
+        'Lineage Family' : 'Lineage Family',
+        'Ref Sequence' : 'Ref Sequence',
+
+        'Unsubscribe' : 'Unsubscribe',
+        'Subscribe' : 'Subscribe',
+
+        'Verify failed' : 'Verify failed',
+        'Wrong verify code.' : 'Wrong verify code.',
+        'Unknown error' : 'Unknown error',
+
+        'Get Verify Code Failed' : 'Get Verify Code Failed',
+        'Wrong Email.' : 'Wrong Email.',
+
+        'Successfully Reset Password!' : 'Successfully Reset Password!',
+        'Go to Home Page' : 'Go to Home Page',
+
+        'Verify Email' : 'Verify Email',
+        'Change new password' : 'Change new password',
+        'Done' : 'Done',
+        'Verify Code' : 'Verify Code',
+        'Reset Password' : 'Reset Password',
+        'New Password' : 'New Password',
+        'Submit' : 'Submit',
+
+        'Get Code' : 'Get Code',
     }
 
     static zh_CN_dict = {
@@ -233,7 +266,9 @@ All data in SaVaDB is freely available to the public domain, with the exception 
 
         // HomeApp
         'HomeAppIntroduction' : '简介',
-        'HomeAppIntroContent' : '这是一个 SARS-Cov-19 病毒变种数据库网站，记录了从公开领域获取的病毒变种数据和统计信息。此外，本网站对公共领域提供API，供使用者进行数据分析用。\n希望疫情早日结束。',
+        'HomeAppIntroContent' : 
+`SaVaDB 是一个 SARS-Cov-19 病毒变种数据库网站，记录了从公开领域获取的病毒变种数据和统计信息。此外，本网站对公共领域提供API，供使用者进行数据分析用。在使用时请注意数据来源的著作权与版权声明。
+希望疫情早日结束。`,
         'HomeAppGlobalStat' : '全球数据统计',
         'HomeAppGlobalStatUpdateTimePrefix' : '数据更新于 ',
         'Confirm case yesterday' : '昨日确诊人数',
@@ -388,5 +423,35 @@ cDNA序列信息来自NCBI数据库，属于公共领域。NCBI旨在为科学�
         'Register Failed' : '注册失败',
         'Register Username Duplicated' : '当前用户名已被注册，请使用其他用户名。',
         'Register Failed Info' : '由于一些未知原因，注册失败。',
+
+        '404Hint' : '您访问的页面不存在。',
+        'Withdraw lineage seq' : '这一谱系已被撤销，因此没有参考序列。',
+        'Parent Lineage' : '父变种',
+
+        'Lineage Family' : '血缘树',
+        'Ref Sequence' : '参考序列',
+
+        'Unsubscribe' : '取消关注',
+        'Subscribe' : '关注',
+
+        'Verify failed' : '校验错误',
+        'Wrong verify code.' : '验证码不匹配',
+        'Unknown error' : '未知错误',
+
+        'Get Verify Code Failed' : '获取验证码出错',
+        'Wrong Email.' : '邮箱地址错误。',
+
+        'Successfully Reset Password!' : '成功重置密码。',
+        'Go to Home Page' : '前往主页',
+
+        'Verify Email' : '验证邮箱',
+        'Change new password' : '设置新密码',
+        'Done' : '完成',
+        'Verify Code' : '验证码',
+        'Reset Password' : '重置密码',
+        'New Password' : '设置新密码',
+        'Submit' : '提交',
+
+        'Get Code' : '发送验证码',
 }
 }

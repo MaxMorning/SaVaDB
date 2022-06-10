@@ -111,7 +111,10 @@ export default class HomeApp extends Component {
                 <Row gutter={[12, 12]}>
                     <Col span={24}>
                         <Card title={localizerDict['HomeAppIntroduction']} bordered={true} hoverable>
-                            <label>
+                            <label
+                                style={{
+                                    whiteSpace: 'pre-wrap'
+                                }}>
                                 {localizerDict['HomeAppIntroContent']}
                             </label>
                         </Card>

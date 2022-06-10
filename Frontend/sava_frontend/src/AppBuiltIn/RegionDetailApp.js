@@ -26,6 +26,8 @@ export default class RegionDetailApp extends Component {
     }
 
     getOption = () =>{
+        var localizerDict = Localizer.getCurrentLocalDict();
+        
         var confirmedValue;
         var deathValue;
         confirmedValue = this.data.map(function (item) {
@@ -66,7 +68,7 @@ export default class RegionDetailApp extends Component {
         ],
         series: [
             {
-            name: 'Confirmed',
+            name: localizerDict['Confirmed'],
             type: 'line',
             symbol: 'none',
             sampling: 'lttb',
@@ -89,7 +91,7 @@ export default class RegionDetailApp extends Component {
             },
 
             {
-                name: 'Death',
+                name: localizerDict['Death'],
                 type: 'line',
                 symbol: 'none',
                 sampling: 'lttb',
@@ -322,7 +324,7 @@ export default class RegionDetailApp extends Component {
 
                 <Col span={8}>
                     <List
-                        header={<h2>Confirmed</h2>}
+                        header={<h2>{localizerDict['Confirmed']}</h2>}
                         bordered
                         pagination
                         dataSource={confirmedDataItems}
@@ -338,7 +340,7 @@ export default class RegionDetailApp extends Component {
 
                 <Col span={8}>
                     <List
-                        header={<h2>Death</h2>}
+                        header={<h2>{localizerDict['Death']}</h2>}
                         bordered
                         pagination
                         dataSource={deathDataItems}
@@ -354,7 +356,7 @@ export default class RegionDetailApp extends Component {
 
                 <Col span={8}>
                     <List
-                        header={<h2>Cured</h2>}
+                        header={<h2>{localizerDict['Cured']}</h2>}
                         bordered
                         pagination
                         dataSource={curedDataItems}

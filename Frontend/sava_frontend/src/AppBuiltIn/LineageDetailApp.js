@@ -252,7 +252,7 @@ export default class LineageDetailApp extends Component {
                     <Result
                         status="404"
                         title="404"
-                        subTitle="Sorry, the page you visited does not exist."
+                        subTitle={localizerDict['404Hint']}
                     />
                 </div>
                 
@@ -318,7 +318,7 @@ export default class LineageDetailApp extends Component {
                 <Result
                     status="404"
                     title="404"
-                    subTitle="Sorry, this lineage has been withdrawn."
+                    subTitle={localizerDict['Withdraw lineage seq']}
                 />
             );
         }
@@ -353,19 +353,19 @@ export default class LineageDetailApp extends Component {
                             </div>
                             
                             }>
-                            <Descriptions.Item label="WHO label">
+                            <Descriptions.Item label={localizerDict["WHO label"]}>
                                 {whoLabelTag}
                             </Descriptions.Item>
                             
-                            <Descriptions.Item label="Monitor level">
+                            <Descriptions.Item label={localizerDict["Monitor level"]}>
                                 {monitorLevelTag}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Status">
+                            <Descriptions.Item label={localizerDict["Status"]}>
                                 {statusTag}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Earlist discover date">
+                            <Descriptions.Item label={localizerDict["Earlist discover date"]}>
                                 {this.lineageData.earliestDate === null ? "NA" : this.lineageData.earliestDate}
                             </Descriptions.Item>
                             
@@ -373,23 +373,23 @@ export default class LineageDetailApp extends Component {
                                 {this.lineageData.R0}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Average incubation">
-                                {this.lineageData.avgIncubation + ' Day'}
+                            <Descriptions.Item label={localizerDict["Average incubation"]}>
+                                {this.lineageData.avgIncubation + ' ' + localizerDict['Day']}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Sequence Count">
+                            <Descriptions.Item label={localizerDict["Sequence Count"]}>
                                 {this.lineageData.seqCount}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Children Count">
+                            <Descriptions.Item label={localizerDict["Children Count"]}>
                                 {this.lineageData.childCount}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Parent Lineage">
+                            <Descriptions.Item label={localizerDict["Parent Lineage"]}>
                                 {this.parentLineage}
                             </Descriptions.Item>
 
-                            <Descriptions.Item label="Update time">
+                            <Descriptions.Item label={localizerDict["Update time"]}>
                                 {this.lineageData.updateTime}
                             </Descriptions.Item>
                         </Descriptions>
@@ -399,10 +399,10 @@ export default class LineageDetailApp extends Component {
                 <Col span={24}>
                     <Card>
                         <Tabs>
-                            <TabPane tab='Lineage' key='1'>
+                            <TabPane tab={localizerDict['Lineage Family']} key='1'>
                                 {lineageTree}
                             </TabPane>
-                            <TabPane tab='Ref Sequence' key='2'>
+                            <TabPane tab={localizerDict['Ref Sequence']} key='2'>
                                 <SeqDataDisplay lineage={this.state.lineage} />
                             </TabPane>
                         </Tabs>
