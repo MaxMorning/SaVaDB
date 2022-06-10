@@ -213,6 +213,26 @@ All data in SaVaDB is freely available to the public domain, with the exception 
 
         'Unsubscribe' : 'Unsubscribe',
         'Subscribe' : 'Subscribe',
+
+        'Verify failed' : 'Verify failed',
+        'Wrong verify code.' : 'Wrong verify code.',
+        'Unknown error' : 'Unknown error',
+
+        'Get Verify Code Failed' : 'Get Verify Code Failed',
+        'Wrong Email.' : 'Wrong Email.',
+
+        'Successfully Reset Password!' : 'Successfully Reset Password!',
+        'Go to Home Page' : 'Go to Home Page',
+
+        'Verify Email' : 'Verify Email',
+        'Change new password' : 'Change new password',
+        'Done' : 'Done',
+        'Verify Code' : 'Verify Code',
+        'Reset Password' : 'Reset Password',
+        'New Password' : 'New Password',
+        'Submit' : 'Submit',
+
+        'Get Code' : 'Get Code',
     }
 
     static zh_CN_dict = {
@@ -413,5 +433,25 @@ cDNA序列信息来自NCBI数据库，属于公共领域。NCBI旨在为科学�
 
         'Unsubscribe' : '取消关注',
         'Subscribe' : '关注',
+
+        'Verify failed' : '校验错误',
+        'Wrong verify code.' : '验证码不匹配',
+        'Unknown error' : '未知错误',
+
+        'Get Verify Code Failed' : '获取验证码出错',
+        'Wrong Email.' : '邮箱地址错误。',
+
+        'Successfully Reset Password!' : '成功重置密码。',
+        'Go to Home Page' : '前往主页',
+
+        'Verify Email' : '验证邮箱',
+        'Change new password' : '设置新密码',
+        'Done' : '完成',
+        'Verify Code' : '验证码',
+        'Reset Password' : '重置密码',
+        'New Password' : '设置新密码',
+        'Submit' : '提交',
+
+        'Get Code' : '发送验证码',
 }
 }
