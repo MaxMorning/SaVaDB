@@ -522,7 +522,6 @@ public class AccountController {
     @PostMapping("/user/changePassword")
     public Result<String> changePassword(@RequestBody Map<String, Object> requestBody) {
         try {
-            byte[] oldPassword = Base64.getDecoder().decode((String) requestBody.get("oldPassword"));
             byte[] newPassword = Base64.getDecoder().decode((String) requestBody.get("newPassword"));
 
             // 验证密码
@@ -531,24 +530,19 @@ public class AccountController {
                 return Result.resultFactory(getUserResult, null);
             }
 
-            if (Arrays.equals(PasswordUtils.passwordHash(oldPassword, this.currentUser.getSalt()), this.currentUser.getPasswd())) {
-                byte[] newSalt = PasswordUtils.genRandom512bit();
-                byte[] newHashedPassword = PasswordUtils.passwordHash(newPassword, newSalt);
+            byte[] newSalt = PasswordUtils.genRandom512bit();
+            byte[] newHashedPassword = PasswordUtils.passwordHash(newPassword, newSalt);
 
-                this.currentUser.setPasswd(newHashedPassword);
-                this.currentUser.setSalt(newSalt);
+            this.currentUser.setPasswd(newHashedPassword);
+            this.currentUser.setSalt(newSalt);
 
-                jpaUserService.insertUser(this.currentUser);
+            jpaUserService.insertUser(this.currentUser);
 
-                // 无需重新签发token
-                return Result.resultFactory(EResult.SUCCESS, "Success");
-            }
-            else {
-                // 密码错误
-                return Result.resultFactory(EResult.AUTH_FAIL, "Wrong password");
-            }
+            // 无需重新签发token
+            return Result.resultFactory(EResult.SUCCESS, "Success");
         }
         catch (Exception e) {
+            e.printStackTrace();
             return Result.resultFactory(EResult.BAD_REQUEST, "Invalid request");
         }
     }
@@ -565,6 +559,56 @@ public class AccountController {
             roleStr.replace(roleStr.length() - 1, roleStr.length() - 1, "]");
 
             tokenMap.put("role", roleStr.toString());
+        }
+    }
+
+    @GetMapping("/other/getVerifyCode")
+    public Result<String> getVerifyCode(@RequestParam String email) {
+        try {
+            UserEntity user = jpaUserService.getUserByEmail(email);
+
+            Random random = new Random();
+
+            user.setVerifyCode(String.valueOf(random.nextInt(1000000)));
+
+            jpaUserService.insertUser(user);
+
+            return Result.resultFactory(EResult.SUCCESS, null);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
+        }
+    }
+
+    @GetMapping("/other/verifyCode")
+    public Result<String> verifyCode(@RequestParam String email, @RequestParam String code) {
+        try {
+            UserEntity user = jpaUserService.getUserByEmail(email);
+
+            if (user.getVerifyCode().equals(code)) {
+                // 验证通过
+                // 签发一个临时的token
+                JWTUtils jwtUtils = new JWTUtils();
+                Map<String, String> tokenMap = new HashMap<>();
+                tokenMap.put("name", user.getUsrName());
+
+                tokenMap.put("role", user.getRole());
+
+                String[] roles = user.getRole().split(",");
+                storeRoleIntoMap(tokenMap, roles);
+
+                String token = jwtUtils.getToken(tokenMap, 1);
+
+                return Result.resultFactory(EResult.SUCCESS, token);
+            }
+            else {
+                return Result.resultFactory(EResult.AUTH_FAIL, null);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
         }
     }
 }

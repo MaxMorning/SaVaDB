@@ -34,4 +34,8 @@ public class JpaUserService {
         user.setRemainCompTime(user.getRemainCompTime() - 1);
         jpaUserRepo.save(user);
     }
+
+    public UserEntity getUserByEmail(String email) {
+        return jpaUserRepo.getUserByEmail(email);
+    }
 }
