@@ -107,6 +107,8 @@ export default class CompareApp extends Component {
     }
 
     submitSeq = () => {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         console.log(this.seqForm.current.getFieldValue().seqFormItem);
 
         Requester.requestJSON(
@@ -126,18 +128,18 @@ export default class CompareApp extends Component {
                     );
 
                     const args = {
-                        message: 'Upload Done',
+                        message: localizerDict['Upload Done'],
                         description:
-                            'The server will compare the sequence you submitted with those in database.Please wait for a moment and refresh the page.',
+                            localizerDict['Upload done hint'],
                         duration: 6,
                     };
                     notification.open(args);
                 }
                 else if (response.data.code === 403) {
                     const args = {
-                        message: 'Compare Time ran out',
+                        message: localizerDict['Compare Time ran out'],
                         description:
-                            'You cannot compare sequence any more.',
+                            localizerDict['Compare time ranout hint'],
                         duration: 6,
                     };
                     notification.open(args);
