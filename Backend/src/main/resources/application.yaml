@@ -5,3 +5,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: savaer
     password: Sava@1951581
+
+seq_file_info:
+  comp_result_dir: F:\TestCode\CUDA\GenomeCompareGPU\resultDir\
+  comp_exe_path: F:\TestCode\CUDA\GenomeCompareGPU\compare.exe
+  ref_seq_dir: F:\TestCode\Java\SaVaDB\Backend\seqDir\
