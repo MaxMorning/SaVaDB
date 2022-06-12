@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Row, Col, Select, Result, Spin, Button, DatePicker, InputNumber, List } from 'antd';
+import { Card, Row, Col, Select, Result, Spin, Button, DatePicker, InputNumber, List, notification } from 'antd';
 import * as echarts from 'echarts'
 import ReactEcharts from 'echarts-for-react';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -309,7 +309,20 @@ export default class StatisticsApp extends Component {
     }
 
     getData = () => {
+        var localizerDict = Localizer.getCurrentLocalDict();
+
         console.log(this.dayInternal);
+        if (!this.dayInternal || !this.startDate || !this.endDate || (this.firstRegionName.length === 0 && this.secondRegionName.length === 0)) {
+            const args = {
+                message: localizerDict['Empty Input'],
+                description:
+                    localizerDict['Empty Input Hint'],
+                duration: 6,
+            };
+            notification.open(args);
+
+            return;
+        }
         if (this.firstRegionName.length > 0) {
             Requester.requestJSON(
                 {
