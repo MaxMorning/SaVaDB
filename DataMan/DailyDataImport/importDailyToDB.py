@@ -1,13 +1,27 @@
 import csv
 import pymysql
-import copy
+import subprocess
 import datetime
+import requests
 
 confirm_csv_path = "time_series_covid19_confirmed_global.csv"
 death_csv_path = "time_series_covid19_deaths_global.csv"
 recovered_csv_path = "time_series_covid19_recovered_global.csv"
 
 start_date = datetime.date(2020, 1, 22)
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'
+}
+
+
+def get_data_from_internet():
+    print('Begin to get CSV')
+
+    cmd = ["PowerShell", "-ExecutionPolicy", "Unrestricted", "-File", ".\\get_csv.ps1"]
+    subprocess.call(cmd)
+
+    print('Get Recovered CSV.')
 
 
 def init(db_cursor):
@@ -22,6 +36,8 @@ def init(db_cursor):
 '''
 一定返回一个index，如果已经入库，返回序号；反之，插入记录后返回序号
 '''
+
+
 def store_region_to_db(db_cursor, region_name):
     select_sql = "SELECT region_id FROM region WHERE region_name = %s"
     count_sql = "SELECT COUNT(*) FROM region"
@@ -37,6 +53,7 @@ def store_region_to_db(db_cursor, region_name):
         return idx
     else:
         return select_result[0]['region_id']
+
 
 def load_csv_dict():
     stat_dict = {}
@@ -157,6 +174,8 @@ def update_time(db_cursor):
 
 
 if __name__ == '__main__':
+    get_data_from_internet()
+
     connection = pymysql.connect(host='127.0.0.1', port=3306, user='savaer', password='Sava@1951581', db='SaVa',
                                  cursorclass=pymysql.cursors.DictCursor)
 
