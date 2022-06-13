@@ -11,6 +11,7 @@ import org.savadb.backend.utils.EResult;
 import org.savadb.backend.utils.JWTUtils;
 import org.savadb.backend.utils.PasswordUtils;
 import org.savadb.backend.utils.Result;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -258,7 +259,8 @@ public class AccountController {
     }
 
 
-    private final String seqFileDir = "F:\\TestCode\\Java\\SaVaDB\\Backend\\seqDir\\";
+    @Value("${seq_file_info.ref_seq_dir}")
+    private String seqFileDir;
 
     @PostMapping("/user/compareSeq")
     public Result<String> compareSequence(@RequestBody Map<String, String> body) {

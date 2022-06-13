@@ -2,6 +2,7 @@ package org.savadb.backend.utils;
 
 import org.savadb.backend.entity.CompRecordEntity;
 import org.savadb.backend.service.JPA.Account.JpaCompRecordService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -13,6 +14,12 @@ import java.util.List;
 @Component
 public class CudaCompareThread implements Runnable{
     private Thread thread;
+
+    @Value("${seq_file_info.comp_result_dir}")
+    private String compResultDir;
+
+    @Value("${seq_file_info.comp_exe_path}")
+    private String compExePath;
 
     @Resource
     private JpaCompRecordService jpaCompRecordService;
@@ -36,7 +43,7 @@ public class CudaCompareThread implements Runnable{
             else {
                 // GPU空闲，可以进行匹配
                 compRecord.setStatus((byte) 1);
-                compRecord.setCompResultPath("F:\\TestCode\\CUDA\\GenomeCompareGPU\\resultDir\\" + compRecord.getSeqSha1Value() + "_result.txt");
+                compRecord.setCompResultPath(compResultDir + compRecord.getSeqSha1Value() + "_result.txt");
                 jpaCompRecordService.saveRecord(compRecord);
 
                 System.out.println("[LOG]\tStart compare " + compRecord.getSeqSha1Value());
@@ -45,7 +52,7 @@ public class CudaCompareThread implements Runnable{
                 InputStream errorStream = null;
                 InputStream stdOutStream = null;
                 try {
-                    process = Runtime.getRuntime().exec("F:\\TestCode\\CUDA\\GenomeCompareGPU\\compare.exe " + compRecord.getSeqFilePath() + ' ' + compRecord.getCompResultPath());
+                    process = Runtime.getRuntime().exec(compExePath + " " + compRecord.getSeqFilePath() + ' ' + compRecord.getCompResultPath());
                     errorStream = process.getErrorStream();
                     stdOutStream = process.getInputStream();
                     int retValue = process.waitFor();
