@@ -233,6 +233,14 @@ All data in SaVaDB is freely available to the public domain, with the exception 
         'Submit' : 'Submit',
 
         'Get Code' : 'Get Code',
+
+        'Upload Done' : 'Upload Done',
+        'Upload done hint' : 'The server will compare the sequence you submitted with those in database.Please wait for a moment and refresh the page.',
+        'Compare Time ran out' : 'Compare Time ran out',
+        'Compare time ranout hint' : 'You cannot compare sequence any more.',
+
+        'Empty Input' : 'Empty Input',
+        'Empty Input Hint' : 'You have not completed neccessary infomation yet.',
     }
 
     static zh_CN_dict = {
@@ -453,5 +461,13 @@ cDNA序列信息来自NCBI数据库，属于公共领域。NCBI旨在为科学�
         'Submit' : '提交',
 
         'Get Code' : '发送验证码',
+
+        'Upload Done' : '上传完成',
+        'Upload done hint' : '服务器将会比较您上传的序列和数据库中的参考序列，请等待一会后刷新页面。',
+        'Compare Time ran out' : '无可用匹配次数',
+        'Compare time ranout hint' : '您目前不能请求匹配序列。',
+
+        'Empty Input' : '空输入',
+        'Empty Input Hint' : '您尚未完成必需信息的填写。',
 }
 }
