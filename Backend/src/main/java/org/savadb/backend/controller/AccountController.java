@@ -59,46 +59,57 @@ public class AccountController {
      */
     @PostMapping("reg")
     public Result<String> register(@RequestBody Map<String, Object> reg_info) {
-        String username = (String) reg_info.get("username");
-        byte[] password = Base64.getDecoder().decode((String) reg_info.get("password"));
-        Boolean keep_login = (Boolean) reg_info.get("keep_login");
-        if (username == null || username.length() == 0 || password == null || password.length < 32 || keep_login == null) {
-            return Result.resultFactory(EResult.DATA_NULL, "Invalid data.");
+        try {
+            String username = (String) reg_info.get("username");
+            byte[] password = Base64.getDecoder().decode((String) reg_info.get("password"));
+            Boolean keep_login = (Boolean) reg_info.get("keep_login");
+            if (username == null || username.length() == 0 || password == null || password.length < 32 || keep_login == null) {
+                return Result.resultFactory(EResult.DATA_NULL, "Invalid data.");
+            }
+
+            // check name used
+            if (!jpaUserService.findAllByUsrName(username).isEmpty()) {
+                return Result.resultFactory(EResult.DATA_DUPLICATE, "Invalid user name.");
+            }
+
+            // check email used
+            if (jpaUserService.getUserByEmail((String) reg_info.get("email")) != null) {
+                return Result.resultFactory(EResult.BAD_REQUEST, "Email used.");
+            }
+
+            UserEntity user = new UserEntity();
+            user.setUsrId(idCnt);
+            ++idCnt;
+            user.setEmail((String) reg_info.get("email"));
+            user.setUsrName(username);
+            user.setRole("ROLE_USER");
+
+            byte[] salt = PasswordUtils.genRandom512bit();
+            byte[] saltedPassword = PasswordUtils.passwordHash(password, salt);
+            user.setSalt(salt);
+            user.setPasswd(saltedPassword);
+            user.setRemainCompTime(5);
+
+            jpaUserService.insertUser(user);
+
+            JWTUtils jwtUtils = new JWTUtils();
+            Map<String, String> tokenMap = new HashMap<>();
+            tokenMap.put("name", user.getUsrName());
+
+            tokenMap.put("role", user.getRole());
+
+            String[] roles = user.getRole().split(",");
+            storeRoleIntoMap(tokenMap, roles);
+
+            int expiredDay = keep_login ? 1 : 15;
+            String token = jwtUtils.getToken(tokenMap, expiredDay);
+
+            return Result.resultFactory(EResult.SUCCESS, token);
         }
-
-        // check name used
-        if (!jpaUserService.findAllByUsrName(username).isEmpty()) {
-            return Result.resultFactory(EResult.DATA_DUPLICATE, "Invalid user name.");
+        catch (Exception e) {
+            e.printStackTrace();
+            return Result.resultFactory(EResult.BAD_REQUEST, null);
         }
-
-        UserEntity user = new UserEntity();
-        user.setUsrId(idCnt);
-        ++idCnt;
-        user.setEmail((String) reg_info.get("email"));
-        user.setUsrName(username);
-        user.setRole("ROLE_USER");
-
-        byte[] salt = PasswordUtils.genRandom512bit();
-        byte[] saltedPassword = PasswordUtils.passwordHash(password, salt);
-        user.setSalt(salt);
-        user.setPasswd(saltedPassword);
-        user.setRemainCompTime(5);
-
-        jpaUserService.insertUser(user);
-
-        JWTUtils jwtUtils = new JWTUtils();
-        Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("name", user.getUsrName());
-
-        tokenMap.put("role", user.getRole());
-
-        String[] roles = user.getRole().split(",");
-        storeRoleIntoMap(tokenMap, roles);
-
-        int expiredDay = keep_login ? 1 : 15;
-        String token = jwtUtils.getToken(tokenMap, expiredDay);
-
-        return Result.resultFactory(EResult.SUCCESS, token);
     }
 
     private EResult getCurrentUser() {
