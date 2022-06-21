@@ -81,7 +81,6 @@ export default class SubscribedLineages extends Component {
                     status="403"
                     title="403"
                     subTitle={localizerDict['403Hint']}
-                    extra={<Button type="primary">Back Home</Button>}
                 />
             );
         }
